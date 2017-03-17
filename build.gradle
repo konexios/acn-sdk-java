@@ -1,0 +1,64 @@
+buildscript {
+    ext {
+        log4jVersion = '2.7'
+        jacksonVersion = '2.8.6'
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8    
+
+    repositories {
+       mavenCentral()
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+    }
+
+    version = '2.0'
+    
+    compileJava.dependsOn(processResources)
+
+    configurations {
+        all*.exclude module: "logback-classic"
+        all*.exclude module: "slf4j-log4j12"
+    }
+
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.name == 'log4j') {
+                details.useTarget 'log4j:log4j:1.2.+'
+            }
+        }
+    }
+    
+    eclipse {
+        classpath {
+             containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+             containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+        }
+    }
+    
+    task wrapper(type: Wrapper) {
+        gradleVersion = '3.4.1'
+    }       
+}
+
+project(':acn-core') {
+    dependencies {
+    }
+}
+
+project(':acn-client') {
+    dependencies {
+        compile project(':acn-core')
+    }
+}

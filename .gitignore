@@ -1,0 +1,11 @@
+/bin/
+/build/
+/.gradle/
+sdk/build/
+sdk/bin/
+example/.gradle/
+example/bin/
+acn-core/bin/
+acn-core/build/
+acn-client/bin/
+acn-client/build/
