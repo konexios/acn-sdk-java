@@ -96,7 +96,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 			String json = JsonUtils.toJson(payload);
 			Message message = new Message(json);
 			long counter = eventCounter.getAndIncrement();
-			logInfo(method, "counter: %d, json size: %d", counter, json.length());
+			logDebug(method, "counter: %d, json size: %d", counter, json.length());
 			client.sendEventAsync(message, eventCallback, counter);
 		} else {
 			logError(method, "client is NULL");
@@ -130,7 +130,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 		public void execute(IotHubStatusCode status, Object context) {
 			String method = "eventCallback";
 			Long counter = (Long) context;
-			logInfo(method, "counter: %d, status: %s", counter, status.name());
+			logDebug(method, "counter: %d, status: %s", counter, status.name());
 		}
 	}
 }
