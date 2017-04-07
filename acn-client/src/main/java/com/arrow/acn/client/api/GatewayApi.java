@@ -25,6 +25,7 @@ import com.arrow.acn.client.model.GatewayModel;
 import com.arrow.acn.client.search.LogsSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.model.ErrorModel;
 import com.arrow.acs.client.model.ExternalHidModel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.ListResultModel;
@@ -33,18 +34,19 @@ import com.arrow.acs.client.model.StatusModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public final class GatewayApi extends ApiAbstract {
-	private final String GATEWAYS_BASE_URL = API_BASE + "/gateways";
-	private final String REGISTER_URL = GATEWAYS_BASE_URL;
-	private final String FIND_ALL_URL = GATEWAYS_BASE_URL;
-	private final String SPECIFIC_GATEWAY_URL = GATEWAYS_BASE_URL + "/{hid}";
-	private final String FIND_URL = SPECIFIC_GATEWAY_URL;
-	private final String UPDATE_EXISTING_URL = SPECIFIC_GATEWAY_URL;
-	private final String DEVICES_URL = SPECIFIC_GATEWAY_URL + "/devices";
-	private final String CHECKIN_URL = SPECIFIC_GATEWAY_URL + "/checkin";
-	private final String DEVICE_COMMAND_URL = SPECIFIC_GATEWAY_URL + "/commands/device-command";
-	private final String CONFIG_URL = SPECIFIC_GATEWAY_URL + "/config";
-	private final String HEARTBEAT_URL = SPECIFIC_GATEWAY_URL + "/heartbeat";
-	private final String LOGS_URL = SPECIFIC_GATEWAY_URL + "/logs";
+	private static final String GATEWAYS_BASE_URL = API_BASE + "/gateways";
+	private static final String REGISTER_URL = GATEWAYS_BASE_URL;
+	private static final String FIND_ALL_URL = GATEWAYS_BASE_URL;
+	private static final String SPECIFIC_GATEWAY_URL = GATEWAYS_BASE_URL + "/{hid}";
+	private static final String FIND_URL = SPECIFIC_GATEWAY_URL;
+	private static final String UPDATE_EXISTING_URL = SPECIFIC_GATEWAY_URL;
+	private static final String DEVICES_URL = SPECIFIC_GATEWAY_URL + "/devices";
+	private static final String CHECKIN_URL = SPECIFIC_GATEWAY_URL + "/checkin";
+	private static final String DEVICE_COMMAND_URL = SPECIFIC_GATEWAY_URL + "/commands/device-command";
+	private static final String CONFIG_URL = SPECIFIC_GATEWAY_URL + "/config";
+	private static final String HEARTBEAT_URL = SPECIFIC_GATEWAY_URL + "/heartbeat";
+	private static final String LOGS_URL = SPECIFIC_GATEWAY_URL + "/logs";
+	private static final String SEND_ERROR_URL = SPECIFIC_GATEWAY_URL + "/errors";
 
 	private final TypeReference<PagingResultModel<AuditLogModel>> AUDIT_LOG_MODEL_TYPE_REF = new TypeReference<PagingResultModel<AuditLogModel>>() {
 	};
@@ -309,6 +311,31 @@ public final class GatewayApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(LOGS_URL.replace("{hid}", hid) + criteria);
 			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, AUDIT_LOG_MODEL_TYPE_REF);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	/**
+	 * Sends POST request to submit an error
+	 *
+	 * @param model
+	 *            {@link ErrorModel} content of the error (code and message)
+	 *
+	 * @return {@link HidModel} containing external {@code hid} of the created
+	 *         audit log
+	 *
+	 * @throws AcnClientException
+	 *             if request failed
+	 */
+	public HidModel sendError(String hid, ErrorModel model) {
+		String method = "sendError";
+		try {
+			URI uri = buildUri(SEND_ERROR_URL.replace("{hid}", hid));
+			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {

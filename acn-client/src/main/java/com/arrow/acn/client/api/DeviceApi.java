@@ -28,6 +28,7 @@ import com.arrow.acn.client.search.EventsSearchCriteria;
 import com.arrow.acn.client.search.LogsSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.model.ErrorModel;
 import com.arrow.acs.client.model.ExternalHidModel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.PagingResultModel;
@@ -42,6 +43,7 @@ public class DeviceApi extends ApiAbstract {
 	private static final String UPDATE_EXISTING_URL = SPECIFIC_DEVICE_URL;
 	private static final String SPECIFIC_EVENTS_URL = SPECIFIC_DEVICE_URL + "/events";
 	private static final String SPECIFIC_LOGS_URL = SPECIFIC_DEVICE_URL + "/logs";
+	private static final String SEND_ERROR_URL = SPECIFIC_DEVICE_URL + "/errors";
 
 	private static final TypeReference<PagingResultModel<DeviceModel>> DEVICE_MODEL_TYPE_REF = new TypeReference<PagingResultModel<DeviceModel>>() {
 	};
@@ -223,6 +225,31 @@ public class DeviceApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(PATTERN.matcher(SPECIFIC_LOGS_URL).replaceAll(Matcher.quoteReplacement(hid)) + criteria);
 			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, AUDIT_LOG_MODEL_TYPE_REF);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	/**
+	 * Sends POST request to submit an error
+	 *
+	 * @param model
+	 *            {@link ErrorModel} content of the error (code and message)
+	 *
+	 * @return {@link HidModel} containing external {@code hid} of the created
+	 *         audit log
+	 *
+	 * @throws AcnClientException
+	 *             if request failed
+	 */
+	public HidModel sendError(String hid, ErrorModel model) {
+		String method = "sendError";
+		try {
+			URI uri = buildUri(SEND_ERROR_URL.replace("{hid}", hid));
+			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
