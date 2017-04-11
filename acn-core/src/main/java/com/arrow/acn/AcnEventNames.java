@@ -11,17 +11,17 @@
 package com.arrow.acn;
 
 public interface AcnEventNames {
-    public interface ServerToGateway {
-        public final static String GATEWAY_SOFTWARE_UPDATE = "ServerToGateway_GatewaySoftwareUpdate";
+	public interface ServerToGateway {
+		final static String GATEWAY_SOFTWARE_UPDATE = "ServerToGateway_GatewaySoftwareUpdate";
 
-        public final static String DEVICE_START = "ServerToGateway_DeviceStart";
-        public final static String DEVICE_STOP = "ServerToGateway_DeviceStop";
+		final static String DEVICE_START = "ServerToGateway_DeviceStart";
+		final static String DEVICE_STOP = "ServerToGateway_DeviceStop";
 
-        public final static String DEVICE_PROPERTY_CHANGE = "ServerToGateway_DevicePropertyChange";
-        public final static String DEVICE_COMMAND = "ServerToGateway_DeviceCommand";
+		final static String DEVICE_PROPERTY_CHANGE = "ServerToGateway_DevicePropertyChange";
+		final static String DEVICE_COMMAND = "ServerToGateway_DeviceCommand";
+		final static String DEVICE_STATE_REQUEST = "ServerToGateway_DeviceStateRequest";
 
-        public final static String SENSOR_PROPERTY_CHANGE = "ServerToGateway_SensorPropertyChange";
-        public final static String SENSOR_TELEMETRY_CHANGE = "ServerToGateway_SensorTelemetryChange";
-        public final static String SENSOR_COMMAND = "ServerToGateway_SensorCommand";
-    }
+		final static String SENSOR_PROPERTY_CHANGE = "ServerToGateway_SensorPropertyChange";
+		final static String SENSOR_TELEMETRY_CHANGE = "ServerToGateway_SensorTelemetryChange";
+	}
 }

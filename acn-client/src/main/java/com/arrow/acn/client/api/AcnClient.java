@@ -14,7 +14,7 @@ import org.apache.commons.lang3.Validate;
 
 import com.arrow.acs.client.api.ApiConfig;
 
-public class AcnClient {
+public final class AcnClient {
 	private ApiConfig apiConfig;
 	private final AccountApi accountApi;
 	private final CoreEventApi coreEventApi;
@@ -25,6 +25,7 @@ public class AcnClient {
 	private final NodeApi nodeApi;
 	private final NodeTypeApi nodeTypeApi;
 	private final TelemetryApi telemetryApi;
+	private final DeviceStateApi deviceStateApi;
 
 	public AcnClient(ApiConfig apiConfig) {
 		Validate.notNull(apiConfig, "apiConfig is not set");
@@ -38,6 +39,7 @@ public class AcnClient {
 		this.nodeApi = new NodeApi(apiConfig);
 		this.nodeTypeApi = new NodeTypeApi(apiConfig);
 		this.telemetryApi = new TelemetryApi(apiConfig);
+		this.deviceStateApi = new DeviceStateApi(apiConfig);
 	}
 
 	public void setApiConfig(ApiConfig apiConfig) {
@@ -51,6 +53,7 @@ public class AcnClient {
 		nodeApi.setApiConfig(apiConfig);
 		nodeTypeApi.setApiConfig(apiConfig);
 		telemetryApi.setApiConfig(apiConfig);
+		deviceActionApi.setApiConfig(apiConfig);
 	}
 
 	public ApiConfig getApiConfig() {
@@ -91,5 +94,9 @@ public class AcnClient {
 
 	public TelemetryApi getTelemetryApi() {
 		return telemetryApi;
+	}
+
+	public DeviceStateApi getDeviceStateApi() {
+		return deviceStateApi;
 	}
 }
