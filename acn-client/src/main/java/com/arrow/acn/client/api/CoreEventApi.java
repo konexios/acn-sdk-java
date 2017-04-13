@@ -11,15 +11,18 @@
 package com.arrow.acn.client.api;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.AcnClientException;
+import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.StatusModel;
 
 public class CoreEventApi extends ApiAbstract {
-	private static final String CORE_EVENT_BASE_URL = API_BASE + "/core/events";
+	private static final String CORE_EVENT_BASE_URL = "/api/v1/core/events";
 	private static final String PUT_FAILED_URL = CORE_EVENT_BASE_URL + "/{hid}/failed";
 	private static final String PUT_RECEIVED_URL = CORE_EVENT_BASE_URL + "/{hid}/received";
 	private static final String PUT_SUCCEEDED_URL = CORE_EVENT_BASE_URL + "/{hid}/succeeded";
@@ -28,12 +31,12 @@ public class CoreEventApi extends ApiAbstract {
 		super(apiConfig);
 	}
 
-	// TODO add body
-	public StatusModel putFailed(String hid) {
+	public StatusModel putFailed(String hid, String error) {
 		String method = "putFailed";
 		try {
 			URI uri = buildUri(PUT_FAILED_URL.replace("{hid}", hid));
-			StatusModel result = execute(new HttpPut(uri), StatusModel.class);
+			StatusModel result = execute(new HttpPut(uri), JsonUtils.toJson(Collections.singletonMap("error", error)),
+			        StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -55,8 +58,11 @@ public class CoreEventApi extends ApiAbstract {
 		}
 	}
 
-	// TODO add body
 	public StatusModel putSucceeded(String hid) {
+		return putSucceeded(hid, Collections.emptyMap());
+	}
+
+	public StatusModel putSucceeded(String hid, Map<String, String> parameters) {
 		String method = "putSucceeded";
 		try {
 			URI uri = buildUri(PUT_SUCCEEDED_URL.replace("{hid}", hid));
