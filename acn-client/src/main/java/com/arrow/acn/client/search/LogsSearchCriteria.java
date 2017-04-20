@@ -14,12 +14,12 @@ public class LogsSearchCriteria extends SortedSearchCriteria {
     private static final String USER_HIDS = "userHids";
     private static final String TYPES = "types";
 
-    LogsSearchCriteria withUserHids(String[] userHids) {
+    public LogsSearchCriteria withUserHids(String[] userHids) {
         arrayCriteria.put(USER_HIDS, userHids);
         return this;
     }
 
-    LogsSearchCriteria withTypes(String[] types) {
+    public LogsSearchCriteria withTypes(String[] types) {
         arrayCriteria.put(TYPES, types);
         return this;
     }

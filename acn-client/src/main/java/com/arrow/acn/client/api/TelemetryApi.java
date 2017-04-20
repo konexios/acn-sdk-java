@@ -13,18 +13,18 @@ package com.arrow.acn.client.api;
 import java.net.URI;
 import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
-import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.AcnClientException;
+import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.model.TelemetryItemModel;
 import com.arrow.acn.client.search.TelemetrySearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 public final class TelemetryApi extends ApiAbstract {
 	private final String TELEMETRY_BASE_URL = API_BASE + "/telemetries";
@@ -88,7 +88,7 @@ public final class TelemetryApi extends ApiAbstract {
 	        TelemetrySearchCriteria criteria) {
 		String method = "findByApplicationHid";
 		try {
-			URI uri = buildUri(FIND_BY_APPLICATION_HID.replace("{applicationHid}", applicationHid) + criteria);
+			URI uri = buildUri(FIND_BY_APPLICATION_HID.replace("{applicationHid}", applicationHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
 			        TELEMETRY_ITEM_MODEL_TYPE_REF);
 			log(method, result);
@@ -120,7 +120,7 @@ public final class TelemetryApi extends ApiAbstract {
 	public PagingResultModel<TelemetryItemModel> findByDeviceHid(String deviceHid, TelemetrySearchCriteria criteria) {
 		String method = "findByDeviceHid";
 		try {
-			URI uri = buildUri(FIND_BY_DEVICE_HID.replace("{deviceHid}", deviceHid) + criteria);
+			URI uri = buildUri(FIND_BY_DEVICE_HID.replace("{deviceHid}", deviceHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
 			        TELEMETRY_ITEM_MODEL_TYPE_REF);
 			log(method, result);
@@ -152,7 +152,7 @@ public final class TelemetryApi extends ApiAbstract {
 	public PagingResultModel<TelemetryItemModel> findByNodeHid(String nodeHid, TelemetrySearchCriteria criteria) {
 		String method = "findByNodeHid";
 		try {
-			URI uri = buildUri(FIND_BY_NODE_HID.replace("{nodeHid}", nodeHid) + criteria);
+			URI uri = buildUri(FIND_BY_NODE_HID.replace("{nodeHid}", nodeHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
 			        TELEMETRY_ITEM_MODEL_TYPE_REF);
 			log(method, result);

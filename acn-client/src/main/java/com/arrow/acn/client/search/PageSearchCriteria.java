@@ -16,12 +16,12 @@ public class PageSearchCriteria extends SearchCriteria {
 	private static final String PAGE = "_page";
 	private static final String SIZE = "_size";
 
-	PageSearchCriteria withPage(long page) {
+	public PageSearchCriteria withPage(long page) {
 		simpleCriteria.put(PAGE, Long.toString(page));
 		return this;
 	}
 
-	PageSearchCriteria withSize(long size) {
+	public PageSearchCriteria withSize(long size) {
 		simpleCriteria.put(SIZE, Long.toString(size));
 		return this;
 	}

@@ -16,12 +16,12 @@ public class TimestampSearchCriteria extends SearchCriteria {
 	private static final String FROM_TIMESTAMP = "fromTimestamp";
 	private static final String TO_TIMESTAMP = "toTimestamp";
 
-	TimestampSearchCriteria withFromTimestamp(String fromTimestamp) {
+	public TimestampSearchCriteria withFromTimestamp(String fromTimestamp) {
 		simpleCriteria.put(FROM_TIMESTAMP, fromTimestamp);
 		return this;
 	}
 
-	TimestampSearchCriteria withToTimestamp(String toTimestamp) {
+	public TimestampSearchCriteria withToTimestamp(String toTimestamp) {
 		simpleCriteria.put(TO_TIMESTAMP, toTimestamp);
 		return this;
 	}
