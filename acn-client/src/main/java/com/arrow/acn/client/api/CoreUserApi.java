@@ -23,7 +23,7 @@ import com.arrow.acs.client.model.StatusModel;
 
 public class CoreUserApi extends ApiAbstract {
 	private static final String CORE_USERS_BASE_URL = API_BASE + "/core/users";
-	private static final String SYNC_SAML_ACCOUNTS_URL = CORE_USERS_BASE_URL + "sync-saml-accounts";
+	private static final String SYNC_SAML_ACCOUNTS_URL = CORE_USERS_BASE_URL + "/sync-saml-accounts";
 
 	CoreUserApi(ApiConfig apiConfig) {
 		super(apiConfig);
