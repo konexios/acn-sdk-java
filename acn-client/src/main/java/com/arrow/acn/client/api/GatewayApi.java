@@ -12,6 +12,7 @@ package com.arrow.acn.client.api;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -31,7 +32,6 @@ import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.ListResultModel;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 public final class GatewayApi extends ApiAbstract {
 	private static final String GATEWAYS_BASE_URL = API_BASE + "/gateways";
@@ -309,7 +309,7 @@ public final class GatewayApi extends ApiAbstract {
 	public PagingResultModel<AuditLogModel> listGatewayAuditLogs(String hid, LogsSearchCriteria criteria) {
 		String method = "listGatewayAuditLogs";
 		try {
-			URI uri = buildUri(LOGS_URL.replace("{hid}", hid) + criteria);
+			URI uri = buildUri(LOGS_URL.replace("{hid}", hid), criteria);
 			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, AUDIT_LOG_MODEL_TYPE_REF);
 			log(method, result);
 			return result;

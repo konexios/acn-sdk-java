@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -32,7 +33,6 @@ import com.arrow.acs.client.model.ErrorModel;
 import com.arrow.acs.client.model.ExternalHidModel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.PagingResultModel;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 public class DeviceApi extends ApiAbstract {
 	private static final String DEVICES_BASE_URL = API_BASE + "/devices";
@@ -76,7 +76,7 @@ public class DeviceApi extends ApiAbstract {
 	public PagingResultModel<DeviceModel> findAllBy(DeviceSearchCriteria criteria) {
 		String method = "findAllBy";
 		try {
-			URI uri = buildUri(FIND_ALL_BY_URL + criteria);
+			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
 			PagingResultModel<DeviceModel> result = execute(new HttpGet(uri), DEVICE_MODEL_TYPE_REF);
 			log(method, result);
 			return result;
@@ -191,7 +191,7 @@ public class DeviceApi extends ApiAbstract {
 		String method = "listHistoricalDeviceEvents";
 		try {
 			URI uri = buildUri(
-			        PATTERN.matcher(SPECIFIC_EVENTS_URL).replaceAll(Matcher.quoteReplacement(hid)) + criteria);
+			        PATTERN.matcher(SPECIFIC_EVENTS_URL).replaceAll(Matcher.quoteReplacement(hid)), criteria);
 			PagingResultModel<DeviceEventModel> result = execute(new HttpGet(uri), criteria,
 			        DEVICE_EVENT_MODEL_TYPE_REF);
 			log(method, result);
@@ -223,7 +223,7 @@ public class DeviceApi extends ApiAbstract {
 	public PagingResultModel<AuditLogModel> listDeviceAuditLogs(String hid, LogsSearchCriteria criteria) {
 		String method = "listDeviceAuditLogs";
 		try {
-			URI uri = buildUri(PATTERN.matcher(SPECIFIC_LOGS_URL).replaceAll(Matcher.quoteReplacement(hid)) + criteria);
+			URI uri = buildUri(PATTERN.matcher(SPECIFIC_LOGS_URL).replaceAll(Matcher.quoteReplacement(hid)), criteria);
 			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, AUDIT_LOG_MODEL_TYPE_REF);
 			log(method, result);
 			return result;

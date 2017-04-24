@@ -14,12 +14,12 @@ public class EventsSearchCriteria extends SortedSearchCriteria {
 	private static final String STATUSES = "statuses";
 	private static final String SYSTEM_NAMES = "systemNames";
 
-	EventsSearchCriteria withStatuses(String[] statuses) {
+	public EventsSearchCriteria withStatuses(String[] statuses) {
 		arrayCriteria.put(STATUSES, statuses);
 		return this;
 	}
 
-	EventsSearchCriteria withSystemNames(String[] systemNames) {
+	public EventsSearchCriteria withSystemNames(String[] systemNames) {
 		arrayCriteria.put(SYSTEM_NAMES, systemNames);
 		return this;
 	}

@@ -11,48 +11,55 @@
 package com.arrow.acn;
 
 public interface MqttConstants {
-    // topic exchange
-    public final static String DEFAULT_RABBITMQ_EXCHANGE = "amq.topic";
+	// topic exchange
+	final static String DEFAULT_RABBITMQ_EXCHANGE = "amq.topic";
 
-    // durable incoming queue
-    public final static String DEFAULT_RABBITMQ_TELEMETRY_QUEUE = "kronos.telemetry";
-    public final static String DEFAULT_RABBITMQ_TELEMETRY_BATCH_QUEUE = "kronos.telemetry.batch";
-    public final static String DEFAULT_RABBITMQ_TELEMTRY_GZIP_BATCH_QUEUE = "kronos.telemetry.gzip.batch";
-    public final static String DEFAULT_RABBITMQ_COMMAND_QUEUE = "kronos.command";
+	// durable incoming queue
+	final static String DEFAULT_RABBITMQ_TELEMETRY_QUEUE = "kronos.telemetry";
+	final static String DEFAULT_RABBITMQ_TELEMETRY_BATCH_QUEUE = "kronos.telemetry.batch";
+	final static String DEFAULT_RABBITMQ_TELEMTRY_GZIP_BATCH_QUEUE = "kronos.telemetry.gzip.batch";
+	final static String DEFAULT_RABBITMQ_COMMAND_QUEUE = "kronos.command";
 
-    public static String gatewayToServerTelemetryRouting(String gatewayHid) {
-        return String.format("krs.tel.gts.%s", gatewayHid);
-    }
+	// application telemetry direct exchange
+	final static String APPLICATION_TELEMETRY_EXCHANGE = "kronos.application.telemetry";
 
-    public static boolean isGatewayToServerTelemetryRouting(String queueName) {
-        return queueName.startsWith("krs.tel.gts.");
-    }
+	static String applicationTelemetryRouting(String applicationHid) {
+		return String.format("app.%s", applicationHid);
+	}
 
-    public static String gatewayToServerTelemetryBatchRouting(String gatewayHid) {
-        return String.format("krs.tel.bat.gts.%s", gatewayHid);
-    }
+	static String gatewayToServerTelemetryRouting(String gatewayHid) {
+		return String.format("krs.tel.gts.%s", gatewayHid);
+	}
 
-    public static boolean isGatewayToServerTelemetryBatchRouting(String queueName) {
-        return queueName.startsWith("krs.tel.bat.gts.");
-    }
+	static boolean isGatewayToServerTelemetryRouting(String queueName) {
+		return queueName.startsWith("krs.tel.gts.");
+	}
 
-    public static String gatewayToServerTelemetryGzipBatchRouting(String gatewayHid) {
-        return String.format("krs.tel.gzb.gts.%s", gatewayHid);
-    }
+	static String gatewayToServerTelemetryBatchRouting(String gatewayHid) {
+		return String.format("krs.tel.bat.gts.%s", gatewayHid);
+	}
 
-    public static boolean isGatewayToServerTelemetryGzipBatchRouting(String queueName) {
-        return queueName.startsWith("krs.tel.gzb.gts.");
-    }
+	static boolean isGatewayToServerTelemetryBatchRouting(String queueName) {
+		return queueName.startsWith("krs.tel.bat.gts.");
+	}
 
-    public static String gatewayToServerCommandRouting(String gatewayHid) {
-        return String.format("krs.cmd.gts.%s", gatewayHid);
-    }
+	static String gatewayToServerTelemetryGzipBatchRouting(String gatewayHid) {
+		return String.format("krs.tel.gzb.gts.%s", gatewayHid);
+	}
 
-    public static String serverToGatewayTelemetryRouting(String gatewayHid) {
-        return String.format("krs.tel.stg.%s", gatewayHid);
-    }
+	static boolean isGatewayToServerTelemetryGzipBatchRouting(String queueName) {
+		return queueName.startsWith("krs.tel.gzb.gts.");
+	}
 
-    public static String serverToGatewayCommandRouting(String gatewayHid) {
-        return String.format("krs.cmd.stg.%s", gatewayHid);
-    }
+	static String gatewayToServerCommandRouting(String gatewayHid) {
+		return String.format("krs.cmd.gts.%s", gatewayHid);
+	}
+
+	static String serverToGatewayTelemetryRouting(String gatewayHid) {
+		return String.format("krs.tel.stg.%s", gatewayHid);
+	}
+
+	static String serverToGatewayCommandRouting(String gatewayHid) {
+		return String.format("krs.cmd.stg.%s", gatewayHid);
+	}
 }

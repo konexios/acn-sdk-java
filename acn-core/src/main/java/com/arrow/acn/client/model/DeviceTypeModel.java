@@ -11,15 +11,17 @@
 package com.arrow.acn.client.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.arrow.acs.client.model.DefinitionModelAbstract;
 
 public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
-
-	private static final long serialVersionUID = -8123803738558398279L;
+	private static final long serialVersionUID = -658863900901932192L;
 
 	private List<DeviceTypeTelemetryModel> telemetries = new ArrayList<>();
+	private Map<String, DeviceStateValueMetadataModel> stateMetadata = new HashMap<>();
 
 	@Override
 	protected DeviceTypeModel self() {
@@ -31,6 +33,11 @@ public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
 		return this;
 	}
 
+	public DeviceTypeModel withStateMetadata(Map<String, DeviceStateValueMetadataModel> stateMetadata) {
+		setStateMetadata(stateMetadata);
+		return this;
+	}
+
 	public void setTelemetries(List<DeviceTypeTelemetryModel> telemetries) {
 		if (telemetries != null) {
 			this.telemetries.addAll(telemetries);
@@ -39,5 +46,13 @@ public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
 
 	public List<DeviceTypeTelemetryModel> getTelemetries() {
 		return telemetries;
+	}
+
+	public Map<String, DeviceStateValueMetadataModel> getStateMetadata() {
+		return stateMetadata;
+	}
+
+	public void setStateMetadata(Map<String, DeviceStateValueMetadataModel> stateMetadata) {
+		this.stateMetadata = stateMetadata;
 	}
 }

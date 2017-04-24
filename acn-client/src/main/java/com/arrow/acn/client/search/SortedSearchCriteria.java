@@ -16,22 +16,22 @@ public class SortedSearchCriteria extends PageSearchCriteria {
 	private static final String SORT_FIELD = "sortField";
 	private static final String SORT_DIRECTION = "sortDirection";
 
-	SortedSearchCriteria withCreatedDateFrom(String createdDateFrom) {
+	public SortedSearchCriteria withCreatedDateFrom(String createdDateFrom) {
 		simpleCriteria.put(CREATED_DATE_FROM, createdDateFrom);
 		return this;
 	}
 
-	SortedSearchCriteria withCreatedDateTo(String createdDateTo) {
+	public SortedSearchCriteria withCreatedDateTo(String createdDateTo) {
 		simpleCriteria.put(CREATED_DATE_TO, createdDateTo);
 		return this;
 	}
 
-	SortedSearchCriteria withSortField(String sortField) {
+	public SortedSearchCriteria withSortField(String sortField) {
 		simpleCriteria.put(SORT_FIELD, sortField);
 		return this;
 	}
 
-	SortedSearchCriteria withSortDirection(String sortDirection) {
+	public SortedSearchCriteria withSortDirection(String sortDirection) {
 		simpleCriteria.put(SORT_DIRECTION, sortDirection);
 		return this;
 	}

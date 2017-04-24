@@ -11,6 +11,7 @@
 package com.arrow.acn.client.model;
 
 import com.arrow.acn.data.TelemetryItemType;
+import com.arrow.acs.AcsSystemException;
 import com.arrow.acs.client.model.ModelAbstract;
 
 public class TelemetryItemModel extends ModelAbstract<TelemetryItemModel> {
@@ -35,6 +36,37 @@ public class TelemetryItemModel extends ModelAbstract<TelemetryItemModel> {
 	@Override
 	protected TelemetryItemModel self() {
 		return this;
+	}
+
+	public Object value() {
+		switch (type) {
+		case Boolean:
+			return getBoolValue();
+		case Date:
+			return getDateValue();
+		case DateTime:
+			return getDatetimeValue();
+		case Float:
+			return getFloatValue();
+		case FloatCube:
+			return getFloatCubeValue();
+		case FloatSquare:
+			return getFloatSqrValue();
+		case Integer:
+			return getIntValue();
+		case IntegerCube:
+			return getIntCubeValue();
+		case IntegerSquare:
+			return getIntSqrValue();
+		case String:
+			return getStrValue();
+		case System:
+			return getStrValue();
+		case Binary:
+			return getBinaryValue();
+		default:
+			throw new AcsSystemException("UNSUPPORTED TYPE: " + type);
+		}
 	}
 
 	public TelemetryItemModel withDeviceHid(String deviceHid) {
