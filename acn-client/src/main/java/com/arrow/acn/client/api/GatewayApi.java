@@ -18,10 +18,12 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.AuditLogModel;
+import com.arrow.acn.client.model.CreateGatewayModel;
 import com.arrow.acn.client.model.DeviceCommandModel;
 import com.arrow.acn.client.model.DeviceModel;
 import com.arrow.acn.client.model.GatewayConfigModel;
 import com.arrow.acn.client.model.GatewayModel;
+import com.arrow.acn.client.model.UpdateGatewayModel;
 import com.arrow.acn.client.search.GatewaySearchCriteria;
 import com.arrow.acn.client.search.LogsSearchCriteria;
 import com.arrow.acs.JsonUtils;
@@ -103,7 +105,7 @@ public final class GatewayApi extends ApiAbstract {
 	 * @throws AcnClientException
 	 *             if request failed
 	 */
-	public ExternalHidModel registerNewGateway(GatewayModel model) {
+	public ExternalHidModel registerNewGateway(CreateGatewayModel model) {
 		String method = "registerNewGateway";
 		try {
 			URI uri = buildUri(REGISTER_URL);
@@ -182,7 +184,7 @@ public final class GatewayApi extends ApiAbstract {
 	 * @throws AcnClientException
 	 *             if request failed
 	 */
-	public HidModel updateExistingGateway(String hid, GatewayModel model) {
+	public HidModel updateExistingGateway(String hid, UpdateGatewayModel model) {
 		String method = "updateExistingGateway";
 		try {
 			URI uri = buildUri(UPDATE_EXISTING_URL.replace("{hid}", hid));
