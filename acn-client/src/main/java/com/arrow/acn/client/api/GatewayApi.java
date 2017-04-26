@@ -12,7 +12,6 @@ package com.arrow.acn.client.api;
 
 import java.net.URI;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -23,6 +22,7 @@ import com.arrow.acn.client.model.DeviceCommandModel;
 import com.arrow.acn.client.model.DeviceModel;
 import com.arrow.acn.client.model.GatewayConfigModel;
 import com.arrow.acn.client.model.GatewayModel;
+import com.arrow.acn.client.search.GatewaySearchCriteria;
 import com.arrow.acn.client.search.LogsSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
@@ -32,11 +32,12 @@ import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.ListResultModel;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public final class GatewayApi extends ApiAbstract {
 	private static final String GATEWAYS_BASE_URL = API_BASE + "/gateways";
 	private static final String REGISTER_URL = GATEWAYS_BASE_URL;
-	private static final String FIND_ALL_URL = GATEWAYS_BASE_URL;
+	private static final String FIND_ALL_BY_URL = GATEWAYS_BASE_URL;
 	private static final String SPECIFIC_GATEWAY_URL = GATEWAYS_BASE_URL + "/{hid}";
 	private static final String FIND_URL = SPECIFIC_GATEWAY_URL;
 	private static final String UPDATE_EXISTING_URL = SPECIFIC_GATEWAY_URL;
@@ -48,6 +49,8 @@ public final class GatewayApi extends ApiAbstract {
 	private static final String LOGS_URL = SPECIFIC_GATEWAY_URL + "/logs";
 	private static final String SEND_ERROR_URL = SPECIFIC_GATEWAY_URL + "/errors";
 
+	private static final TypeReference<PagingResultModel<GatewayModel>> GATEWAY_MODEL_TYPE_REF = new TypeReference<PagingResultModel<GatewayModel>>() {
+	};
 	private final TypeReference<PagingResultModel<AuditLogModel>> AUDIT_LOG_MODEL_TYPE_REF = new TypeReference<PagingResultModel<AuditLogModel>>() {
 	};
 	private final TypeReference<ListResultModel<DeviceModel>> DEVICE_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceModel>>() {
@@ -58,19 +61,27 @@ public final class GatewayApi extends ApiAbstract {
 	}
 
 	/**
-	 * Sends GET request to obtain all available gateways
+	 * Sends GET request to obtain parameters of gateways corresponding
+	 * {@code criteria}
 	 *
-	 * @return array of {@link GatewayModel} containing gateway parameters
+	 * @param criteria
+	 *            {@link GatewaySearchCriteria} representing search filter
+	 *            parameters
+	 *
+	 * @return subset of {@link GatewayModel} containing gateway parameters.
+	 *         <b>Note:</b> resulting subset may contain not all gateways
+	 *         corresponding to search parameters because it cannot exceed page
+	 *         size passed in {@code criteria}
 	 *
 	 * @throws AcnClientException
 	 *             if request failed
 	 */
-	public GatewayModel[] findAll() {
-		String method = "findAll";
+	public PagingResultModel<GatewayModel> findAllBy(GatewaySearchCriteria criteria) {
+		String method = "findAllBy";
 		try {
-			URI uri = buildUri(FIND_ALL_URL);
-			GatewayModel[] result = execute(new HttpGet(uri), GatewayModel[].class);
-			logDebug(method, "size: %s", result.length);
+			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
+			PagingResultModel<GatewayModel> result = execute(new HttpGet(uri), GATEWAY_MODEL_TYPE_REF);
+			log(method, result);
 			return result;
 		} catch (Throwable e) {
 			logError(method, e);

@@ -10,10 +10,10 @@
  *******************************************************************************/
 package com.arrow.acn.client.model;
 
-import com.arrow.acs.client.model.ModelAbstract;
+import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
-public class GatewayModel extends ModelAbstract<GatewayModel> {
-	private static final long serialVersionUID = -6337474754509476955L;
+public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
+	private static final long serialVersionUID = 6827224663160186991L;
 
 	public enum GatewayType {
 		Local, Cloud, Mobile
