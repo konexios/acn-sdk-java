@@ -12,10 +12,10 @@ package com.arrow.acn.client.model;
 
 import java.util.Map;
 
-import com.arrow.acs.client.model.ModelAbstract;
+import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
-public class DeviceModel extends ModelAbstract<DeviceModel> {
-	private static final long serialVersionUID = 7931765882858260643L;
+public class DeviceModel extends AuditableDocumentModelAbstract<DeviceModel> {
+	private static final long serialVersionUID = 2652754792835097934L;
 
 	private String uid;
 	private String name;
