@@ -1,8 +1,9 @@
 package com.arrow.acn.client.api;
 
 import java.net.URI;
-import java.net.URLEncoder;
+import java.util.Collections;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -23,8 +24,8 @@ public class DeviceStateApi extends ApiAbstract {
 	private static final String CREATE_STATE_UPDATE_URL = DEVICES_STATE_BASE_URL + "/update";
 	private static final String TRANS_BASE_URL = DEVICES_STATE_BASE_URL + "/trans/%s/";
 	private static final String TRANS_RECEIVED_URL = TRANS_BASE_URL + "received";
-	private static final String TRANS_COMPLETE_URL = TRANS_BASE_URL + "complete";
-	private static final String TRANS_ERROR_URL = TRANS_BASE_URL + "error";
+	private static final String TRANS_SUCCEEDED_URL = TRANS_BASE_URL + "succeeded";
+	private static final String TRANS_FAILED_URL = TRANS_BASE_URL + "failed";
 
 	DeviceStateApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -82,10 +83,10 @@ public class DeviceStateApi extends ApiAbstract {
 		}
 	}
 
-	public StatusModel transComplete(String deviceHid, String transHid) {
-		String method = "transComplete";
+	public StatusModel transSucceeded(String deviceHid, String transHid) {
+		String method = "transSucceeded";
 		try {
-			URI uri = buildUri(String.format(TRANS_COMPLETE_URL, deviceHid, transHid));
+			URI uri = buildUri(String.format(TRANS_SUCCEEDED_URL, deviceHid, transHid));
 			StatusModel result = execute(new HttpPut(uri), StatusModel.class);
 			log(method, result);
 			return result;
@@ -95,11 +96,12 @@ public class DeviceStateApi extends ApiAbstract {
 		}
 	}
 
-	public StatusModel transError(String deviceHid, String transHid, String error) {
+	public StatusModel transFailed(String deviceHid, String transHid, String error) {
 		String method = "transError";
 		try {
-			URI uri = buildUri(String.format(TRANS_ERROR_URL, deviceHid, transHid));
-			StatusModel result = execute(new HttpPut(uri + "?error=" + URLEncoder.encode(error, "UTF-8")),
+			URI uri = buildUri(String.format(TRANS_FAILED_URL, deviceHid, transHid));
+			StatusModel result = execute(new HttpPut(uri),
+			        JsonUtils.toJson(Collections.singletonMap("error", StringUtils.trimToEmpty(error))),
 			        StatusModel.class);
 			log(method, result);
 			return result;
