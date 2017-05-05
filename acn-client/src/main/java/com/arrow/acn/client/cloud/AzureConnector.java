@@ -117,10 +117,10 @@ public class AzureConnector extends CloudConnectorAbstract {
 	class LocalMessageCallback implements MessageCallback {
 		public IotHubMessageResult execute(Message msg, Object context) {
 			String method = "messageCallback";
-			String payload = new String(msg.getBytes(), Message.DEFAULT_IOTHUB_MESSAGE_CHARSET);
-			logInfo(method, "payload: %s", payload);
+			byte[] bytes = msg.getBytes();
+			logInfo(method, "payload: %s", new String(bytes, Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
 			if (messageListener != null) {
-				messageListener.processMessage(gatewayUid, payload);
+				messageListener.processMessage(gatewayUid, bytes);
 			}
 			return IotHubMessageResult.COMPLETE;
 		}
