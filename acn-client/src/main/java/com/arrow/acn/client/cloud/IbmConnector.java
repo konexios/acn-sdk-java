@@ -129,7 +129,7 @@ public class IbmConnector extends CloudConnectorAbstract {
 		@Override
 		public void processCommand(Command cmd) {
 			if (listener != null) {
-				listener.processMessage(cmd.getCommand(), new String(cmd.getRawPayload(), StandardCharsets.UTF_8));
+				listener.processMessage(cmd.getCommand(), cmd.getRawPayload());
 			}
 		}
 
