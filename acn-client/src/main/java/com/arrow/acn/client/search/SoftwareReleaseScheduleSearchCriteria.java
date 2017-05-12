@@ -47,18 +47,19 @@ public class SoftwareReleaseScheduleSearchCriteria extends SearchCriteria {
 
 	public SoftwareReleaseScheduleSearchCriteria withStatuses(SoftwareReleaseScheduleStatus... statuses) {
 		if (statuses != null) {
-			arrayCriteria.put(STATUSES, Arrays.stream(statuses).map(s -> s.toString()).toArray(String[]::new));
+			arrayCriteria.put(STATUSES,
+			        Arrays.stream(statuses).map(SoftwareReleaseScheduleStatus::toString).toArray(String[]::new));
 		}
 		return this;
 	}
 
 	public SoftwareReleaseScheduleSearchCriteria withNotifyOnStart(boolean notifyOnStart) {
-		simpleCriteria.put(NOTIFY_ON_START, Boolean.valueOf(notifyOnStart).toString());
+		simpleCriteria.put(NOTIFY_ON_START, String.valueOf(notifyOnStart));
 		return this;
 	}
 
 	public SoftwareReleaseScheduleSearchCriteria withNotifyOnEnd(boolean notifyOnEnd) {
-		simpleCriteria.put(NOTIFY_ON_END, Boolean.valueOf(notifyOnEnd).toString());
+		simpleCriteria.put(NOTIFY_ON_END, String.valueOf(notifyOnEnd));
 		return this;
 	}
 
