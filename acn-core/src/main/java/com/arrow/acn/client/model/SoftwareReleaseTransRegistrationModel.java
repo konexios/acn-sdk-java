@@ -7,7 +7,7 @@ public class SoftwareReleaseTransRegistrationModel implements Serializable {
 	private static final long serialVersionUID = -5156352330326271900L;
 
 	private String objectHid;
-	private DeviceCategory category;
+	private String deviceCategoryHid;
 	private String softwareReleaseScheduleHid;
 	private String fromSoftwareReleaseHid;
 	private String toSoftwareReleaseHid;
@@ -17,11 +17,6 @@ public class SoftwareReleaseTransRegistrationModel implements Serializable {
 
 	public SoftwareReleaseTransRegistrationModel withObjectHid(String objectHid) {
 		setObjectHid(objectHid);
-		return this;
-	}
-
-	public SoftwareReleaseTransRegistrationModel withCategory(DeviceCategory category) {
-		setCategory(category);
 		return this;
 	}
 
@@ -56,20 +51,17 @@ public class SoftwareReleaseTransRegistrationModel implements Serializable {
 		return this;
 	}
 
+	public SoftwareReleaseTransRegistrationModel withDeviceCategoryHid(String deviceCategoryHid) {
+		setDeviceCategoryHid(deviceCategoryHid);
+		return this;
+	}
+
 	public String getObjectHid() {
 		return objectHid;
 	}
 
 	public void setObjectHid(String objectHid) {
 		this.objectHid = objectHid;
-	}
-
-	public DeviceCategory getCategory() {
-		return category;
-	}
-
-	public void setCategory(DeviceCategory category) {
-		this.category = category;
 	}
 
 	public String getSoftwareReleaseScheduleHid() {
@@ -118,5 +110,13 @@ public class SoftwareReleaseTransRegistrationModel implements Serializable {
 
 	public void setError(String error) {
 		this.error = error;
+	}
+
+	public String getDeviceCategoryHid() {
+		return deviceCategoryHid;
+	}
+
+	public void setDeviceCategoryHid(String deviceCategoryHid) {
+		this.deviceCategoryHid = deviceCategoryHid;
 	}
 }

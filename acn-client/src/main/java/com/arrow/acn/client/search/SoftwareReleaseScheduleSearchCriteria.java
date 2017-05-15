@@ -3,7 +3,6 @@ package com.arrow.acn.client.search;
 import java.time.Instant;
 import java.util.Arrays;
 
-import com.arrow.acn.client.model.DeviceCategory;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleStatus;
 import com.arrow.acs.client.search.SearchCriteria;
 
@@ -12,7 +11,7 @@ public class SoftwareReleaseScheduleSearchCriteria extends SearchCriteria {
 	private static final String FROM_SCHEDULED_DATE = "fromScheduledDate";
 	private static final String TO_SCHEDULED_DATE = "toScheduledDate";
 	private static final String SOFTWARE_RELEASE_HIDS = "softwareReleaseHids";
-	private static final String CATEGORY = "category";
+	private static final String DEVICE_CATEGORY_HID = "deviceCategoryHid";
 	private static final String OBJECT_HIDS = "objectHids";
 	private static final String STATUSES = "statuses";
 	private static final String NOTIFY_ON_START = "notifyOnStart";
@@ -35,8 +34,8 @@ public class SoftwareReleaseScheduleSearchCriteria extends SearchCriteria {
 		return this;
 	}
 
-	public SoftwareReleaseScheduleSearchCriteria withCategory(DeviceCategory category) {
-		simpleCriteria.put(CATEGORY, category.toString());
+	public SoftwareReleaseScheduleSearchCriteria withDeviceCategoryHid(String deviceCategoryHid) {
+		simpleCriteria.put(DEVICE_CATEGORY_HID, deviceCategoryHid);
 		return this;
 	}
 
@@ -48,7 +47,7 @@ public class SoftwareReleaseScheduleSearchCriteria extends SearchCriteria {
 	public SoftwareReleaseScheduleSearchCriteria withStatuses(SoftwareReleaseScheduleStatus... statuses) {
 		if (statuses != null) {
 			arrayCriteria.put(STATUSES,
-			        Arrays.stream(statuses).map(SoftwareReleaseScheduleStatus::toString).toArray(String[]::new));
+			        Arrays.stream(statuses).map(Object::toString).toArray(String[]::new));
 		}
 		return this;
 	}

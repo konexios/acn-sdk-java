@@ -10,7 +10,7 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 
 	private String scheduledDate;
 	private String softwareReleaseHid;
-	private DeviceCategory category;
+	private String deviceCategoryHid;
 	private String comments;
 	private Set<String> objectHids = new HashSet<String>();
 	private SoftwareReleaseScheduleStatus status;
@@ -28,8 +28,8 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withCategory(DeviceCategory category) {
-		setCategory(category);
+	public SoftwareReleaseScheduleRegistrationModel withDeviceCategoryHid(String deviceCategoryHid) {
+		setDeviceCategoryHid(deviceCategoryHid);
 		return this;
 	}
 
@@ -84,14 +84,6 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 		this.softwareReleaseHid = softwareReleaseHid;
 	}
 
-	public DeviceCategory getCategory() {
-		return category;
-	}
-
-	public void setCategory(DeviceCategory category) {
-		this.category = category;
-	}
-
 	public String getComments() {
 		return comments;
 	}
@@ -138,5 +130,13 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 
 	public void setNotifyEmails(String notifyEmails) {
 		this.notifyEmails = notifyEmails;
+	}
+
+	public String getDeviceCategoryHid() {
+		return deviceCategoryHid;
+	}
+
+	public void setDeviceCategoryHid(String deviceCategoryHid) {
+		this.deviceCategoryHid = deviceCategoryHid;
 	}
 }

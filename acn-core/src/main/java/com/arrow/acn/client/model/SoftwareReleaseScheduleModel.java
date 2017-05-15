@@ -12,7 +12,7 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 	private String applicationHid;
 	private String scheduledDate;
 	private String softwareReleaseHid;
-	private DeviceCategory category;
+	private String deviceCategoryHid;
 	private String comments;
 	private List<String> objectHids = new ArrayList<String>();
 	private SoftwareReleaseScheduleStatus status;
@@ -45,11 +45,6 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 
 	public SoftwareReleaseScheduleModel withSoftwareReleaseHid(String softwareReleaseHid) {
 		setSoftwareReleaseHid(softwareReleaseHid);
-		return this;
-	}
-
-	public SoftwareReleaseScheduleModel withCategory(DeviceCategory category) {
-		setCategory(category);
 		return this;
 	}
 
@@ -88,6 +83,11 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 		return this;
 	}
 
+	public SoftwareReleaseScheduleModel withDeviceCategoryHid(String deviceCategoryHid) {
+		setDeviceCategoryHid(deviceCategoryHid);
+		return this;
+	}
+
 	public String getScheduledDate() {
 		return scheduledDate;
 	}
@@ -102,14 +102,6 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 
 	public void setSoftwareReleaseHid(String softwareReleaseHid) {
 		this.softwareReleaseHid = softwareReleaseHid;
-	}
-
-	public DeviceCategory getCategory() {
-		return category;
-	}
-
-	public void setCategory(DeviceCategory category) {
-		this.category = category;
 	}
 
 	public String getComments() {
@@ -158,5 +150,13 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 
 	public void setNotifyEmails(String notifyEmails) {
 		this.notifyEmails = notifyEmails;
+	}
+
+	public String getDeviceCategoryHid() {
+		return deviceCategoryHid;
+	}
+
+	public void setDeviceCategoryHid(String deviceCategoryHid) {
+		this.deviceCategoryHid = deviceCategoryHid;
 	}
 }
