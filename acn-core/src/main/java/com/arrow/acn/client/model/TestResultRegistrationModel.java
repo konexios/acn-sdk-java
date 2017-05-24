@@ -1,16 +1,20 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestResultRegistrationModel implements Serializable  {
-	private static final long serialVersionUID = 6175664500208558852L;
+	private static final long serialVersionUID = 5667361130792298479L;
+	
 	//private DeviceCategory category; 
 	private String objectHid;
 	private String status;
 	private String testProcedureHid;
 	private List<TestResultStepModel> steps = new ArrayList<>();
+	private Instant started;
+	private Instant ended;
 
 	public String getTestProcedureHid() {
 		return testProcedureHid;
@@ -70,5 +74,21 @@ public class TestResultRegistrationModel implements Serializable  {
 
 	public void setSteps(List<TestResultStepModel> steps) {
 		this.steps = steps;
+	}
+
+	public Instant getStarted() {
+		return started;
+	}
+
+	public void setStarted(Instant started) {
+		this.started = started;
+	}
+	
+	public Instant getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Instant ended) {
+		this.ended = ended;
 	}
 }

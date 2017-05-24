@@ -1,18 +1,22 @@
 package com.arrow.acn.client.model;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public class TestResultModel extends AuditableDocumentModelAbstract<TestResultModel> {
-	private static final long serialVersionUID = 5708579470146042662L;
+	private static final long serialVersionUID = -8647007345276915564L;
+
 	//private DeviceCategory category; 
 	private String objectHid;
 	private String status;
 	private String testProcedureHid;
 	private List<TestResultStepModel> steps = new ArrayList<>();
 	private String hid;
+	private Instant started;
+	private Instant ended;
 
 	@Override
 	protected TestResultModel self() {
@@ -67,7 +71,7 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 	}
 
 	public TestResultModel withStatus(String status) {
-		this.status = status;
+		setStatus(status);
 		return this;
 	}
 
@@ -89,6 +93,32 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 
 	public TestResultModel withHid(String hid) {
 		setHid(hid);
+		return this;
+	}
+	
+	public Instant getStarted() {
+		return started;
+	}
+
+	public void setStarted(Instant started) {
+		this.started = started;
+	}
+	
+	public TestResultModel withStarted(Instant started) {
+		setStarted(started);
+		return this;
+	}
+	
+	public Instant getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Instant ended) {
+		this.ended = ended;
+	}
+	
+	public TestResultModel withEnded(Instant ended) {
+		setEnded(ended);
 		return this;
 	}
 }
