@@ -11,5 +11,5 @@
 package com.arrow.acn.client.cloud;
 
 public interface MessageListener {
-    void processMessage(String topic, String payload);
+    void processMessage(String topic, byte[] payload);
 }

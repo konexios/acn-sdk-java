@@ -205,9 +205,9 @@ public class CustomMqttClient extends Loggable {
 		@Override
 		public void messageArrived(String topic, MqttMessage message) throws Exception {
 			String method = "messageArrived";
+			byte[] payload = message.getPayload();
+			logDebug(method, "topic: %s, payload: %s", topic, new String(payload, StandardCharsets.UTF_8));
 			if (listener != null) {
-				String payload = new String(message.getPayload(), StandardCharsets.UTF_8);
-				logDebug(method, "topic: %s, payload: %s", topic, payload);
 				try {
 					listener.processMessage(topic, payload);
 				} catch (Throwable t) {
