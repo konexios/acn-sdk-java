@@ -1,24 +1,23 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
-import java.time.Instant;
 
 public class TestResultStepModel implements Serializable{
 	private static final long serialVersionUID = 7560816543482740980L;
 
-	private String testProcedureStepId;
+	private TestProcedureStepModel definition;
 	private String comment;
 	private String error;
 	private String status;
-	private Instant started;
-	private Instant ended;
+	private String started;
+	private String ended;
 	
-	public String getTestProcedureStepId() {
-		return testProcedureStepId;
+	public TestProcedureStepModel getDefinition() {
+		return definition;
 	}
 
-	public void setTestProcedureStepId(String testProcedureStepId) {
-		this.testProcedureStepId = testProcedureStepId;
+	public void setDefinition(TestProcedureStepModel definition) {
+		this.definition = definition;
 	}
 
 	public String getComment() {
@@ -45,19 +44,19 @@ public class TestResultStepModel implements Serializable{
 		this.status = status;
 	}
 	
-	public Instant getStarted() {
+	public String getStarted() {
 		return started;
 	}
 
-	public void setStarted(Instant started) {
+	public void setStarted(String started) {
 		this.started = started;
 	}
 	
-	public Instant getEnded() {
+	public String getEnded() {
 		return ended;
 	}
 
-	public void setEnded(Instant ended) {
+	public void setEnded(String ended) {
 		this.ended = ended;
 	}
 }

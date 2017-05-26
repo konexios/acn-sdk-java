@@ -15,8 +15,8 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 	private String testProcedureHid;
 	private List<TestResultStepModel> steps = new ArrayList<>();
 	private String hid;
-	private Instant started;
-	private Instant ended;
+	private String started;
+	private String ended;
 
 	@Override
 	protected TestResultModel self() {
@@ -96,28 +96,28 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 		return this;
 	}
 	
-	public Instant getStarted() {
+	public String getStarted() {
 		return started;
 	}
 
-	public void setStarted(Instant started) {
+	public void setStarted(String started) {
 		this.started = started;
 	}
 	
-	public TestResultModel withStarted(Instant started) {
+	public TestResultModel withStarted(String started) {
 		setStarted(started);
 		return this;
 	}
 	
-	public Instant getEnded() {
+	public String getEnded() {
 		return ended;
 	}
 
-	public void setEnded(Instant ended) {
+	public void setEnded(String ended) {
 		this.ended = ended;
 	}
 	
-	public TestResultModel withEnded(Instant ended) {
+	public TestResultModel withEnded(String ended) {
 		setEnded(ended);
 		return this;
 	}

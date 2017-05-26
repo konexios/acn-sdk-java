@@ -13,8 +13,8 @@ public class TestResultRegistrationModel implements Serializable  {
 	private String status;
 	private String testProcedureHid;
 	private List<TestResultStepModel> steps = new ArrayList<>();
-	private Instant started;
-	private Instant ended;
+	private String started;
+	private String ended;
 
 	public String getTestProcedureHid() {
 		return testProcedureHid;
@@ -76,19 +76,19 @@ public class TestResultRegistrationModel implements Serializable  {
 		this.steps = steps;
 	}
 
-	public Instant getStarted() {
+	public String getStarted() {
 		return started;
 	}
 
-	public void setStarted(Instant started) {
+	public void setStarted(String started) {
 		this.started = started;
 	}
 	
-	public Instant getEnded() {
+	public String getEnded() {
 		return ended;
 	}
 
-	public void setEnded(Instant ended) {
+	public void setEnded(String ended) {
 		this.ended = ended;
 	}
 }
