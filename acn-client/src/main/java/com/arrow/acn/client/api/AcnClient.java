@@ -21,25 +21,29 @@ public final class AcnClient {
 	private final CoreUserApi coreUserApi;
 	private final DeviceActionApi deviceActionApi;
 	private final DeviceApi deviceApi;
+	private final DeviceStateApi deviceStateApi;
 	private final GatewayApi gatewayApi;
 	private final NodeApi nodeApi;
 	private final NodeTypeApi nodeTypeApi;
+	private final SoftwareReleaseScheduleApi softwareReleaseScheduleApi;
+	private final SoftwareReleaseTransApi softwareReleaseTransApi;
 	private final TelemetryApi telemetryApi;
-	private final DeviceStateApi deviceStateApi;
 
 	public AcnClient(ApiConfig apiConfig) {
 		Validate.notNull(apiConfig, "apiConfig is not set");
 		this.apiConfig = apiConfig;
-		this.accountApi = new AccountApi(apiConfig);
-		this.coreEventApi = new CoreEventApi(apiConfig);
-		this.coreUserApi = new CoreUserApi(apiConfig);
-		this.deviceActionApi = new DeviceActionApi(apiConfig);
-		this.deviceApi = new DeviceApi(apiConfig);
-		this.gatewayApi = new GatewayApi(apiConfig);
-		this.nodeApi = new NodeApi(apiConfig);
-		this.nodeTypeApi = new NodeTypeApi(apiConfig);
-		this.telemetryApi = new TelemetryApi(apiConfig);
-		this.deviceStateApi = new DeviceStateApi(apiConfig);
+		accountApi = new AccountApi(apiConfig);
+		coreEventApi = new CoreEventApi(apiConfig);
+		coreUserApi = new CoreUserApi(apiConfig);
+		deviceActionApi = new DeviceActionApi(apiConfig);
+		deviceApi = new DeviceApi(apiConfig);
+		deviceStateApi = new DeviceStateApi(apiConfig);
+		gatewayApi = new GatewayApi(apiConfig);
+		nodeApi = new NodeApi(apiConfig);
+		nodeTypeApi = new NodeTypeApi(apiConfig);
+		softwareReleaseScheduleApi = new SoftwareReleaseScheduleApi(apiConfig);
+		softwareReleaseTransApi = new SoftwareReleaseTransApi(apiConfig);
+		telemetryApi = new TelemetryApi(apiConfig);
 	}
 
 	public void setApiConfig(ApiConfig apiConfig) {
@@ -51,7 +55,7 @@ public final class AcnClient {
 		deviceApi.setApiConfig(apiConfig);
 		gatewayApi.setApiConfig(apiConfig);
 		nodeApi.setApiConfig(apiConfig);
-		nodeTypeApi.setApiConfig(apiConfig);
+		softwareReleaseScheduleApi.setApiConfig(apiConfig);
 		telemetryApi.setApiConfig(apiConfig);
 		deviceActionApi.setApiConfig(apiConfig);
 	}
@@ -80,6 +84,10 @@ public final class AcnClient {
 		return deviceApi;
 	}
 
+	public DeviceStateApi getDeviceStateApi() {
+		return deviceStateApi;
+	}
+
 	public GatewayApi getGatewayApi() {
 		return gatewayApi;
 	}
@@ -92,11 +100,15 @@ public final class AcnClient {
 		return nodeTypeApi;
 	}
 
-	public TelemetryApi getTelemetryApi() {
-		return telemetryApi;
+	public SoftwareReleaseScheduleApi getSoftwareReleaseScheduleApi() {
+		return softwareReleaseScheduleApi;
 	}
 
-	public DeviceStateApi getDeviceStateApi() {
-		return deviceStateApi;
+	public SoftwareReleaseTransApi getSoftwareReleaseTransApi() {
+		return softwareReleaseTransApi;
+	}
+
+	public TelemetryApi getTelemetryApi() {
+		return telemetryApi;
 	}
 }
