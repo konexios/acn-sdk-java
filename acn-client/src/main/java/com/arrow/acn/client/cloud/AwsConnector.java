@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 import com.arrow.acn.client.IotParameters;
+import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.model.AwsConfigModel;
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.utils.SslUtil;
@@ -25,8 +26,8 @@ import com.arrow.acn.client.utils.SslUtil;
 public class AwsConnector extends MqttConnectorAbstract {
 	private final AwsConfigModel model;
 
-	public AwsConnector(AwsConfigModel model) {
-		super(String.format("ssl://%s", model.getHost()));
+	public AwsConnector(AwsConfigModel model, AcnClient acnClient) {
+		super(String.format("ssl://%s", model.getHost()), acnClient);
 		this.model = model;
 		// TODO revisit
 		// setSubscriber(false);
