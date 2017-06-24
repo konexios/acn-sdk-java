@@ -10,7 +10,6 @@
  *******************************************************************************/
 package com.arrow.acn.client.cloud;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
 
@@ -18,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.arrow.acn.client.ClientConstants;
 import com.arrow.acn.client.IotParameters;
+import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.model.IbmConfigModel;
 import com.arrow.acn.client.utils.Utils;
 import com.arrow.acs.AcsLogicalException;
@@ -43,7 +43,8 @@ public class IbmConnector extends CloudConnectorAbstract {
 	private GatewayClient gatewayClient;
 	private DefaultGatewayCallback gatewayCallback = new DefaultGatewayCallback();
 
-	public IbmConnector(IbmConfigModel gatewayModel) {
+	public IbmConnector(IbmConfigModel gatewayModel, AcnClient acnClient) {
+		super(acnClient);
 		this.gatewayModel = gatewayModel;
 	}
 
@@ -115,31 +116,19 @@ public class IbmConnector extends CloudConnectorAbstract {
 		this.qos = qos;
 	}
 
-	@Override
-	public void setListener(MessageListener listener) {
-		gatewayCallback.setListener(listener);
-	}
-
-	private static class DefaultGatewayCallback implements GatewayCallback {
-		private MessageListener listener;
+	private class DefaultGatewayCallback implements GatewayCallback {
 
 		DefaultGatewayCallback() {
 		}
 
 		@Override
 		public void processCommand(Command cmd) {
-			if (listener != null) {
-				listener.processMessage(cmd.getCommand(), cmd.getRawPayload());
-			}
+			validateAndProcessEvent(cmd.getCommand(), cmd.getRawPayload());
 		}
 
 		@Override
 		public void processNotification(Notification notification) {
 			// not implemented in library
-		}
-
-		void setListener(MessageListener listener) {
-			this.listener = listener;
 		}
 	}
 }

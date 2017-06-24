@@ -17,17 +17,20 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import com.arrow.acn.Utils;
 import com.arrow.acn.client.ClientConstants.Mqtt;
 import com.arrow.acn.client.IotParameters;
+import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acs.JsonUtils;
 
-public abstract class MqttConnectorAbstract extends CloudConnectorAbstract {
+public abstract class MqttConnectorAbstract extends CloudConnectorAbstract implements MessageListener {
 	private int qos;
 	private CustomMqttClient client;
 
-	protected MqttConnectorAbstract(String url) {
+	protected MqttConnectorAbstract(String url, AcnClient acnClient) {
+		super(acnClient);
 		client = new CustomMqttClient(url);
 	}
 
-	protected MqttConnectorAbstract(String url, String gatewayHid) {
+	protected MqttConnectorAbstract(String url, String gatewayHid, AcnClient acnClient) {
+		super(acnClient);
 		client = new CustomMqttClient(url, gatewayHid);
 		setGatewayHid(gatewayHid);
 	}
@@ -36,6 +39,7 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract {
 	public void start() {
 		client.setOptions(mqttConnectOptions());
 		client.setTopics(subscriberTopic());
+		client.setListener(this);
 		client.connect(false);
 	}
 
@@ -63,11 +67,6 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract {
 		}
 	}
 
-	@Override
-	public void setListener(MessageListener listener) {
-		client.setListener(listener);
-	}
-
 	protected int getQos() {
 		return qos;
 	}
@@ -81,6 +80,11 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract {
 		options.setConnectionTimeout(Mqtt.DEFAULT_CONNECTION_TIMEOUT_SECS);
 		options.setKeepAliveInterval(Mqtt.DEFAULT_KEEP_ALIVE_INTERVAL_SECS);
 		return options;
+	}
+
+	@Override
+	public void processMessage(String topic, byte[] payload) {
+		validateAndProcessEvent(topic,  payload);
 	}
 
 	protected abstract String publisherTopic(IotParameters payload);
