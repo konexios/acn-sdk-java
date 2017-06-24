@@ -16,22 +16,21 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 import com.arrow.acn.MqttConstants;
 import com.arrow.acn.client.IotParameters;
+import com.arrow.acn.client.api.AcnClient;
 
 public class IotConnectConnector extends MqttConnectorAbstract {
     private String iotConnectMqttVHost;
-    private String apiKey;
 
-    public IotConnectConnector(String url, String iotConnectMqttVHost, String apiKey, String gatewayHid) {
-        super(url, gatewayHid);
+    public IotConnectConnector(String url, String iotConnectMqttVHost, String gatewayHid, AcnClient acnClient) {
+        super(url, gatewayHid, acnClient);
         this.iotConnectMqttVHost = iotConnectMqttVHost;
-        this.apiKey = apiKey;
     }
 
     @Override
     protected MqttConnectOptions mqttConnectOptions() {
         MqttConnectOptions options = super.mqttConnectOptions();
         options.setUserName(String.format("%s:%s", iotConnectMqttVHost, getGatewayHid()));
-        options.setPassword(apiKey.toCharArray());
+        options.setPassword(acnClient.getApiConfig().getApiKey().toCharArray());
         return options;
     }
 

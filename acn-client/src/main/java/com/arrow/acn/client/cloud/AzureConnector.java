@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang3.Validate;
 
 import com.arrow.acn.client.IotParameters;
+import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.model.AzureConfigModel;
 import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsRuntimeException;
@@ -40,16 +41,11 @@ public class AzureConnector extends CloudConnectorAbstract {
 	private AtomicLong eventCounter = new AtomicLong();
 	private LocalEventCallback eventCallback = new LocalEventCallback();
 	private LocalMessageCallback messageCallback = new LocalMessageCallback();
-	private MessageListener messageListener;
 
-	public AzureConnector(AzureConfigModel model, String gatewayUid) {
+	public AzureConnector(AzureConfigModel model, String gatewayUid, AcnClient acnClient) {
+		super(acnClient);
 		this.model = model;
 		this.gatewayUid = gatewayUid;
-	}
-
-	@Override
-	public void setListener(MessageListener listener) {
-		this.messageListener = listener;
 	}
 
 	@Override
@@ -119,9 +115,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 			String method = "messageCallback";
 			byte[] bytes = msg.getBytes();
 			logInfo(method, "payload: %s", new String(bytes, Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
-			if (messageListener != null) {
-				messageListener.processMessage(gatewayUid, bytes);
-			}
+			validateAndProcessEvent(gatewayUid, bytes);
 			return IotHubMessageResult.COMPLETE;
 		}
 	}
