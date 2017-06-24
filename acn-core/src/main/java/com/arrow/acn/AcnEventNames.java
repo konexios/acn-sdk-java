@@ -23,5 +23,8 @@ public interface AcnEventNames {
 
 		final static String SENSOR_PROPERTY_CHANGE = "ServerToGateway_SensorPropertyChange";
 		final static String SENSOR_TELEMETRY_CHANGE = "ServerToGateway_SensorTelemetryChange";
+
+		final static String GATEWAY_SOFTWARE_RELEASE = "ServerToGateway_GatewaySoftwareRelease";
+		final static String DEVICE_SOFTWARE_RELEASE = "ServerToGateway_DeviceSoftwareRelease";
 	}
 }
