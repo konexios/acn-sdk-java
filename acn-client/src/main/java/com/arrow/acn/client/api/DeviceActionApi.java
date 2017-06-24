@@ -32,6 +32,9 @@ public class DeviceActionApi extends ApiAbstract {
 	private static final String SPECIFIC_DEVICE_URL = DEVICES_BASE_URL + "/{hid}";
 	private static final String SPECIFIC_DEVICE_ACTIONS_URL = SPECIFIC_DEVICE_URL + "/actions";
 	private static final String SPECIFIC_ACTION_URL = SPECIFIC_DEVICE_ACTIONS_URL + "/{index}";
+	private static final String DEVICE_TYPES_URL = DEVICES_BASE_URL + "/types";
+	private static final String SPECIFIC_DEVICE_TYPE_ACTIONS_URL = DEVICE_TYPES_URL + "/{hid}/actions";
+	private static final String SPECIFIC_DEVICE_TYPE_ACTION_URL = SPECIFIC_DEVICE_TYPE_ACTIONS_URL + "/{index}";
 
 	private static final TypeReference<ListResultModel<DeviceActionTypeModel>> DEVICE_ACTION_TYPE_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceActionTypeModel>>() {
 	};
@@ -79,7 +82,7 @@ public class DeviceActionApi extends ApiAbstract {
 	 *             if request failed
 	 */
 	public ListResultModel<DeviceActionModel> listDeviceActions(String hid) {
-		String method = "listAvailableActionTypes";
+		String method = "listDeviceActions";
 		try {
 			URI uri = buildUri(SPECIFIC_DEVICE_ACTIONS_URL.replace("{hid}", hid));
 			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), DEVICE_ACTION_MODEL_TYPE_REF);
@@ -132,7 +135,7 @@ public class DeviceActionApi extends ApiAbstract {
 	 *             no exist
 	 */
 	public HidModel deleteDeviceAction(String hid, int index) {
-		String method = "findByHid";
+		String method = "deleteDeviceAction";
 		try {
 			URI uri = buildUri(SPECIFIC_ACTION_URL.replace("{hid}", hid).replace("{index}", Integer.toString(index)));
 			HidModel result = execute(new HttpDelete(uri), HidModel.class);
@@ -162,6 +165,60 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "updateDeviceAction";
 		try {
 			URI uri = buildUri(SPECIFIC_ACTION_URL.replace("{hid}", hid).replace("{index}", Integer.toString(index)));
+			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public ListResultModel<DeviceActionModel> listDeviceTypeActions(String deviceTypeHid) {
+		String method = "listDeviceTypeActions";
+		try {
+			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTIONS_URL.replace("{hid}", deviceTypeHid));
+			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), DEVICE_ACTION_MODEL_TYPE_REF);
+			logDebug(method, "size: %s", result.getSize());
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel createNewDeviceTypeAction(String deviceTypeHid, DeviceActionModel model) {
+		String method = "createNewDeviceTypeAction";
+		try {
+			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTIONS_URL.replace("{hid}", deviceTypeHid));
+			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel deleteDeviceTypeAction(String deviceTypeHid, int index) {
+		String method = "deleteDeviceTypeAction";
+		try {
+			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTION_URL.replace("{hid}", deviceTypeHid).replace("{index}",
+			        Integer.toString(index)));
+			HidModel result = execute(new HttpDelete(uri), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel updateDeviceTypeAction(String deviceTypeHid, int index, DeviceActionModel model) {
+		String method = "updateDeviceTypeAction";
+		try {
+			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTION_URL.replace("{hid}", deviceTypeHid).replace("{index}",
+			        Integer.toString(index)));
 			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;
