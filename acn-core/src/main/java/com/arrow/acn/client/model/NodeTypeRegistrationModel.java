@@ -20,6 +20,7 @@ public class NodeTypeRegistrationModel implements Serializable {
 	private String name;
 	private String description;
 	private boolean enabled = true;
+	private String deviceCategoryHid;
 
 	public void trim() {
 		name = StringUtils.trimToNull(name);
@@ -38,6 +39,11 @@ public class NodeTypeRegistrationModel implements Serializable {
 
 	public NodeTypeRegistrationModel withEnabled(boolean enabled) {
 		setEnabled(enabled);
+		return this;
+	}
+	
+	public NodeTypeRegistrationModel withDeviceCategoryHid(String deviceCategoryHid) {
+		setDeviceCategoryHid(deviceCategoryHid);
 		return this;
 	}
 
@@ -63,5 +69,13 @@ public class NodeTypeRegistrationModel implements Serializable {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public String getDeviceCategoryHid() {
+		return deviceCategoryHid;
+	}
+	
+	public void setDeviceCategoryHid(String deviceCategoryHid) {
+		this.deviceCategoryHid = deviceCategoryHid;
 	}
 }

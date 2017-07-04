@@ -16,6 +16,7 @@ public class NodeTypeModel extends DefinitionModelAbstract<NodeTypeModel> {
 	private static final long serialVersionUID = 5534197607758563587L;
 
 	private boolean enabled;
+	private String deviceCategoryHid;
 
 	@Override
 	protected NodeTypeModel self() {
@@ -33,5 +34,18 @@ public class NodeTypeModel extends DefinitionModelAbstract<NodeTypeModel> {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public String getDeviceCategoryHid() {
+		return deviceCategoryHid;
+	}
+	
+	public void setDeviceCategoryHid(String deviceCategoryHid) {
+		this.deviceCategoryHid = deviceCategoryHid;
+	}
+	
+	public NodeTypeModel withDeviceCategoryHid(String deviceCategoryHid) {
+		setDeviceCategoryHid(deviceCategoryHid);
+		return this;
 	}
 }
