@@ -17,6 +17,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.arrow.acn.AcnDeviceCategory;
+
 public class DeviceTypeRegistrationModel implements Serializable {
 	private static final long serialVersionUID = 3174634854949378263L;
 
@@ -25,6 +27,7 @@ public class DeviceTypeRegistrationModel implements Serializable {
 	private List<DeviceTypeTelemetryModel> telemetries;
 	private Map<String, DeviceStateValueMetadataModel> stateMetadata = new HashMap<>();
 	private boolean enabled = true;
+	private AcnDeviceCategory deviceCategory;
 
 	public void trim() {
 		name = StringUtils.trimToNull(name);
@@ -53,6 +56,11 @@ public class DeviceTypeRegistrationModel implements Serializable {
 
 	public DeviceTypeRegistrationModel withStateMetadata(Map<String, DeviceStateValueMetadataModel> stateMetadata) {
 		setStateMetadata(stateMetadata);
+		return this;
+	}
+
+	public DeviceTypeRegistrationModel withDeviceCategory(AcnDeviceCategory deviceCategory) {
+		setDeviceCategory(deviceCategory);
 		return this;
 	}
 
@@ -96,6 +104,14 @@ public class DeviceTypeRegistrationModel implements Serializable {
 		this.stateMetadata = stateMetadata;
 	}
 
+	public AcnDeviceCategory getDeviceCategory() {
+		return deviceCategory;
+	}
+
+	public void setDeviceCategory(AcnDeviceCategory deviceCategory) {
+		this.deviceCategory = deviceCategory;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,6 +119,7 @@ public class DeviceTypeRegistrationModel implements Serializable {
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + (enabled ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((deviceCategory == null) ? 0 : deviceCategory.name().hashCode());
 		return result;
 	}
 
@@ -126,6 +143,11 @@ public class DeviceTypeRegistrationModel implements Serializable {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (deviceCategory == null) {
+			if (other.deviceCategory != null)
+				return false;
+		} else if (!deviceCategory.equals(other.deviceCategory))
 			return false;
 		return true;
 	}
