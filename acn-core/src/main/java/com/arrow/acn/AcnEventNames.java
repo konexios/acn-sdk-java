@@ -26,5 +26,8 @@ public interface AcnEventNames {
 
 		final static String GATEWAY_SOFTWARE_RELEASE = "ServerToGateway_GatewaySoftwareRelease";
 		final static String DEVICE_SOFTWARE_RELEASE = "ServerToGateway_DeviceSoftwareRelease";
+
+		final static String GATEWAY_CONFIGURATION_UPDATE = "ServerToGateway_GatewayConfigurationUpdate";
+		final static String DEVICE_CONFIGURATION_UPDATE = "ServerToGateway_DeviceConfigurationUpdate";
 	}
 }
