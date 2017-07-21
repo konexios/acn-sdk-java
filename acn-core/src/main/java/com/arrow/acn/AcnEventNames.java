@@ -29,5 +29,8 @@ public interface AcnEventNames {
 
 		final static String GATEWAY_CONFIGURATION_UPDATE = "ServerToGateway_GatewayConfigurationUpdate";
 		final static String DEVICE_CONFIGURATION_UPDATE = "ServerToGateway_DeviceConfigurationUpdate";
+
+		final static String GATEWAY_CONFIGURATION_RESTORE = "ServerToGateway_GatewayConfigurationRestore";
+		final static String DEVICE_CONFIGURATION_RESTORE = "ServerToGateway_DeviceConfigurationRestore";
 	}
 }
