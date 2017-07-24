@@ -18,6 +18,8 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.AuditLogModel;
+import com.arrow.acn.client.model.ConfigBackupModel;
+import com.arrow.acn.client.model.CreateConfigBackupModel;
 import com.arrow.acn.client.model.CreateGatewayModel;
 import com.arrow.acn.client.model.DeviceCommandModel;
 import com.arrow.acn.client.model.DeviceModel;
@@ -26,6 +28,7 @@ import com.arrow.acn.client.model.GatewayModel;
 import com.arrow.acn.client.model.UpdateGatewayModel;
 import com.arrow.acn.client.search.GatewaySearchCriteria;
 import com.arrow.acn.client.search.LogsSearchCriteria;
+import com.arrow.acn.client.search.SortedSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.ErrorModel;
@@ -50,12 +53,17 @@ public final class GatewayApi extends ApiAbstract {
 	private static final String HEARTBEAT_URL = SPECIFIC_GATEWAY_URL + "/heartbeat";
 	private static final String LOGS_URL = SPECIFIC_GATEWAY_URL + "/logs";
 	private static final String SEND_ERROR_URL = SPECIFIC_GATEWAY_URL + "/errors";
+	private static final String CONFIGURATION_BACKUP_URL = SPECIFIC_GATEWAY_URL + "/config-backups";
+	private static final String SPECIFIC_CONFIGURATION_BACKUP_URL = CONFIGURATION_BACKUP_URL + "/{configBackupHid}";
+	private static final String RESTORE_CONFIGURATION_URL = SPECIFIC_CONFIGURATION_BACKUP_URL + "/restore";
 
 	private static final TypeReference<PagingResultModel<GatewayModel>> GATEWAY_MODEL_TYPE_REF = new TypeReference<PagingResultModel<GatewayModel>>() {
 	};
 	private final TypeReference<PagingResultModel<AuditLogModel>> AUDIT_LOG_MODEL_TYPE_REF = new TypeReference<PagingResultModel<AuditLogModel>>() {
 	};
 	private final TypeReference<ListResultModel<DeviceModel>> DEVICE_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceModel>>() {
+	};
+	private static final TypeReference<PagingResultModel<ConfigBackupModel>> CONFIG_BACKUP_MODEL_TYPE_REF = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
 	};
 
 	GatewayApi(ApiConfig apiConfig) {
@@ -349,6 +357,47 @@ public final class GatewayApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(SEND_ERROR_URL.replace("{hid}", hid));
 			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel backupConfiguration(String hid, CreateConfigBackupModel model) {
+		String method = "backupConfiguration";
+		try {
+			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid));
+			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public StatusModel restoreConfiguration(String gatewayHid, String configBackupHid) {
+		String method = "restoreConfiguration";
+		try {
+			URI uri = buildUri(RESTORE_CONFIGURATION_URL.replace("{hid}", gatewayHid).replace("{configBackupHid}",
+			        configBackupHid));
+			StatusModel result = execute(new HttpPost(uri), StatusModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public PagingResultModel<ConfigBackupModel> listConfigurationBackups(String hid, SortedSearchCriteria criteria) {
+		String method = "listConfigurationBackups";
+		try {
+			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid), criteria);
+			PagingResultModel<ConfigBackupModel> result = execute(new HttpGet(uri), criteria,
+			        CONFIG_BACKUP_MODEL_TYPE_REF);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {

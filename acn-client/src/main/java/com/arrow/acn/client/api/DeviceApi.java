@@ -21,18 +21,22 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.AuditLogModel;
+import com.arrow.acn.client.model.ConfigBackupModel;
+import com.arrow.acn.client.model.CreateConfigBackupModel;
 import com.arrow.acn.client.model.DeviceEventModel;
 import com.arrow.acn.client.model.DeviceModel;
 import com.arrow.acn.client.model.DeviceRegistrationModel;
 import com.arrow.acn.client.search.DeviceSearchCriteria;
 import com.arrow.acn.client.search.EventsSearchCriteria;
 import com.arrow.acn.client.search.LogsSearchCriteria;
+import com.arrow.acn.client.search.SortedSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.ErrorModel;
 import com.arrow.acs.client.model.ExternalHidModel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.PagingResultModel;
+import com.arrow.acs.client.model.StatusModel;
 
 public class DeviceApi extends ApiAbstract {
 	private static final String DEVICES_BASE_URL = API_BASE + "/devices";
@@ -44,12 +48,17 @@ public class DeviceApi extends ApiAbstract {
 	private static final String SPECIFIC_EVENTS_URL = SPECIFIC_DEVICE_URL + "/events";
 	private static final String SPECIFIC_LOGS_URL = SPECIFIC_DEVICE_URL + "/logs";
 	private static final String SEND_ERROR_URL = SPECIFIC_DEVICE_URL + "/errors";
+	private static final String CONFIGURATION_BACKUP_URL = SPECIFIC_DEVICE_URL + "/config-backups";
+	private static final String SPECIFIC_CONFIGURATION_BACKUP_URL = CONFIGURATION_BACKUP_URL + "/{configBackupHid}";
+	private static final String RESTORE_CONFIGURATION_URL = SPECIFIC_CONFIGURATION_BACKUP_URL + "/restore";
 
 	private static final TypeReference<PagingResultModel<DeviceModel>> DEVICE_MODEL_TYPE_REF = new TypeReference<PagingResultModel<DeviceModel>>() {
 	};
 	private static final TypeReference<PagingResultModel<DeviceEventModel>> DEVICE_EVENT_MODEL_TYPE_REF = new TypeReference<PagingResultModel<DeviceEventModel>>() {
 	};
 	private static final TypeReference<PagingResultModel<AuditLogModel>> AUDIT_LOG_MODEL_TYPE_REF = new TypeReference<PagingResultModel<AuditLogModel>>() {
+	};
+	private static final TypeReference<PagingResultModel<ConfigBackupModel>> CONFIG_BACKUP_MODEL_TYPE_REF = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
 	};
 	private static final Pattern PATTERN = Pattern.compile("{hid}", Pattern.LITERAL);
 
@@ -250,6 +259,47 @@ public class DeviceApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(SEND_ERROR_URL.replace("{hid}", hid));
 			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel backupConfiguration(String hid, CreateConfigBackupModel model) {
+		String method = "backupConfiguration";
+		try {
+			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid));
+			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public StatusModel restoreConfiguration(String deviceHid, String configBackupHid) {
+		String method = "restoreConfiguration";
+		try {
+			URI uri = buildUri(RESTORE_CONFIGURATION_URL.replace("{hid}", deviceHid).replace("{configBackupHid}",
+			        configBackupHid));
+			StatusModel result = execute(new HttpPost(uri), StatusModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public PagingResultModel<ConfigBackupModel> listConfigurationBackups(String hid, SortedSearchCriteria criteria) {
+		String method = "listConfigurationBackups";
+		try {
+			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid), criteria);
+			PagingResultModel<ConfigBackupModel> result = execute(new HttpGet(uri), criteria,
+			        CONFIG_BACKUP_MODEL_TYPE_REF);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {

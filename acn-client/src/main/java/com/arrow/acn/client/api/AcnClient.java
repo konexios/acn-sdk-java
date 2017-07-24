@@ -28,6 +28,7 @@ public final class AcnClient {
 	private final SoftwareReleaseScheduleApi softwareReleaseScheduleApi;
 	private final SoftwareReleaseTransApi softwareReleaseTransApi;
 	private final TelemetryApi telemetryApi;
+	private final ConfigBackupApi configBackupApi;
 
 	public AcnClient(ApiConfig apiConfig) {
 		Validate.notNull(apiConfig, "apiConfig is not set");
@@ -44,6 +45,7 @@ public final class AcnClient {
 		softwareReleaseScheduleApi = new SoftwareReleaseScheduleApi(apiConfig);
 		softwareReleaseTransApi = new SoftwareReleaseTransApi(apiConfig);
 		telemetryApi = new TelemetryApi(apiConfig);
+		configBackupApi = new ConfigBackupApi(apiConfig);
 	}
 
 	public void setApiConfig(ApiConfig apiConfig) {
@@ -58,6 +60,7 @@ public final class AcnClient {
 		softwareReleaseScheduleApi.setApiConfig(apiConfig);
 		telemetryApi.setApiConfig(apiConfig);
 		deviceActionApi.setApiConfig(apiConfig);
+		configBackupApi.setApiConfig(apiConfig);
 	}
 
 	public ApiConfig getApiConfig() {
@@ -110,5 +113,9 @@ public final class AcnClient {
 
 	public TelemetryApi getTelemetryApi() {
 		return telemetryApi;
+	}
+
+	public ConfigBackupApi getConfigBackupApi() {
+		return configBackupApi;
 	}
 }
