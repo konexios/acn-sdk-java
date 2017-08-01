@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.arrow.acn.AcnDeviceCategory;
+
 public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 
 	private static final long serialVersionUID = 6384264075263411626L;
 
 	private String scheduledDate;
 	private String softwareReleaseHid;
-	private String deviceCategoryHid;
+	// private String deviceCategoryHid;
+	private AcnDeviceCategory deviceCategory;
 	private String comments;
 	private Set<String> objectHids = new HashSet<String>();
 	private SoftwareReleaseScheduleStatus status;
@@ -28,8 +31,14 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withDeviceCategoryHid(String deviceCategoryHid) {
-		setDeviceCategoryHid(deviceCategoryHid);
+	// public SoftwareReleaseScheduleRegistrationModel
+	// withDeviceCategoryHid(String deviceCategoryHid) {
+	// setDeviceCategoryHid(deviceCategoryHid);
+	// return this;
+	// }
+
+	public SoftwareReleaseScheduleRegistrationModel withDeviceCategory(AcnDeviceCategory deviceCategory) {
+		setDeviceCategory(deviceCategory);
 		return this;
 	}
 
@@ -132,11 +141,19 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 		this.notifyEmails = notifyEmails;
 	}
 
-	public String getDeviceCategoryHid() {
-		return deviceCategoryHid;
+	// public String getDeviceCategoryHid() {
+	// return deviceCategoryHid;
+	// }
+	//
+	// public void setDeviceCategoryHid(String deviceCategoryHid) {
+	// this.deviceCategoryHid = deviceCategoryHid;
+	// }
+
+	public AcnDeviceCategory getDeviceCategory() {
+		return deviceCategory;
 	}
 
-	public void setDeviceCategoryHid(String deviceCategoryHid) {
-		this.deviceCategoryHid = deviceCategoryHid;
+	public void setDeviceCategory(AcnDeviceCategory deviceCategory) {
+		this.deviceCategory = deviceCategory;
 	}
 }

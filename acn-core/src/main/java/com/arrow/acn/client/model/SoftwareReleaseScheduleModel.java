@@ -3,6 +3,7 @@ package com.arrow.acn.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.arrow.acn.AcnDeviceCategory;
 import com.arrow.acs.client.model.ModelAbstract;
 
 public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseScheduleModel> {
@@ -12,7 +13,8 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 	private String applicationHid;
 	private String scheduledDate;
 	private String softwareReleaseHid;
-	private String deviceCategoryHid;
+	// private String deviceCategoryHid;
+	private AcnDeviceCategory deviceCategory;
 	private String comments;
 	private List<String> objectHids = new ArrayList<String>();
 	private SoftwareReleaseScheduleStatus status;
@@ -83,8 +85,14 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 		return this;
 	}
 
-	public SoftwareReleaseScheduleModel withDeviceCategoryHid(String deviceCategoryHid) {
-		setDeviceCategoryHid(deviceCategoryHid);
+	// public SoftwareReleaseScheduleModel withDeviceCategoryHid(String
+	// deviceCategoryHid) {
+	// setDeviceCategoryHid(deviceCategoryHid);
+	// return this;
+	// }
+
+	public SoftwareReleaseScheduleModel withDeviceCategory(AcnDeviceCategory deviceCategory) {
+		setDeviceCategory(deviceCategory);
 		return this;
 	}
 
@@ -152,11 +160,19 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 		this.notifyEmails = notifyEmails;
 	}
 
-	public String getDeviceCategoryHid() {
-		return deviceCategoryHid;
+	// public String getDeviceCategoryHid() {
+	// return deviceCategoryHid;
+	// }
+	//
+	// public void setDeviceCategoryHid(String deviceCategoryHid) {
+	// this.deviceCategoryHid = deviceCategoryHid;
+	// }
+
+	public AcnDeviceCategory getDeviceCategory() {
+		return deviceCategory;
 	}
 
-	public void setDeviceCategoryHid(String deviceCategoryHid) {
-		this.deviceCategoryHid = deviceCategoryHid;
+	public void setDeviceCategory(AcnDeviceCategory deviceCategory) {
+		this.deviceCategory = deviceCategory;
 	}
 }
