@@ -3,7 +3,7 @@ package com.arrow.acn.client.model;
 import java.io.Serializable;
 
 public class CreateGatewayModel implements Serializable {
-	private static final long serialVersionUID = 4573399913956992878L;
+	private static final long serialVersionUID = -7283768476053595318L;
 
 	public enum GatewayType {
 		Local, Cloud, Mobile
@@ -12,6 +12,7 @@ public class CreateGatewayModel implements Serializable {
 	private String uid;
 	private String name;
 	private GatewayType type;
+	private String deviceType;
 	private String userHid;
 	private String osName;
 	private String softwareName;
@@ -41,6 +42,14 @@ public class CreateGatewayModel implements Serializable {
 
 	public void setType(GatewayType type) {
 		this.type = type;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 
 	public String getUserHid() {

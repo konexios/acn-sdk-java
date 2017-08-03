@@ -8,6 +8,7 @@ public class GatewaySearchCriteria extends SearchCriteria {
 	private static final String UIDS = "uids";
 	private static final String USER_IDS = "userIds";
 	private static final String TYPES = "types";
+	private static final String DEVICE_TYPES = "deviceTypes";
 	private static final String OS_NAMES = "osNames";
 	private static final String SOFTWARE_NAMES = "softwareNames";
 	private static final String SOFTWARE_VERSIONS = "softwareVersions";
@@ -30,6 +31,11 @@ public class GatewaySearchCriteria extends SearchCriteria {
 
 	public GatewaySearchCriteria withTypes(String... types) {
 		arrayCriteria.put(TYPES, types);
+		return this;
+	}
+
+	public GatewaySearchCriteria withDeviceTypes(String... deviceTypes) {
+		arrayCriteria.put(DEVICE_TYPES, deviceTypes);
 		return this;
 	}
 
