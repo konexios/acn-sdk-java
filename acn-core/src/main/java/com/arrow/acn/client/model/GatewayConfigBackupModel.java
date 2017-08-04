@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.arrow.acn.client.model.GatewayModel.GatewayType;
+import com.arrow.acs.client.model.ConfigurationPropertyModel;
 
 public class GatewayConfigBackupModel extends BaseDeviceConfigBackupModel {
 
