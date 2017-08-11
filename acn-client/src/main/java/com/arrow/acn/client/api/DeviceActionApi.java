@@ -35,6 +35,9 @@ public class DeviceActionApi extends ApiAbstract {
 	private static final String DEVICE_TYPES_URL = DEVICES_BASE_URL + "/types";
 	private static final String SPECIFIC_DEVICE_TYPE_ACTIONS_URL = DEVICE_TYPES_URL + "/{hid}/actions";
 	private static final String SPECIFIC_DEVICE_TYPE_ACTION_URL = SPECIFIC_DEVICE_TYPE_ACTIONS_URL + "/{index}";
+	private static final String SPECIFIC_NODE_URL = API_BASE + "/nodes/{hid}";
+	private static final String SPECIFIC_NODE_ACTIONS_URL = SPECIFIC_NODE_URL + "/actions";
+	private static final String SPECIFIC_NODE_ACTION_URL = SPECIFIC_NODE_ACTIONS_URL + "/{index}";
 
 	private static final TypeReference<ListResultModel<DeviceActionTypeModel>> DEVICE_ACTION_TYPE_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceActionTypeModel>>() {
 	};
@@ -219,6 +222,60 @@ public class DeviceActionApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTION_URL.replace("{hid}", deviceTypeHid).replace("{index}",
 			        Integer.toString(index)));
+			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public ListResultModel<DeviceActionModel> listNodeActions(String nodeHid) {
+		String method = "listNodeActions";
+		try {
+			URI uri = buildUri(SPECIFIC_NODE_ACTIONS_URL.replace("{hid}", nodeHid));
+			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), DEVICE_ACTION_MODEL_TYPE_REF);
+			logDebug(method, "size: %s", result.getSize());
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel createNewNodeAction(String nodeHid, DeviceActionModel model) {
+		String method = "createNewNodeAction";
+		try {
+			URI uri = buildUri(SPECIFIC_NODE_ACTIONS_URL.replace("{hid}", nodeHid));
+			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel deleteNodeAction(String nodeHid, int index) {
+		String method = "deleteNodeAction";
+		try {
+			URI uri = buildUri(
+			        SPECIFIC_NODE_ACTION_URL.replace("{hid}", nodeHid).replace("{index}", Integer.toString(index)));
+			HidModel result = execute(new HttpDelete(uri), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel updateNodeAction(String nodeHid, int index, DeviceActionModel model) {
+		String method = "updateNodeAction";
+		try {
+			URI uri = buildUri(
+			        SPECIFIC_NODE_ACTION_URL.replace("{hid}", nodeHid).replace("{index}", Integer.toString(index)));
 			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;
