@@ -14,7 +14,7 @@ import com.arrow.acs.ApiHeaders;
 import com.arrow.acs.client.AcsClientException;
 import com.arrow.acs.client.api.ApiConfig;
 
-public class WebSocketClientAbstract extends ApiAbstract {
+public abstract class WebSocketClientAbstract extends ApiAbstract {
 
 	private static final long DEFAULT_CONNECTION_TIMEOUT_MILLISECONDS = 5000;
 
