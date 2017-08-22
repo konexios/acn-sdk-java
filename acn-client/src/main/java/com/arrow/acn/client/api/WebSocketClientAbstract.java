@@ -27,8 +27,12 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 		super(apiConfig);
 	}
 
-	public void setConnectionTimeout(long timeout) {
-		connectionTimeout = timeout;
+	public void setConnectionTimeout(long ms) {
+		connectionTimeout = ms;
+	}
+
+	public void setMaxIdleTimeout(long ms) {
+		client.setMaxIdleTimeout(ms);
 	}
 
 	public void setMessageListener(MessageListener messageListener) {
