@@ -23,7 +23,8 @@ public class TestTelemetrySubscription {
 
 	@Before
 	public void init() {
-		ApiConfig apiConfig = new ApiConfig().withBaseUrl("ws://localhost:8080").withApiKey("key").withSecretkey("key");
+		ApiConfig apiConfig = new ApiConfig().withBaseWebSocketUrl("ws://localhost:8080").withApiKey("key")
+		        .withSecretkey("key");
 		acnClient = new AcnClient(apiConfig);
 	}
 
