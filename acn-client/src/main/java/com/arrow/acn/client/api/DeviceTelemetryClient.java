@@ -17,8 +17,8 @@ public class DeviceTelemetryClient extends WebSocketClientAbstract {
 	public WebSocketSubscription subscribe(String deviceHid, String telemetryName) {
 		String method = "subscribe";
 		try {
-			URI uri = buildUri(DEVICE_TELEMETRY_ENDPOINT_URL.replace("{hid}", deviceHid).replace("{telemetryName}",
-			        telemetryName));
+			URI uri = buildWebSocketUri(DEVICE_TELEMETRY_ENDPOINT_URL.replace("{hid}", deviceHid)
+			        .replace("{telemetryName}", telemetryName));
 			return subscribe(uri);
 		} catch (Throwable e) {
 			logError(method, e);
