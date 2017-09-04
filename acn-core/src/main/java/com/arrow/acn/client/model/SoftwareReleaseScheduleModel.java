@@ -8,7 +8,7 @@ import com.arrow.acs.client.model.ModelAbstract;
 
 public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseScheduleModel> {
 
-	private static final long serialVersionUID = 4446552374750442128L;
+	private static final long serialVersionUID = 605752316012531011L;
 
 	private String applicationHid;
 	private String scheduledDate;
@@ -20,7 +20,12 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 	private SoftwareReleaseScheduleStatus status;
 	private boolean notifyOnStart;
 	private boolean notifyOnEnd;
+	private boolean notifyOnSubmit;
 	private String notifyEmails;
+	private String name;
+	private boolean onDemand;
+	private String deviceTypeHid;
+	private String hardwareVersionHid;
 
 	@Override
 	protected SoftwareReleaseScheduleModel self() {
@@ -93,6 +98,31 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 
 	public SoftwareReleaseScheduleModel withDeviceCategory(AcnDeviceCategory deviceCategory) {
 		setDeviceCategory(deviceCategory);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleModel withNotifyOnSubmit(boolean notifyOnSubmit) {
+		setNotifyOnSubmit(notifyOnSubmit);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleModel withName(String name) {
+		setName(name);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleModel withDeviceTypeHid(String deviceTypeHid) {
+		setDeviceTypeHid(deviceTypeHid);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleModel withOnDemand(boolean onDemand) {
+		setOnDemand(onDemand);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleModel withHardwareVersionHid(String hardwareVersionHid) {
+		setHardwareVersionHid(hardwareVersionHid);
 		return this;
 	}
 
@@ -175,4 +205,44 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 	public void setDeviceCategory(AcnDeviceCategory deviceCategory) {
 		this.deviceCategory = deviceCategory;
 	}
+
+	public boolean getNotifyOnSubmit() {
+		return notifyOnSubmit;
+	}
+
+	public void setNotifyOnSubmit(boolean notifyOnSubmit) {
+		this.notifyOnSubmit = notifyOnSubmit;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isOnDemand() {
+		return onDemand;
+	}
+
+	public void setOnDemand(boolean onDemand) {
+		this.onDemand = onDemand;
+	}
+
+	public String getDeviceTypeHid() {
+		return deviceTypeHid;
+	}
+
+	public void setDeviceTypeHid(String deviceTypeHid) {
+		this.deviceTypeHid = deviceTypeHid;
+	}
+
+	public String getHardwareVersionHid() {
+		return hardwareVersionHid;
+	}
+
+	public void setHardwareVersionHid(String hardwareVersionHid) {
+		this.hardwareVersionHid = hardwareVersionHid;
+	}	
 }
