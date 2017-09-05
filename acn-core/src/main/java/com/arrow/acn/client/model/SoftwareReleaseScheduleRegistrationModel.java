@@ -8,7 +8,7 @@ import com.arrow.acn.AcnDeviceCategory;
 
 public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 
-	private static final long serialVersionUID = 6384264075263411626L;
+	private static final long serialVersionUID = -1151936563899531439L;
 
 	private String scheduledDate;
 	private String softwareReleaseHid;
@@ -19,7 +19,12 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 	private SoftwareReleaseScheduleStatus status;
 	private boolean notifyOnStart;
 	private boolean notifyOnEnd;
+	private boolean notifyOnSubmit;
 	private String notifyEmails;
+	private String name;
+	private boolean onDemand;
+	private String deviceTypeHid;
+	private String hardwareVersionHid;
 
 	public SoftwareReleaseScheduleRegistrationModel withScheduledDate(String scheduledDate) {
 		setScheduledDate(scheduledDate);
@@ -72,8 +77,33 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 		return this;
 	}
 
+	public SoftwareReleaseScheduleRegistrationModel withNotifyOnSubmit(boolean notifyOnSubmit) {
+		setNotifyOnSubmit(notifyOnSubmit);
+		return this;
+	}
+
 	public SoftwareReleaseScheduleRegistrationModel withNotifyEmails(String notifyEmails) {
 		setNotifyEmails(notifyEmails);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleRegistrationModel withName(String name) {
+		setName(name);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleRegistrationModel withDeviceTypeHid(String deviceTypeHid) {
+		setDeviceTypeHid(deviceTypeHid);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleRegistrationModel withOnDemand(boolean onDemand) {
+		setOnDemand(onDemand);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleRegistrationModel withHardwareVersionHid(String hardwareVersionHid) {
+		setHardwareVersionHid(hardwareVersionHid);
 		return this;
 	}
 
@@ -133,6 +163,14 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 		this.notifyOnEnd = notifyOnEnd;
 	}
 
+	public boolean isNotifyOnSubmit() {
+		return notifyOnSubmit;
+	}
+
+	public void setNotifyOnSubmit(boolean notifyOnSubmit) {
+		this.notifyOnSubmit = notifyOnSubmit;
+	}
+
 	public String getNotifyEmails() {
 		return notifyEmails;
 	}
@@ -155,5 +193,37 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 
 	public void setDeviceCategory(AcnDeviceCategory deviceCategory) {
 		this.deviceCategory = deviceCategory;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isOnDemand() {
+		return onDemand;
+	}
+
+	public void setOnDemand(boolean onDemand) {
+		this.onDemand = onDemand;
+	}
+
+	public String getDeviceTypeHid() {
+		return deviceTypeHid;
+	}
+
+	public void setDeviceTypeHid(String deviceTypeHid) {
+		this.deviceTypeHid = deviceTypeHid;
+	}
+
+	public String getHardwareVersionHid() {
+		return hardwareVersionHid;
+	}
+
+	public void setHardwareVersionHid(String hardwareVersionHid) {
+		this.hardwareVersionHid = hardwareVersionHid;
 	}
 }
