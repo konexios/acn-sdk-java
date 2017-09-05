@@ -11,5 +11,5 @@
 package com.arrow.acn.client.model;
 
 public enum RightToUseType {
-	Public, Private, Restricted
+	Public, Private, Unrestricted
 }
