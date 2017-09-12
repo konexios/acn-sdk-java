@@ -32,7 +32,7 @@ public interface MqttConstants {
 	}
 
 	static boolean isGatewayToServerTelemetryRouting(String queueName) {
-		return queueName.startsWith("krs/tel/gts/");
+		return queueName.startsWith("krs/tel/gts/") || queueName.startsWith("krs.tel.gts.");
 	}
 
 	static String gatewayToServerTelemetryBatchRouting(String gatewayHid) {
@@ -40,7 +40,7 @@ public interface MqttConstants {
 	}
 
 	static boolean isGatewayToServerTelemetryBatchRouting(String queueName) {
-		return queueName.startsWith("krs/tel/bat/gts/");
+		return queueName.startsWith("krs/tel/bat/gts/") || queueName.startsWith("krs.tel.bat.gts.");
 	}
 
 	static String gatewayToServerTelemetryGzipBatchRouting(String gatewayHid) {
@@ -48,7 +48,7 @@ public interface MqttConstants {
 	}
 
 	static boolean isGatewayToServerTelemetryGzipBatchRouting(String queueName) {
-		return queueName.startsWith("krs/tel/gzb/gts/");
+		return queueName.startsWith("krs/tel/gzb/gts/") || queueName.startsWith("krs.tel.gzb.gts.");
 	}
 
 	static String gatewayToServerCommandRouting(String gatewayHid) {
