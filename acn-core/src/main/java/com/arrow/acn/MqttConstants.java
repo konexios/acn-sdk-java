@@ -56,10 +56,10 @@ public interface MqttConstants {
 	}
 
 	static String serverToGatewayTelemetryRouting(String gatewayHid) {
-		return String.format("krs/tel/stg/%s", gatewayHid);
+		return String.format("krs.tel.stg.%s", gatewayHid);
 	}
 
 	static String serverToGatewayCommandRouting(String gatewayHid) {
-		return String.format("krs/cmd/stg/%s", gatewayHid);
+		return String.format("krs.cmd.stg.%s", gatewayHid);
 	}
 }
