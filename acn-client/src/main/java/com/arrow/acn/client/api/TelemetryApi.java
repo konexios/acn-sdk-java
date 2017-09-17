@@ -20,6 +20,8 @@ import org.apache.http.client.methods.HttpPost;
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.model.TelemetryItemModel;
+import com.arrow.acn.client.model.TelemetryStatModel;
+import com.arrow.acn.client.search.TelemetryCountSearchCriteria;
 import com.arrow.acn.client.search.TelemetrySearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
@@ -33,6 +35,7 @@ public final class TelemetryApi extends ApiAbstract {
 	private final String FIND_BY_NODE_HID = TELEMETRY_BASE_URL + "/nodes/{nodeHid}";
 	private final String CREATE_URL = TELEMETRY_BASE_URL;
 	private final String BATCH_CREATE_URL = CREATE_URL + "/batch";
+	private final String COUNT_BY_DEVICE_HID = FIND_BY_DEVICE_HID + "/count";
 	private final TypeReference<PagingResultModel<TelemetryItemModel>> TELEMETRY_ITEM_MODEL_TYPE_REF = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
 	};
 
@@ -182,6 +185,34 @@ public final class TelemetryApi extends ApiAbstract {
 			URI uri = buildUri(BATCH_CREATE_URL);
 			StatusModel result = execute(new HttpPost(uri), JsonUtils.toJson(parameters), StatusModel.class);
 			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	/**
+	 * Sends GET request to obtain telemetry count of specific device and
+	 * corresponding to {@code criteria}
+	 *
+	 * @param deviceHid
+	 *            {@link String} representing specific device
+	 * @param criteria
+	 *            {@link TelemetryCountSearchCriteria} representing search
+	 *            filter parameters
+	 *
+	 * @return {@link TelemetryStatModel} containing telemetry count
+	 *
+	 * @throws AcnClientException
+	 *             if request failed
+	 */
+	public TelemetryStatModel countByDeviceHid(String deviceHid, TelemetryCountSearchCriteria criteria) {
+		String method = "countByDeviceHid";
+		try {
+			URI uri = buildUri(COUNT_BY_DEVICE_HID.replace("{deviceHid}", deviceHid), criteria);
+			TelemetryStatModel result = execute(new HttpGet(uri), criteria, TelemetryStatModel.class);
+			logDebug(method, "device hid: %s", result.getDeviceHid());
 			return result;
 		} catch (Throwable e) {
 			logError(method, e);

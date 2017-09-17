@@ -1,4 +1,4 @@
-version = '2.0'
+version = '2.1'
 
 jar {
     manifest {
@@ -24,6 +24,8 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-core:2.7'
     
     compile 'org.bouncycastle:bcprov-jdk16:1.46'
+    
+    compile("org.eclipse.jetty.websocket:websocket-client:9.4.6.v20170531")
     
     testCompile 'junit:junit:4.+'
     

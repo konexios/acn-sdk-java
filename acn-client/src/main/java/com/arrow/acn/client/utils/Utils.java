@@ -59,11 +59,11 @@ public class Utils {
 		return sb.toString();
 	}
 
-	public static void shutdownThread(Thread thread, String name) {
+	public static void shutdownThread(Thread thread) {
 		String method = "shutdownThread";
 		if (thread != null && thread.isAlive()) {
 			try {
-				LOGGER.logInfo(method, "shutting down %s ...", name);
+				LOGGER.logInfo(method, "shutting down %s ...", thread.getName());
 				thread.interrupt();
 				LOGGER.logInfo(method, "joining thread ...");
 			} catch (Throwable e) {

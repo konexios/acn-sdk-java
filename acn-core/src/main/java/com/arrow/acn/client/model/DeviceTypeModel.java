@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.arrow.acn.AcnDeviceCategory;
 import com.arrow.acs.client.model.DefinitionModelAbstract;
 
 public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
@@ -22,6 +23,7 @@ public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
 
 	private List<DeviceTypeTelemetryModel> telemetries = new ArrayList<>();
 	private Map<String, DeviceStateValueMetadataModel> stateMetadata = new HashMap<>();
+	private AcnDeviceCategory deviceCategory;
 
 	@Override
 	protected DeviceTypeModel self() {
@@ -35,6 +37,11 @@ public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
 
 	public DeviceTypeModel withStateMetadata(Map<String, DeviceStateValueMetadataModel> stateMetadata) {
 		setStateMetadata(stateMetadata);
+		return this;
+	}
+
+	public DeviceTypeModel withDeviceCategory(AcnDeviceCategory deviceCategory) {
+		setDeviceCategory(deviceCategory);
 		return this;
 	}
 
@@ -54,5 +61,13 @@ public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
 
 	public void setStateMetadata(Map<String, DeviceStateValueMetadataModel> stateMetadata) {
 		this.stateMetadata = stateMetadata;
+	}
+	
+	public AcnDeviceCategory getDeviceCategory() {
+		return deviceCategory;
+	}
+
+	public void setDeviceCategory(AcnDeviceCategory deviceCategory) {
+		this.deviceCategory = deviceCategory;
 	}
 }

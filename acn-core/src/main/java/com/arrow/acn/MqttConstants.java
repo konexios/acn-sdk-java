@@ -28,31 +28,31 @@ public interface MqttConstants {
 	}
 
 	static String gatewayToServerTelemetryRouting(String gatewayHid) {
-		return String.format("krs.tel.gts.%s", gatewayHid);
+		return String.format("krs/tel/gts/%s", gatewayHid);
 	}
 
 	static boolean isGatewayToServerTelemetryRouting(String queueName) {
-		return queueName.startsWith("krs.tel.gts.");
+		return queueName.startsWith("krs/tel/gts/") || queueName.startsWith("krs.tel.gts.");
 	}
 
 	static String gatewayToServerTelemetryBatchRouting(String gatewayHid) {
-		return String.format("krs.tel.bat.gts.%s", gatewayHid);
+		return String.format("krs/tel/bat/gts/%s", gatewayHid);
 	}
 
 	static boolean isGatewayToServerTelemetryBatchRouting(String queueName) {
-		return queueName.startsWith("krs.tel.bat.gts.");
+		return queueName.startsWith("krs/tel/bat/gts/") || queueName.startsWith("krs.tel.bat.gts.");
 	}
 
 	static String gatewayToServerTelemetryGzipBatchRouting(String gatewayHid) {
-		return String.format("krs.tel.gzb.gts.%s", gatewayHid);
+		return String.format("krs/tel/gzb/gts/%s", gatewayHid);
 	}
 
 	static boolean isGatewayToServerTelemetryGzipBatchRouting(String queueName) {
-		return queueName.startsWith("krs.tel.gzb.gts.");
+		return queueName.startsWith("krs/tel/gzb/gts/") || queueName.startsWith("krs.tel.gzb.gts.");
 	}
 
 	static String gatewayToServerCommandRouting(String gatewayHid) {
-		return String.format("krs.cmd.gts.%s", gatewayHid);
+		return String.format("krs/cmd/gts/%s", gatewayHid);
 	}
 
 	static String serverToGatewayTelemetryRouting(String gatewayHid) {

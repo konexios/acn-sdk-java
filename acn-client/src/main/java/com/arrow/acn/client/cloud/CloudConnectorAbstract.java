@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.api.CoreEventApi;

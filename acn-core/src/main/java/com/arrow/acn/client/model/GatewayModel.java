@@ -13,7 +13,7 @@ package com.arrow.acn.client.model;
 import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
-	private static final long serialVersionUID = 6827224663160186991L;
+	private static final long serialVersionUID = 8738104557146056949L;
 
 	public enum GatewayType {
 		Local, Cloud, Mobile
@@ -22,6 +22,7 @@ public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
 	private String uid;
 	private String name;
 	private GatewayType type;
+	private String deviceType;
 	private String userHid;
 	private String osName;
 	private String softwareName;
@@ -51,6 +52,11 @@ public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
 
 	public GatewayModel withType(GatewayType type) {
 		setType(type);
+		return this;
+	}
+
+	public GatewayModel withDeviceType(String deviceType) {
+		setDeviceType(deviceType);
 		return this;
 	}
 
@@ -85,6 +91,14 @@ public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
 
 	public void setType(GatewayType type) {
 		this.type = type;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 
 	public String getUid() {
