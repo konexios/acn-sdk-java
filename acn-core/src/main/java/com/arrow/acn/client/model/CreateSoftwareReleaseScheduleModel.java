@@ -16,17 +16,15 @@ import java.util.Set;
 
 import com.arrow.acn.AcnDeviceCategory;
 
-public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
+public class CreateSoftwareReleaseScheduleModel implements Serializable {
 
-	private static final long serialVersionUID = -1151936563899531439L;
+	private static final long serialVersionUID = -8598243732118576300L;
 
 	private String scheduledDate;
 	private String softwareReleaseHid;
-	// private String deviceCategoryHid;
 	private AcnDeviceCategory deviceCategory;
 	private String comments;
 	private Set<String> objectHids = new HashSet<String>();
-	private SoftwareReleaseScheduleStatus status;
 	private boolean notifyOnStart;
 	private boolean notifyOnEnd;
 	private boolean notifyOnSubmit;
@@ -36,83 +34,72 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 	private String deviceTypeHid;
 	private String hardwareVersionHid;
 
-	public SoftwareReleaseScheduleRegistrationModel withScheduledDate(String scheduledDate) {
+	public CreateSoftwareReleaseScheduleModel withScheduledDate(String scheduledDate) {
 		setScheduledDate(scheduledDate);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withSoftwareReleaseHid(String softwareReleaseHid) {
+	public CreateSoftwareReleaseScheduleModel withSoftwareReleaseHid(String softwareReleaseHid) {
 		setSoftwareReleaseHid(softwareReleaseHid);
 		return this;
 	}
 
-	// public SoftwareReleaseScheduleRegistrationModel
-	// withDeviceCategoryHid(String deviceCategoryHid) {
-	// setDeviceCategoryHid(deviceCategoryHid);
-	// return this;
-	// }
-
-	public SoftwareReleaseScheduleRegistrationModel withDeviceCategory(AcnDeviceCategory deviceCategory) {
+	public CreateSoftwareReleaseScheduleModel withDeviceCategory(AcnDeviceCategory deviceCategory) {
 		setDeviceCategory(deviceCategory);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withComments(String comments) {
+	public CreateSoftwareReleaseScheduleModel withComments(String comments) {
 		setComments(comments);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withObjectHids(Set<String> objectHids) {
+	public CreateSoftwareReleaseScheduleModel withObjectHids(Set<String> objectHids) {
 		setObjectHids(objectHids);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withObjectHid(String objectHid) {
+	public CreateSoftwareReleaseScheduleModel withObjectHid(String objectHid) {
 		objectHids.add(objectHid);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withStatus(SoftwareReleaseScheduleStatus status) {
-		setStatus(status);
-		return this;
-	}
-
-	public SoftwareReleaseScheduleRegistrationModel withNotifyOnStart(boolean notifyOnStart) {
+	public CreateSoftwareReleaseScheduleModel withNotifyOnStart(boolean notifyOnStart) {
 		setNotifyOnStart(notifyOnStart);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withNotifyOnEnd(boolean notifyOnEnd) {
+	public CreateSoftwareReleaseScheduleModel withNotifyOnEnd(boolean notifyOnEnd) {
 		setNotifyOnEnd(notifyOnEnd);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withNotifyOnSubmit(boolean notifyOnSubmit) {
+	public CreateSoftwareReleaseScheduleModel withNotifyOnSubmit(boolean notifyOnSubmit) {
 		setNotifyOnSubmit(notifyOnSubmit);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withNotifyEmails(String notifyEmails) {
+	public CreateSoftwareReleaseScheduleModel withNotifyEmails(String notifyEmails) {
 		setNotifyEmails(notifyEmails);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withName(String name) {
+	public CreateSoftwareReleaseScheduleModel withName(String name) {
 		setName(name);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withDeviceTypeHid(String deviceTypeHid) {
+	public CreateSoftwareReleaseScheduleModel withDeviceTypeHid(String deviceTypeHid) {
 		setDeviceTypeHid(deviceTypeHid);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withOnDemand(boolean onDemand) {
+	public CreateSoftwareReleaseScheduleModel withOnDemand(boolean onDemand) {
 		setOnDemand(onDemand);
 		return this;
 	}
 
-	public SoftwareReleaseScheduleRegistrationModel withHardwareVersionHid(String hardwareVersionHid) {
+	public CreateSoftwareReleaseScheduleModel withHardwareVersionHid(String hardwareVersionHid) {
 		setHardwareVersionHid(hardwareVersionHid);
 		return this;
 	}
@@ -149,14 +136,6 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 		this.objectHids.addAll(objectHids);
 	}
 
-	public SoftwareReleaseScheduleStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(SoftwareReleaseScheduleStatus status) {
-		this.status = status;
-	}
-
 	public boolean isNotifyOnStart() {
 		return notifyOnStart;
 	}
@@ -188,14 +167,6 @@ public class SoftwareReleaseScheduleRegistrationModel implements Serializable {
 	public void setNotifyEmails(String notifyEmails) {
 		this.notifyEmails = notifyEmails;
 	}
-
-	// public String getDeviceCategoryHid() {
-	// return deviceCategoryHid;
-	// }
-	//
-	// public void setDeviceCategoryHid(String deviceCategoryHid) {
-	// this.deviceCategoryHid = deviceCategoryHid;
-	// }
 
 	public AcnDeviceCategory getDeviceCategory() {
 		return deviceCategory;

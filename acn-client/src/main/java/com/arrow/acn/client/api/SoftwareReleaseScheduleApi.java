@@ -17,8 +17,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.AcnClientException;
+import com.arrow.acn.client.model.CreateSoftwareReleaseScheduleModel;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleModel;
-import com.arrow.acn.client.model.SoftwareReleaseScheduleRegistrationModel;
+import com.arrow.acn.client.model.UpdateSoftwareReleaseScheduleModel;
 import com.arrow.acn.client.search.SoftwareReleaseScheduleSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
@@ -42,7 +43,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 		super(apiConfig);
 	}
 
-	public HidModel create(SoftwareReleaseScheduleRegistrationModel model) {
+	public HidModel create(CreateSoftwareReleaseScheduleModel model) {
 		String method = "create";
 		try {
 			URI uri = buildUri(CREATE_URL);
@@ -55,7 +56,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 		}
 	}
 
-	public HidModel update(String hid, SoftwareReleaseScheduleRegistrationModel model) {
+	public HidModel update(String hid, UpdateSoftwareReleaseScheduleModel model) {
 		String method = "update";
 		try {
 			URI uri = buildUri(String.format(UPDATE_URL, hid));
