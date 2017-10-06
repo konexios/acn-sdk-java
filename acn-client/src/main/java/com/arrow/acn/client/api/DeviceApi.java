@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -37,6 +37,7 @@ import com.arrow.acs.client.model.ExternalHidModel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class DeviceApi extends ApiAbstract {
 	private static final String DEVICES_BASE_URL = API_BASE + "/devices";
@@ -300,6 +301,19 @@ public class DeviceApi extends ApiAbstract {
 			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid), criteria);
 			PagingResultModel<ConfigBackupModel> result = execute(new HttpGet(uri), criteria,
 			        CONFIG_BACKUP_MODEL_TYPE_REF);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public StatusModel deleteDevice(String hid) {
+		String method = "deleteDevice";
+		try {
+			URI uri = buildUri(SPECIFIC_DEVICE_URL.replace("{hid}", hid));
+			StatusModel result = execute(new HttpDelete(uri), StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
