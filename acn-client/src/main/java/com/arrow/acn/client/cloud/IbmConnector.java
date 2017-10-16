@@ -41,7 +41,7 @@ public class IbmConnector extends CloudConnectorAbstract {
 	private int qos;
 
 	private GatewayClient gatewayClient;
-	private DefaultGatewayCallback gatewayCallback = new DefaultGatewayCallback();
+	private GatewayCallback gatewayCallback = new DefaultGatewayCallback();
 
 	public IbmConnector(IbmConfigModel gatewayModel, AcnClient acnClient) {
 		super(acnClient);

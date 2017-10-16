@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        log4jVersion = '2.7'
-        jacksonVersion = '2.8.6'
+        log4jVersion = '2.9.1'
+        jacksonVersion = '2.9.0'
     }
     repositories {
         mavenCentral()
@@ -23,7 +23,7 @@ subprojects {
         testCompile 'junit:junit:4.12'
     }
 
-    version = '2.1'
+    version = '8.2'
     
     compileJava.dependsOn(processResources)
 
@@ -50,6 +50,10 @@ subprojects {
     task wrapper(type: Wrapper) {
         gradleVersion = '3.4.1'
     }       
+
+    def jarToCopy = copySpec {
+        from "build/libs/${jar.archiveName}"
+    }          
 }
 
 project(':acn-core') {

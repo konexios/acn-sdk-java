@@ -1,36 +1,33 @@
-version = '2.1'
-
-jar {
+jar.doFirst {
     manifest {
         attributes(
-            "Specification-Title": "Arrow Connect Client",
-            "Specification-Version": version,
             "Implementation-Title": "Arrow Connect Client",
             "Implementation-Version": version,
-            "Implementation-Vendor": "Arrow Electronics, Inc.")                        
+            "Implementation-Vendor": "Arrow Electronics, Inc.",
+            "Built-By": System.getProperty('user.name'),
+            "Built-Date": new Date().format("yyyy-MM-dd"),
+            "Built-Jdk": "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})")                       
     }
 }
 
 dependencies {   
-    compile 'com.ibm.messaging:watson-iot:0.2.2'
+    compile("com.ibm.messaging:watson-iot:0.2.6")
+    compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0")
     
-    compile 'com.microsoft.azure.iothub-java-client:iothub-java-device-client:1.0.16'
+    compile("com.microsoft.azure.iothub-java-client:iothub-java-device-client:1.0.16")
         
-    compile 'commons-io:commons-io:2.5'
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
     
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.3'
+    compile("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
+    compile("org.apache.logging.log4j:log4j-core:${log4jVersion}")
     
-    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.7'
-    compile 'org.apache.logging.log4j:log4j-core:2.7'
+    compile("org.eclipse.jetty.websocket:websocket-client:9.4.7.v20170914")
     
-    compile 'org.bouncycastle:bcprov-jdk16:1.46'
-    
-    compile("org.eclipse.jetty.websocket:websocket-client:9.4.6.v20170531")
-    
-    testCompile 'junit:junit:4.+'
+    testCompile("junit:junit:4.+")
     
     compile fileTree(dir: '../lib', include: '*.jar')    
 }
+
 
 def jarToCopy = copySpec {
     from "build/libs/${jar.archiveName}"
@@ -40,5 +37,25 @@ task copyJar(dependsOn: jar) << {
     copy {
         with jarToCopy
         into "../../lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../kronos/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../rhea/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../selene/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../hyperion/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../apollo/lib"
     }
 }
