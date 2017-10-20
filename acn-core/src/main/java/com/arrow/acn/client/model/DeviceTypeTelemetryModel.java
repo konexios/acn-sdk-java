@@ -11,6 +11,7 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class DeviceTypeTelemetryModel implements Serializable {
 
@@ -19,7 +20,7 @@ public class DeviceTypeTelemetryModel implements Serializable {
     private String description;
     private String name;
     private String type;
-    private boolean controllable = false;
+    private HashMap<String, String> variables;
 
     public DeviceTypeTelemetryModel withDescription(String description) {
         setDescription(description);
@@ -36,8 +37,8 @@ public class DeviceTypeTelemetryModel implements Serializable {
         return this;
     }
 
-    public DeviceTypeTelemetryModel withControllable(boolean controllable) {
-        setControllable(controllable);
+    public DeviceTypeTelemetryModel withVariables(HashMap<String, String> variables) {
+        setVariables(variables);
         return this;
     }
 
@@ -65,51 +66,45 @@ public class DeviceTypeTelemetryModel implements Serializable {
         this.type = type;
     }
 
-    public void setControllable(boolean controllable) {
-        this.controllable = controllable;
+    public HashMap<String, String> getVariables() {
+        return variables;
     }
 
-    public boolean isControllable() {
-        return controllable;
+    public void setVariables(HashMap variables) {
+        this.variables = variables;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
-        result = prime * result + (controllable ? 1231 : 1237);
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        int result = description != null ? description.hashCode() : 0;
+        result = prime * result + (name != null ? name.hashCode() : 0);
+        result = prime * result + (type != null ? type.hashCode() : 0);
+        result = prime * result + (variables != null ? variables.hashCode() : 0);
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
-        if (obj == null)
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+
+        DeviceTypeTelemetryModel that = (DeviceTypeTelemetryModel) o;
+
+        if (description != null ? !description.equals(that.description) : that.description != null) {
             return false;
-        DeviceTypeTelemetryModel other = (DeviceTypeTelemetryModel) obj;
-        if (controllable != other.controllable)
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
             return false;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
+        }
+        if (type != null ? !type.equals(that.type) : that.type != null) {
             return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (type == null) {
-            if (other.type != null)
-                return false;
-        } else if (!type.equals(other.type))
-            return false;
-        return true;
+        }
+        return variables != null ? variables.equals(that.variables) : that.variables == null;
     }
+
 }
