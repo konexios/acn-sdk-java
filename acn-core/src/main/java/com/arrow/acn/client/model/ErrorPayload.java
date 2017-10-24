@@ -12,26 +12,25 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-public class TestResultObjectModel implements Serializable {
+public class ErrorPayload implements Serializable {
+    private static final long serialVersionUID = 4550623647779649658L;
 
-	private static final long serialVersionUID = 9166997825674356939L;
+    private String error;
+    private String code;
 
-	private String hid;
-	private String testProcedureHid;
+    public String getError() {
+        return error;
+    }
 
-	public String getHid() {
-		return hid;
-	}
+    public void setError(String error) {
+        this.error = error;
+    }
 
-	public void setHid(String objectHid) {
-		this.hid = objectHid;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getTestProcedureHid() {
-		return testProcedureHid;
-	}
-
-	public void setTestProcedureHid(String testProcedureHid) {
-		this.testProcedureHid = testProcedureHid;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 }
