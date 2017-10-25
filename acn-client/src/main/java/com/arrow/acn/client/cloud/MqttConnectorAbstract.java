@@ -12,6 +12,7 @@ package com.arrow.acn.client.cloud;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 import com.arrow.acn.Utils;
@@ -37,8 +38,14 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 
 	@Override
 	public void start() {
+		String method = "MqttConnectorAbstract.start";
 		client.setOptions(mqttConnectOptions());
-		client.setTopics(subscriberTopic());
+		String topic = subscriberTopic();
+		if (!StringUtils.isEmpty(topic)) {
+			client.setTopics(topic);
+		} else {
+			logWarn(method, "no topic to subscribe!");
+		}
 		client.setListener(this);
 		client.connect(false);
 	}
@@ -84,7 +91,7 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 
 	@Override
 	public void processMessage(String topic, byte[] payload) {
-		validateAndProcessEvent(topic,  payload);
+		validateAndProcessEvent(topic, payload);
 	}
 
 	protected abstract String publisherTopic(IotParameters payload);
