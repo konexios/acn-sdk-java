@@ -10,23 +10,24 @@
  *******************************************************************************/
 package com.arrow.acn.client.api;
 
-import java.net.URI;
-import java.util.List;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.model.TelemetryItemModel;
 import com.arrow.acn.client.model.TelemetryStatModel;
 import com.arrow.acn.client.search.TelemetryCountSearchCriteria;
+import com.arrow.acn.client.search.TelemetryDeleteSearchCriteria;
 import com.arrow.acn.client.search.TelemetrySearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+
+import java.net.URI;
+import java.util.List;
 
 public final class TelemetryApi extends ApiAbstract {
 	private final String TELEMETRY_BASE_URL = API_BASE + "/telemetries";
@@ -36,6 +37,7 @@ public final class TelemetryApi extends ApiAbstract {
 	private final String CREATE_URL = TELEMETRY_BASE_URL;
 	private final String BATCH_CREATE_URL = CREATE_URL + "/batch";
 	private final String COUNT_BY_DEVICE_HID = FIND_BY_DEVICE_HID + "/count";
+	private final String BULK_DELETE_LAST_TELEMETRY = TELEMETRY_BASE_URL + "/devices/{deviceHid}/bulkDeleteLastTelemetry";
 	private final TypeReference<PagingResultModel<TelemetryItemModel>> TELEMETRY_ITEM_MODEL_TYPE_REF = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
 	};
 
@@ -213,6 +215,39 @@ public final class TelemetryApi extends ApiAbstract {
 			URI uri = buildUri(COUNT_BY_DEVICE_HID.replace("{deviceHid}", deviceHid), criteria);
 			TelemetryStatModel result = execute(new HttpGet(uri), criteria, TelemetryStatModel.class);
 			logDebug(method, "device hid: %s", result.getDeviceHid());
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	/**
+	 * Send DELETE request to remove set of last telemetry items
+	 *
+	 * @param lastTelemetryItemsIds
+	 * 			{@link List<String>} ids of last telemetry items
+	 *
+	 * @param deviceHid
+	 * 			{@link String} representing specific device
+	 *
+	 * @param removeTelemetryDefinition
+	 * 			{@link boolean} true - if needs remove telemetry definition if exists
+	 *
+	 * @return {@link StatusModel} containing status of batch telemetry delete request
+	 */
+	public StatusModel bulkDeleteLastTelemetries(
+			List<String> lastTelemetryItemsIds, String deviceHid, boolean removeTelemetryDefinition) {
+
+		String method = "bulkDeleteLastTelemetries";
+
+		TelemetryDeleteSearchCriteria criteria = new TelemetryDeleteSearchCriteria();
+		criteria.withRemoveDefinitions(removeTelemetryDefinition);
+
+		try {
+			URI uri = buildUri(BULK_DELETE_LAST_TELEMETRY.replace("{deviceHid}", deviceHid), criteria);
+			StatusModel result = execute(new HttpPut(uri), JsonUtils.toJson(lastTelemetryItemsIds), StatusModel.class);
+			log(method, result);
 			return result;
 		} catch (Throwable e) {
 			logError(method, e);
