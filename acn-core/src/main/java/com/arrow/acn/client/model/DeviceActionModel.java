@@ -23,6 +23,9 @@ public class DeviceActionModel implements Serializable {
     private String systemName;
     private String description;
     private String criteria;
+    // if false - expect criteria is not empty, if true - special case for No Telemetry Enhancement
+    private boolean noTelemetry;
+    private long noTelemetryTime;
     private long expiration;
     private boolean enabled = true;
     private Map<String, String> parameters = new HashMap<>();
@@ -46,6 +49,16 @@ public class DeviceActionModel implements Serializable {
 
     public DeviceActionModel withCriteria(String criteria) {
         setCriteria(criteria);
+        return this;
+    }
+    
+    public DeviceActionModel withNoTelemetry(boolean noTelemetry) {
+        setNoTelemetry(noTelemetry);
+        return this;
+    }
+
+    public DeviceActionModel withNoTelemetryTime(long noTelemetryTime) {
+        setNoTelemetryTime(noTelemetryTime);
         return this;
     }
 
@@ -105,7 +118,15 @@ public class DeviceActionModel implements Serializable {
         return parameters;
     }
 
-    public void setParameters(Map<String, String> parameters) {
+    public boolean isNoTelemetry() {
+		return noTelemetry;
+	}
+
+	public long getNoTelemetryTime() {
+		return noTelemetryTime;
+	}
+
+	public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
     }
 
@@ -125,55 +146,69 @@ public class DeviceActionModel implements Serializable {
         this.index = index;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((criteria == null) ? 0 : criteria.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + (enabled ? 1231 : 1237);
-        result = prime * result + (int) (expiration ^ (expiration >>> 32));
-        result = prime * result + index;
-        result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
-        result = prime * result + ((systemName == null) ? 0 : systemName.hashCode());
-        return result;
-    }
+    public void setNoTelemetry(boolean noTelemetry) {
+		this.noTelemetry = noTelemetry;
+	}
+
+	public void setNoTelemetryTime(long noTelemetryTime) {
+		this.noTelemetryTime = noTelemetryTime;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((criteria == null) ? 0 : criteria.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + (int) (expiration ^ (expiration >>> 32));
+		result = prime * result + index;
+		result = prime * result + (noTelemetry ? 1231 : 1237);
+		result = prime * result + (int) (noTelemetryTime ^ (noTelemetryTime >>> 32));
+		result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
+		result = prime * result + ((systemName == null) ? 0 : systemName.hashCode());
+		return result;
+	}
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        DeviceActionModel other = (DeviceActionModel) obj;
-        if (criteria == null) {
-            if (other.criteria != null)
-                return false;
-        } else if (!criteria.equals(other.criteria))
-            return false;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
-            return false;
-        if (enabled != other.enabled)
-            return false;
-        if (expiration != other.expiration)
-            return false;
-        if (index != other.index)
-            return false;
-        if (parameters == null) {
-            if (other.parameters != null)
-                return false;
-        } else if (!parameters.equals(other.parameters))
-            return false;
-        if (systemName == null) {
-            if (other.systemName != null)
-                return false;
-        } else if (!systemName.equals(other.systemName))
-            return false;
-        return true;
-    }
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DeviceActionModel other = (DeviceActionModel) obj;
+		if (criteria == null) {
+			if (other.criteria != null)
+				return false;
+		} else if (!criteria.equals(other.criteria))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (enabled != other.enabled)
+			return false;
+		if (expiration != other.expiration)
+			return false;
+		if (index != other.index)
+			return false;
+		if (noTelemetry != other.noTelemetry)
+			return false;
+		if (noTelemetryTime != other.noTelemetryTime)
+			return false;
+		if (parameters == null) {
+			if (other.parameters != null)
+				return false;
+		} else if (!parameters.equals(other.parameters))
+			return false;
+		if (systemName == null) {
+			if (other.systemName != null)
+				return false;
+		} else if (!systemName.equals(other.systemName))
+			return false;
+		return true;
+	}
 }
