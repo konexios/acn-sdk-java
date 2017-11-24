@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.Collections;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 
@@ -22,6 +23,7 @@ import com.arrow.acn.client.model.SoftwareReleaseTransRegistrationModel;
 import com.arrow.acn.client.model.SoftwareReleaseUpgradeModel;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.model.DownloadFileInfo;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.StatusModel;
 
@@ -34,9 +36,23 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 	private static final String UPGRADE_GATEWAY_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/gateways/upgrade";
 	private static final String UPGRADE_DEVICE_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/devices/upgrade";
 	private static final String START_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s/start";
+	private static final String FILE_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s/%s/file";
 
 	public SoftwareReleaseTransApi(ApiConfig apiConfig) {
 		super(apiConfig);
+	}
+
+	public DownloadFileInfo downloadFile(String hid, String tempToken) {
+		String method = "file";
+		try {
+			URI uri = buildUri(String.format(FILE_URL, hid, tempToken));
+			DownloadFileInfo result = downloadFile(new HttpGet(uri));
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
 	}
 
 	public StatusModel received(String hid) {
