@@ -11,6 +11,8 @@
 package com.arrow.acn.client.api;
 
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -25,13 +27,40 @@ import com.arrow.acs.client.model.ListResultModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public final class NodeApi extends ApiAbstract {
-	private final String NODES_BASE_URL = API_BASE + "/nodes";
-	private final String SPECIFIC_NODE_URL = NODES_BASE_URL + "/{hid}";
-	private final TypeReference<ListResultModel<NodeModel>> NODE_MODEL_TYPE_REF = new TypeReference<ListResultModel<NodeModel>>() {
+	private static final String NODES_BASE_URL = API_BASE + "/nodes";
+	private static final String SPECIFIC_NODE_URL = NODES_BASE_URL + "/{hid}";
+	private static final String FIND_BY_HID_URL = SPECIFIC_NODE_URL;
+	private static final TypeReference<ListResultModel<NodeModel>> NODE_MODEL_TYPE_REF = new TypeReference<ListResultModel<NodeModel>>() {
 	};
+	private static final Pattern PATTERN = Pattern.compile("{hid}", Pattern.LITERAL);
 
 	NodeApi(ApiConfig apiConfig) {
 		super(apiConfig);
+	}
+
+	/**
+	 * Sends GET request to obtain parameters of node specified by its
+	 * {@code hid}
+	 *
+	 * @param hid
+	 *            {@link String} representing specific node
+	 *
+	 * @return {@link NodeModel} containing node parameters
+	 *
+	 * @throws AcnClientException
+	 *             if request failed
+	 */
+	public NodeModel findByHid(String hid) {
+		String method = "findByHid";
+		try {
+			URI uri = buildUri(PATTERN.matcher(FIND_BY_HID_URL).replaceAll(Matcher.quoteReplacement(hid)));
+			NodeModel result = execute(new HttpGet(uri), NodeModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
 	}
 
 	/**
