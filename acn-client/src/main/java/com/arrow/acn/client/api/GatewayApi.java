@@ -12,6 +12,7 @@ package com.arrow.acn.client.api;
 
 import java.net.URI;
 
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -398,6 +399,19 @@ public final class GatewayApi extends ApiAbstract {
 			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid), criteria);
 			PagingResultModel<ConfigBackupModel> result = execute(new HttpGet(uri), criteria,
 			        CONFIG_BACKUP_MODEL_TYPE_REF);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public StatusModel deleteGateway(String hid) {
+		String method = "deleteGateway";
+		try {
+			URI uri = buildUri(SPECIFIC_GATEWAY_URL.replace("{hid}", hid));
+			StatusModel result = execute(new HttpDelete(uri), StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {

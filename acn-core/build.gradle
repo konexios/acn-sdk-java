@@ -1,21 +1,23 @@
-version = '2.1'
-
-jar {
+jar.doFirst {
     manifest {
         attributes(
-            "Specification-Title": "Arrow Connect Core",
-            "Specification-Version": version,
             "Implementation-Title": "Arrow Connect Core",
             "Implementation-Version": version,
-            "Implementation-Vendor": "Arrow Electronics, Inc")                        
+            "Implementation-Vendor": "Arrow Electronics, Inc.",
+            "Built-By": System.getProperty('user.name'),
+            "Built-Date": new Date().format("yyyy-MM-dd"),
+            "Built-Jdk": "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
+            "Git-Branch": getCurrentGitBranch(),
+            "Git-Last-Commit": getLastGitCommit())
     }
 }
 
 dependencies {
-    compile("org.apache.commons:commons-lang3:3.5")
+    compile("org.apache.commons:commons-lang3:3.6")
     
     compile fileTree(dir: '../lib', include: '*.jar')
 }
+
 
 def jarToCopy = copySpec {
     from "build/libs/${jar.archiveName}"
@@ -25,5 +27,25 @@ task copyJar(dependsOn: jar) << {
     copy {
         with jarToCopy
         into "../../lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../kronos/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../rhea/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../selene/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../hyperion/lib"
+    }
+    copy {
+        with jarToCopy
+        into "../../apollo/lib"
     }
 }

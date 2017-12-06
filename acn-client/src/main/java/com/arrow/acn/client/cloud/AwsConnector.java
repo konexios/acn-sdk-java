@@ -14,10 +14,10 @@ import java.util.List;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
+import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.model.AwsConfigModel;
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.utils.SslUtil;
 
 /**
@@ -62,6 +62,6 @@ public class AwsConnector extends MqttConnectorAbstract {
 
 	@Override
 	protected String subscriberTopic() {
-		throw new AcnClientException("not implemented!");
+		return null;
 	}
 }

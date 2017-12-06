@@ -1,11 +1,39 @@
 buildscript {
     ext {
-        log4jVersion = '2.7'
-        jacksonVersion = '2.8.6'
+        log4jVersion = '2.9.1'
+        jacksonVersion = '2.9.0'
     }
     repositories {
         mavenCentral()
     }
+}
+
+def getCurrentGitBranch() {
+    def gitBranch = "Unknown"
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            gitBranch = result.text.trim()
+        }
+    } catch (e) {
+    }
+    return gitBranch
+}
+
+def getLastGitCommit() {
+    def lastGitCommit = "Unknown"
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git log --pretty=format:"%h | %ad | %an" --date=iso -1'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            lastGitCommit = result.text.trim()
+        }
+    } catch (e) {
+    }
+    return lastGitCommit
 }
 
 subprojects {
@@ -23,7 +51,7 @@ subprojects {
         testCompile 'junit:junit:4.12'
     }
 
-    version = '2.1'
+    version = '8.3'
     
     compileJava.dependsOn(processResources)
 
@@ -50,6 +78,10 @@ subprojects {
     task wrapper(type: Wrapper) {
         gradleVersion = '3.4.1'
     }       
+
+    def jarToCopy = copySpec {
+        from "build/libs/${jar.archiveName}"
+    }          
 }
 
 project(':acn-core') {

@@ -11,105 +11,100 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class DeviceTypeTelemetryModel implements Serializable {
 
-    private static final long serialVersionUID = 1351634662217682079L;
+	private static final long serialVersionUID = 1351634662217682079L;
 
-    private String description;
-    private String name;
-    private String type;
-    private boolean controllable = false;
+	private String description;
+	private String name;
+	private String type;
+	private Map<String, String> variables;
 
-    public DeviceTypeTelemetryModel withDescription(String description) {
-        setDescription(description);
-        return this;
-    }
+	public DeviceTypeTelemetryModel withDescription(String description) {
+		setDescription(description);
+		return this;
+	}
 
-    public DeviceTypeTelemetryModel withName(String name) {
-        setName(name);
-        return this;
-    }
+	public DeviceTypeTelemetryModel withName(String name) {
+		setName(name);
+		return this;
+	}
 
-    public DeviceTypeTelemetryModel withType(String type) {
-        setType(type);
-        return this;
-    }
+	public DeviceTypeTelemetryModel withType(String type) {
+		setType(type);
+		return this;
+	}
 
-    public DeviceTypeTelemetryModel withControllable(boolean controllable) {
-        setControllable(controllable);
-        return this;
-    }
+	public DeviceTypeTelemetryModel withVariables(Map<String, String> variables) {
+		setVariables(variables);
+		return this;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public void setControllable(boolean controllable) {
-        this.controllable = controllable;
-    }
+	public Map<String, String> getVariables() {
+		return variables;
+	}
 
-    public boolean isControllable() {
-        return controllable;
-    }
+	public void setVariables(Map<String, String> variables) {
+		this.variables = variables;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (controllable ? 1231 : 1237);
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = description != null ? description.hashCode() : 0;
+		result = prime * result + (name != null ? name.hashCode() : 0);
+		result = prime * result + (type != null ? type.hashCode() : 0);
+		result = prime * result + (variables != null ? variables.hashCode() : 0);
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        DeviceTypeTelemetryModel other = (DeviceTypeTelemetryModel) obj;
-        if (controllable != other.controllable)
-            return false;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (type == null) {
-            if (other.type != null)
-                return false;
-        } else if (!type.equals(other.type))
-            return false;
-        return true;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		DeviceTypeTelemetryModel that = (DeviceTypeTelemetryModel) o;
+
+		if (description != null ? !description.equals(that.description) : that.description != null) {
+			return false;
+		}
+		if (name != null ? !name.equals(that.name) : that.name != null) {
+			return false;
+		}
+		if (type != null ? !type.equals(that.type) : that.type != null) {
+			return false;
+		}
+		return variables != null ? variables.equals(that.variables) : that.variables == null;
+	}
+
 }

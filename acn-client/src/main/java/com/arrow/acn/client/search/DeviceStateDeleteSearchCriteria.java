@@ -8,30 +8,16 @@
  * Contributors:
  *     Arrow Electronics, Inc.
  *******************************************************************************/
-package com.arrow.acn.client.model;
+package com.arrow.acn.client.search;
 
-import java.io.Serializable;
+import com.arrow.acs.client.search.SearchCriteria;
 
-public class TestResultStepStatusModel implements Serializable {
+public class DeviceStateDeleteSearchCriteria extends SearchCriteria {
 
-	private static final long serialVersionUID = 8635999788974235648L;
+	private static final String REMOVE_DEVICE_STATE_DEFINITION = "removeStatesDefinition";
 
-	private String status;
-	private String error;
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getError() {
-		return error;
-	}
-
-	public void setError(String error) {
-		this.error = error;
+	public DeviceStateDeleteSearchCriteria withRemoveDefinitions(final boolean removeStatesDefinition) {
+		simpleCriteria.put(REMOVE_DEVICE_STATE_DEFINITION, String.valueOf(removeStatesDefinition));
+		return this;
 	}
 }
