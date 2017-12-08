@@ -36,8 +36,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 	private static final String FIND_BY_HID = SPECIFIC_SOFTWARE_RELEASE_URL;
 	private static final String FIND_ALL_BY_URL = SOFTWARE_RELEASE_SCHEDULE_BASE_URL;
 
-	private static final TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> SOFTWARE_RELEASE_SCHEDULE_MODEL_TYPE_REF = new TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>>() {
-	};
+	private TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> softwareReleaseScheduleModelTypeRef;
 
 	SoftwareReleaseScheduleApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -87,12 +86,18 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
 			PagingResultModel<SoftwareReleaseScheduleModel> result = execute(new HttpGet(uri),
-			        SOFTWARE_RELEASE_SCHEDULE_MODEL_TYPE_REF);
+			        getSoftwareReleaseScheduleModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> getSoftwareReleaseScheduleModelTypeRef() {
+		return softwareReleaseScheduleModelTypeRef != null ? softwareReleaseScheduleModelTypeRef
+		        : (softwareReleaseScheduleModelTypeRef = new TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>>() {
+		        });
 	}
 }

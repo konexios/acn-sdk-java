@@ -42,10 +42,9 @@ public final class TelemetryApi extends ApiAbstract {
 	private final String COUNT_BY_DEVICE_HID = FIND_BY_DEVICE_HID + "/count";
 	private final String BULK_DELETE_LAST_TELEMETRY = TELEMETRY_BASE_URL
 	        + "/devices/{deviceHid}/bulkDeleteLastTelemetry";
-	private final TypeReference<PagingResultModel<TelemetryItemModel>> TELEMETRY_ITEM_MODEL_PAGING_RESULT_TYPE_REF = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
-	};
-	private final TypeReference<ListResultModel<TelemetryItemModel>> TELEMETRY_ITEM_MODEL_LIST_RESULT_TYPE_REF = new TypeReference<ListResultModel<TelemetryItemModel>>() {
-	};
+
+	private TypeReference<PagingResultModel<TelemetryItemModel>> pagingResultTypeRef;
+	private TypeReference<ListResultModel<TelemetryItemModel>> resultTypeRef;
 
 	TelemetryApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -101,7 +100,7 @@ public final class TelemetryApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_BY_APPLICATION_HID.replace("{applicationHid}", applicationHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        TELEMETRY_ITEM_MODEL_PAGING_RESULT_TYPE_REF);
+			        getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -126,8 +125,7 @@ public final class TelemetryApi extends ApiAbstract {
 		String method = "getLatestTelemetry";
 		try {
 			URI uri = buildUri(FIND_LATEST_BY_DEVICE_HID.replace("{deviceHid}", deviceHid));
-			ListResultModel<TelemetryItemModel> result = execute(new HttpGet(uri),
-			        TELEMETRY_ITEM_MODEL_LIST_RESULT_TYPE_REF);
+			ListResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), getResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -159,7 +157,7 @@ public final class TelemetryApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_BY_DEVICE_HID.replace("{deviceHid}", deviceHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        TELEMETRY_ITEM_MODEL_PAGING_RESULT_TYPE_REF);
+			        getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -191,7 +189,7 @@ public final class TelemetryApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_BY_NODE_HID.replace("{nodeHid}", nodeHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        TELEMETRY_ITEM_MODEL_PAGING_RESULT_TYPE_REF);
+			        getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -287,5 +285,17 @@ public final class TelemetryApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<PagingResultModel<TelemetryItemModel>> getPagingResultTypeRef() {
+		return pagingResultTypeRef != null ? pagingResultTypeRef
+		        : (pagingResultTypeRef = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<ListResultModel<TelemetryItemModel>> getResultTypeRef() {
+		return resultTypeRef != null ? resultTypeRef
+		        : (resultTypeRef = new TypeReference<ListResultModel<TelemetryItemModel>>() {
+		        });
 	}
 }

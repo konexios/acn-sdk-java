@@ -30,9 +30,10 @@ public final class NodeApi extends ApiAbstract {
 	private static final String NODES_BASE_URL = API_BASE + "/nodes";
 	private static final String SPECIFIC_NODE_URL = NODES_BASE_URL + "/{hid}";
 	private static final String FIND_BY_HID_URL = SPECIFIC_NODE_URL;
-	private static final TypeReference<ListResultModel<NodeModel>> NODE_MODEL_TYPE_REF = new TypeReference<ListResultModel<NodeModel>>() {
-	};
+
 	private static final Pattern PATTERN = Pattern.compile("{hid}", Pattern.LITERAL);
+
+	private TypeReference<ListResultModel<NodeModel>> nodeModelTypeRef;
 
 	NodeApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -75,7 +76,7 @@ public final class NodeApi extends ApiAbstract {
 		String method = "listExistingNodes";
 		try {
 			URI uri = buildUri(NODES_BASE_URL);
-			ListResultModel<NodeModel> result = execute(new HttpGet(uri), NODE_MODEL_TYPE_REF);
+			ListResultModel<NodeModel> result = execute(new HttpGet(uri), getNodeModelTypeRef());
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
@@ -134,5 +135,11 @@ public final class NodeApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<ListResultModel<NodeModel>> getNodeModelTypeRef() {
+		return nodeModelTypeRef != null ? nodeModelTypeRef
+		        : (nodeModelTypeRef = new TypeReference<ListResultModel<NodeModel>>() {
+		        });
 	}
 }

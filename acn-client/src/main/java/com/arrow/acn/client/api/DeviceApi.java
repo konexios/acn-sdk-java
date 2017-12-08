@@ -53,15 +53,13 @@ public class DeviceApi extends ApiAbstract {
 	private static final String SPECIFIC_CONFIGURATION_BACKUP_URL = CONFIGURATION_BACKUP_URL + "/{configBackupHid}";
 	private static final String RESTORE_CONFIGURATION_URL = SPECIFIC_CONFIGURATION_BACKUP_URL + "/restore";
 
-	private static final TypeReference<PagingResultModel<DeviceModel>> DEVICE_MODEL_TYPE_REF = new TypeReference<PagingResultModel<DeviceModel>>() {
-	};
-	private static final TypeReference<PagingResultModel<DeviceEventModel>> DEVICE_EVENT_MODEL_TYPE_REF = new TypeReference<PagingResultModel<DeviceEventModel>>() {
-	};
-	private static final TypeReference<PagingResultModel<AuditLogModel>> AUDIT_LOG_MODEL_TYPE_REF = new TypeReference<PagingResultModel<AuditLogModel>>() {
-	};
-	private static final TypeReference<PagingResultModel<ConfigBackupModel>> CONFIG_BACKUP_MODEL_TYPE_REF = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
-	};
 	private static final Pattern PATTERN = Pattern.compile("{hid}", Pattern.LITERAL);
+
+	// instantiation is expensive for these objects
+	private TypeReference<PagingResultModel<DeviceModel>> deviceModelTypeRef;
+	private TypeReference<PagingResultModel<DeviceEventModel>> deviceEventModelTypeRef;
+	private TypeReference<PagingResultModel<AuditLogModel>> auditLogModelTypeRef;
+	private TypeReference<PagingResultModel<ConfigBackupModel>> configBackupModelTypeRef;
 
 	DeviceApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -87,7 +85,7 @@ public class DeviceApi extends ApiAbstract {
 		String method = "findAllBy";
 		try {
 			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
-			PagingResultModel<DeviceModel> result = execute(new HttpGet(uri), DEVICE_MODEL_TYPE_REF);
+			PagingResultModel<DeviceModel> result = execute(new HttpGet(uri), getDeviceModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -200,10 +198,10 @@ public class DeviceApi extends ApiAbstract {
 	public PagingResultModel<DeviceEventModel> listHistoricalDeviceEvents(String hid, EventsSearchCriteria criteria) {
 		String method = "listHistoricalDeviceEvents";
 		try {
-			URI uri = buildUri(
-			        PATTERN.matcher(SPECIFIC_EVENTS_URL).replaceAll(Matcher.quoteReplacement(hid)), criteria);
+			URI uri = buildUri(PATTERN.matcher(SPECIFIC_EVENTS_URL).replaceAll(Matcher.quoteReplacement(hid)),
+			        criteria);
 			PagingResultModel<DeviceEventModel> result = execute(new HttpGet(uri), criteria,
-			        DEVICE_EVENT_MODEL_TYPE_REF);
+			        getDeviceEventModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -234,7 +232,7 @@ public class DeviceApi extends ApiAbstract {
 		String method = "listDeviceAuditLogs";
 		try {
 			URI uri = buildUri(PATTERN.matcher(SPECIFIC_LOGS_URL).replaceAll(Matcher.quoteReplacement(hid)), criteria);
-			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, AUDIT_LOG_MODEL_TYPE_REF);
+			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, getAuditLogModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -300,7 +298,7 @@ public class DeviceApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid), criteria);
 			PagingResultModel<ConfigBackupModel> result = execute(new HttpGet(uri), criteria,
-			        CONFIG_BACKUP_MODEL_TYPE_REF);
+			        getConfigBackupModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -320,5 +318,29 @@ public class DeviceApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<PagingResultModel<DeviceModel>> getDeviceModelTypeRef() {
+		return deviceModelTypeRef != null ? deviceModelTypeRef
+		        : (deviceModelTypeRef = new TypeReference<PagingResultModel<DeviceModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<PagingResultModel<DeviceEventModel>> getDeviceEventModelTypeRef() {
+		return deviceEventModelTypeRef != null ? deviceEventModelTypeRef
+		        : (deviceEventModelTypeRef = new TypeReference<PagingResultModel<DeviceEventModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<PagingResultModel<AuditLogModel>> getAuditLogModelTypeRef() {
+		return auditLogModelTypeRef != null ? auditLogModelTypeRef
+		        : (auditLogModelTypeRef = new TypeReference<PagingResultModel<AuditLogModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<PagingResultModel<ConfigBackupModel>> getConfigBackupModelTypeRef() {
+		return configBackupModelTypeRef != null ? configBackupModelTypeRef
+		        : (configBackupModelTypeRef = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
+		        });
 	}
 }

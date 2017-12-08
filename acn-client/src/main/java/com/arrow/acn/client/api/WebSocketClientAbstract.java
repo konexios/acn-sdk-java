@@ -18,8 +18,8 @@ import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import com.arrow.acn.client.websocket.MessageListener;
-import com.arrow.acn.client.websocket.WebSocketSubscription;
 import com.arrow.acn.client.websocket.WebSocketEndpoint;
+import com.arrow.acn.client.websocket.WebSocketSubscription;
 import com.arrow.acs.ApiHeaders;
 import com.arrow.acs.client.AcsClientException;
 import com.arrow.acs.client.api.ApiConfig;
@@ -28,7 +28,7 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 
 	private static final long DEFAULT_CONNECTION_TIMEOUT_MILLISECONDS = 5000;
 
-	private WebSocketClient client = new WebSocketClient();
+	private WebSocketClient client;
 	private long connectionTimeout = DEFAULT_CONNECTION_TIMEOUT_MILLISECONDS;
 	private MessageListener messageListener = new MessageListener() {
 	};
@@ -42,6 +42,7 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 	}
 
 	public void setMaxIdleTimeout(long ms) {
+		lazyInitWebsocket();
 		client.setMaxIdleTimeout(ms);
 	}
 
@@ -51,6 +52,7 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 	}
 
 	public void start() throws Exception {
+		lazyInitWebsocket();
 		if (!client.isRunning()) {
 			String method = "start";
 			logDebug(method, "...");
@@ -61,12 +63,14 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 	public void stop() throws Exception {
 		String method = "stop";
 		logDebug(method, "...");
-		client.stop();
+		if (client != null)
+			client.stop();
 	}
 
 	protected WebSocketSubscription subscribe(URI uri) throws Exception {
 		String method = "subscribe";
 		logDebug(method, "...");
+		lazyInitWebsocket();
 		try {
 			start();
 			ClientUpgradeRequest request = new ClientUpgradeRequest();
@@ -95,5 +99,11 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 		Validate.notNull(request, "request is null");
 		request.setHeader(ApiHeaders.X_ARROW_APIKEY, getApiConfig().getApiKey());
 		return request;
+	}
+
+	private synchronized void lazyInitWebsocket() {
+		if (client == null) {
+			client = new WebSocketClient();
+		}
 	}
 }

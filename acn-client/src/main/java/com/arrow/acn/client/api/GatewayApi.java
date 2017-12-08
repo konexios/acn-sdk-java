@@ -58,14 +58,11 @@ public final class GatewayApi extends ApiAbstract {
 	private static final String SPECIFIC_CONFIGURATION_BACKUP_URL = CONFIGURATION_BACKUP_URL + "/{configBackupHid}";
 	private static final String RESTORE_CONFIGURATION_URL = SPECIFIC_CONFIGURATION_BACKUP_URL + "/restore";
 
-	private static final TypeReference<PagingResultModel<GatewayModel>> GATEWAY_MODEL_TYPE_REF = new TypeReference<PagingResultModel<GatewayModel>>() {
-	};
-	private final TypeReference<PagingResultModel<AuditLogModel>> AUDIT_LOG_MODEL_TYPE_REF = new TypeReference<PagingResultModel<AuditLogModel>>() {
-	};
-	private final TypeReference<ListResultModel<DeviceModel>> DEVICE_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceModel>>() {
-	};
-	private static final TypeReference<PagingResultModel<ConfigBackupModel>> CONFIG_BACKUP_MODEL_TYPE_REF = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
-	};
+	// instantiation is expensive for these objects
+	private TypeReference<PagingResultModel<GatewayModel>> gatewayModelTypeRef;
+	private TypeReference<PagingResultModel<AuditLogModel>> auditLogModelTypeRef;
+	private TypeReference<ListResultModel<DeviceModel>> deviceModelTypeRef;
+	private TypeReference<PagingResultModel<ConfigBackupModel>> configBackupModelTypeRef;
 
 	GatewayApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -91,7 +88,7 @@ public final class GatewayApi extends ApiAbstract {
 		String method = "findAllBy";
 		try {
 			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
-			PagingResultModel<GatewayModel> result = execute(new HttpGet(uri), GATEWAY_MODEL_TYPE_REF);
+			PagingResultModel<GatewayModel> result = execute(new HttpGet(uri), getGatewayModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -118,6 +115,7 @@ public final class GatewayApi extends ApiAbstract {
 		String method = "registerNewGateway";
 		try {
 			URI uri = buildUri(REGISTER_URL);
+			logInfo(method, "execute ...");
 			ExternalHidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), ExternalHidModel.class);
 			log(method, result);
 			return result;
@@ -168,7 +166,7 @@ public final class GatewayApi extends ApiAbstract {
 		String method = "find";
 		try {
 			URI uri = buildUri(DEVICES_URL.replace("{hid}", hid));
-			ListResultModel<DeviceModel> result = execute(new HttpGet(uri), DEVICE_MODEL_TYPE_REF);
+			ListResultModel<DeviceModel> result = execute(new HttpGet(uri), getDeviceModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -332,7 +330,7 @@ public final class GatewayApi extends ApiAbstract {
 		String method = "listGatewayAuditLogs";
 		try {
 			URI uri = buildUri(LOGS_URL.replace("{hid}", hid), criteria);
-			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, AUDIT_LOG_MODEL_TYPE_REF);
+			PagingResultModel<AuditLogModel> result = execute(new HttpGet(uri), criteria, getAuditLogModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -398,7 +396,7 @@ public final class GatewayApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid), criteria);
 			PagingResultModel<ConfigBackupModel> result = execute(new HttpGet(uri), criteria,
-			        CONFIG_BACKUP_MODEL_TYPE_REF);
+			        getConfigBackupModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -418,5 +416,29 @@ public final class GatewayApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<PagingResultModel<GatewayModel>> getGatewayModelTypeRef() {
+		return gatewayModelTypeRef != null ? gatewayModelTypeRef
+		        : (gatewayModelTypeRef = new TypeReference<PagingResultModel<GatewayModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<PagingResultModel<AuditLogModel>> getAuditLogModelTypeRef() {
+		return auditLogModelTypeRef != null ? auditLogModelTypeRef
+		        : (auditLogModelTypeRef = new TypeReference<PagingResultModel<AuditLogModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<ListResultModel<DeviceModel>> getDeviceModelTypeRef() {
+		return deviceModelTypeRef != null ? deviceModelTypeRef
+		        : (deviceModelTypeRef = new TypeReference<ListResultModel<DeviceModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<PagingResultModel<ConfigBackupModel>> getConfigBackupModelTypeRef() {
+		return configBackupModelTypeRef != null ? configBackupModelTypeRef
+		        : (configBackupModelTypeRef = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
+		        });
 	}
 }

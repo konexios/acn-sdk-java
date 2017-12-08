@@ -93,9 +93,10 @@ public class CustomMqttClient extends Loggable {
 			public void run() {
 				client = initClient(clientId, options);
 				if (client != null && topics != null) {
+					logInfo(method, "subscribing to: %d topics", topics.length);
 					subscribe(topics);
 				} else {
-					logWarn(method, "client or topics is null");
+					logWarn(method, "there's no topics to subscribe");
 				}
 			}
 		});
@@ -136,7 +137,7 @@ public class CustomMqttClient extends Loggable {
 	public void checkConnection() {
 		String method = "checkConnection";
 		while (client == null || !client.isConnected()) {
-			logError(method, "client is not ready, check back in %d ...",
+			logError(method, "client is not ready: %s, check back in %d ...", this.url,
 			        Mqtt.DEFAULT_CHECK_CONNECTION_RETRY_INTERVAL_MS);
 			Utils.sleep(Mqtt.DEFAULT_CHECK_CONNECTION_RETRY_INTERVAL_MS);
 		}
@@ -176,7 +177,7 @@ public class CustomMqttClient extends Loggable {
 
 	private MqttClient initClient(String clientId, MqttConnectOptions options) {
 		String method = "initClient";
-		logInfo(method, "create client %s connecting to %s", clientId, url);
+		logInfo(method, "creating client %s to %s", clientId, url);
 		while (!disconnected) {
 			try {
 				MqttClient client = new MqttClient(url, clientId, null);
