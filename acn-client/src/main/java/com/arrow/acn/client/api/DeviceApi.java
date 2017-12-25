@@ -166,7 +166,7 @@ public class DeviceApi extends ApiAbstract {
 	 *             if request failed
 	 */
 	public HidModel updateExistingDevice(String hid, DeviceRegistrationModel model) {
-		String method = "putFailed";
+		String method = "updateExistingDevice";
 		try {
 			URI uri = buildUri(PATTERN.matcher(UPDATE_EXISTING_URL).replaceAll(Matcher.quoteReplacement(hid)));
 			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);
