@@ -32,6 +32,7 @@ public final class AcnClient {
 	private final DeviceTelemetryClient deviceTelemetryClient;
 	private final NodeTelemetryClient nodeTelemetryClient;
 	private final RTUFirmwareApi rtuFirmwareApi;
+	private final SocialEventRegistrationApi socialEventRegistrationApi;
 
 	public AcnClient(ApiConfig apiConfig) {
 		Validate.notNull(apiConfig, "apiConfig is not set");
@@ -52,6 +53,7 @@ public final class AcnClient {
 		deviceTelemetryClient = new DeviceTelemetryClient(apiConfig);
 		nodeTelemetryClient = new NodeTelemetryClient(apiConfig);
 		rtuFirmwareApi = new RTUFirmwareApi(apiConfig);
+		socialEventRegistrationApi = new SocialEventRegistrationApi(apiConfig);
 	}
 
 	public void setApiConfig(ApiConfig apiConfig) {
@@ -70,6 +72,7 @@ public final class AcnClient {
 		deviceTelemetryClient.setApiConfig(apiConfig);
 		nodeTelemetryClient.setApiConfig(apiConfig);
 		rtuFirmwareApi.setApiConfig(apiConfig);
+		socialEventRegistrationApi.setApiConfig(apiConfig);
 	}
 
 	public ApiConfig getApiConfig() {
@@ -138,5 +141,9 @@ public final class AcnClient {
 	
 	public RTUFirmwareApi getRTUFirmwareApi() {
 		return rtuFirmwareApi;
+	}
+	
+	public SocialEventRegistrationApi getSocialEventRegistrationApi() {
+		return socialEventRegistrationApi;
 	}
 }
