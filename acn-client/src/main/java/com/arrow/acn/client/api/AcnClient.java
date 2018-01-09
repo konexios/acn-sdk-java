@@ -46,6 +46,7 @@ public final class AcnClient {
 		getCoreUserApi().setApiConfig(apiConfig);
 		getDeviceActionApi().setApiConfig(apiConfig);
 		getDeviceApi().setApiConfig(apiConfig);
+		getDeviceStateApi().setApiConfig(apiConfig);
 		getGatewayApi().setApiConfig(apiConfig);
 		getNodeApi().setApiConfig(apiConfig);
 		getSoftwareReleaseScheduleApi().setApiConfig(apiConfig);
