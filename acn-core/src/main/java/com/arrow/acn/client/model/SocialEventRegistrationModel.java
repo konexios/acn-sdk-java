@@ -29,6 +29,7 @@ public class SocialEventRegistrationModel extends ModelAbstract<SocialEventRegis
 	private String lastModifiedBy;
 	private String origEmail;
 	private String origEncryptedPassword;
+	private String userHid;
 
 	@Override
 	protected SocialEventRegistrationModel self() {
@@ -153,5 +154,13 @@ public class SocialEventRegistrationModel extends ModelAbstract<SocialEventRegis
 
 	public void setOrigEncryptedPassword(String origEncryptedPassword) {
 		this.origEncryptedPassword = origEncryptedPassword;
+	}
+
+	public String getUserHid() {
+		return userHid;
+	}
+
+	public void setUserHid(String userHid) {
+		this.userHid = userHid;
 	}	
 }

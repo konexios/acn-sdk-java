@@ -18,8 +18,8 @@ public class CreateSocialEventRegistrationModel implements Serializable {
 	private String socialEventHid;
 	private String origPassword;
 	private String origEmail;
-	//TODO clarify moment about application matching
-	//private String applicationHid;
+	private String email;
+	private String userHid;
 
 	public String getSocialEventHid() {
 		return socialEventHid;
@@ -45,11 +45,19 @@ public class CreateSocialEventRegistrationModel implements Serializable {
 		this.origEmail = origEmail;
 	}
 
-	/*public String getApplicationHid() {
-		return applicationHid;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setApplicationHid(String applicationHid) {
-		this.applicationHid = applicationHid;
-	}*/
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getUserHid() {
+		return userHid;
+	}
+
+	public void setUserHid(String userHid) {
+		this.userHid = userHid;
+	}
 }
