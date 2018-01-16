@@ -33,11 +33,11 @@ public class SocialEventRegistrationVerifyModel implements Serializable {
 		this.applicationHid = applicationHid;
 	}
 
-	public String getTenantHid() {
+	public String getCompanyHid() {
 		return tenantHid;
 	}
 
-	public void setTenantHid(String tenantHid) {
+	public void setCompanyHid(String tenantHid) {
 		this.tenantHid = tenantHid;
 	}
 
