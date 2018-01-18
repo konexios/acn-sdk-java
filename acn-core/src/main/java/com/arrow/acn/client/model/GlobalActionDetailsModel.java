@@ -1,7 +1,6 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
