@@ -31,6 +31,8 @@ public class DeviceRegistrationModel implements Serializable {
     private boolean isEnabled = true;
     private Set<String> tags = new HashSet<>();
     private String nodeHid;
+    private String softwareName;
+    private String softwareVersion;
 
     public void trim() {
         uid = StringUtils.trimToNull(uid);
@@ -39,6 +41,8 @@ public class DeviceRegistrationModel implements Serializable {
         userHid = StringUtils.trimToNull(userHid);
         gatewayHid = StringUtils.trimToNull(gatewayHid);
         nodeHid = StringUtils.trimToNull(nodeHid);
+        softwareName = StringUtils.trim(softwareName);
+        softwareVersion = StringUtils.trim(softwareVersion);
     }
 
     public DeviceRegistrationModel withUid(String uid) {
@@ -171,6 +175,22 @@ public class DeviceRegistrationModel implements Serializable {
 		this.nodeHid = nodeHid;
 	}
 
+	public String getSoftwareName() {
+		return softwareName;
+	}
+
+	public void setSoftwareName(String softwareName) {
+		this.softwareName = softwareName;
+	}
+
+	public String getSoftwareVersion() {
+		return softwareVersion;
+	}
+
+	public void setSoftwareVersion(String softwareVersion) {
+		this.softwareVersion = softwareVersion;
+	}
+
 	@Override
     public int hashCode() {
         final int prime = 31;
@@ -185,6 +205,8 @@ public class DeviceRegistrationModel implements Serializable {
         result = prime * result + (isEnabled ? 1 : 0);
         result = prime * result + (tags == null ? 0 : tags.hashCode());
         result = prime * result + (nodeHid == null ? 0 : nodeHid.hashCode());
+        result = prime * result + ((softwareName == null) ? 0 : softwareName.hashCode());
+        result = prime * result + ((softwareVersion == null) ? 0 : softwareVersion.hashCode());
         return result;
     }
 
@@ -244,6 +266,18 @@ public class DeviceRegistrationModel implements Serializable {
             if (other.nodeHid != null)
                 return false;
         } else if (!nodeHid.equals(other.nodeHid)) {
+            return false;
+        }
+        if (softwareName == null) {
+            if (other.softwareName != null)
+                return false;
+        } else if (!softwareName.equals(other.softwareName)) {
+            return false;
+        }
+        if (softwareVersion == null) {
+            if (other.softwareVersion != null)
+                return false;
+        } else if (!softwareVersion.equals(other.softwareVersion)) {
             return false;
         }
         return true;

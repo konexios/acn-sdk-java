@@ -15,7 +15,7 @@ import java.util.Map;
 import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public class DeviceModel extends AuditableDocumentModelAbstract<DeviceModel> {
-	private static final long serialVersionUID = 2652754792835097934L;
+	private static final long serialVersionUID = -8361035771470871050L;
 
 	private String uid;
 	private String name;
@@ -26,6 +26,8 @@ public class DeviceModel extends AuditableDocumentModelAbstract<DeviceModel> {
 	private String createdDate;
 	private Map<String, String> info;
 	private Map<String, String> properties;
+	private String softwareName;
+	private String softwareVersion;
 
 	@Override
 	protected DeviceModel self() {
@@ -147,5 +149,21 @@ public class DeviceModel extends AuditableDocumentModelAbstract<DeviceModel> {
 
 	public void setProperties(Map<String, String> properties) {
 		this.properties = properties;
+	}
+
+	public String getSoftwareName() {
+		return softwareName;
+	}
+
+	public void setSoftwareName(String softwareName) {
+		this.softwareName = softwareName;
+	}
+
+	public String getSoftwareVersion() {
+		return softwareVersion;
+	}
+
+	public void setSoftwareVersion(String softwareVersion) {
+		this.softwareVersion = softwareVersion;
 	}
 }
