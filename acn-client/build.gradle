@@ -61,3 +61,24 @@ task copyJar(dependsOn: jar) << {
         into "../../apollo/lib"
     }
 }
+
+task jenkinsInput() << {
+   delete fileTree('lib') {
+       include '**/acs*'
+   }
+   copy {
+       from('/data1/jenkins/workspace/global-libs')  { include '**/acs*' }
+       into 'lib'
+   }
+}
+
+task jenkinsOutput() {
+    copy {
+        with jarToCopy
+        into "/data1/jenkins/workspace/global-libs"
+    }
+}
+
+task jenkinsBuild(type: GradleBuild) {
+    tasks = ['jenkinsInput', 'jar', 'jenkinsOutput']
+}
