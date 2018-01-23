@@ -72,7 +72,7 @@ task jenkinsInput() << {
    }
 }
 
-task jenkinsOutput() {
+task jenkinsOutput() << {
     copy {
         with jarToCopy
         into "/data1/jenkins/workspace/global-libs"
