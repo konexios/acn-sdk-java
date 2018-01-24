@@ -20,7 +20,7 @@ import com.arrow.acs.client.model.YesNoInherit;
 
 public class BaseDeviceConfigBackupModel implements Serializable {
 
-	private static final long serialVersionUID = -693863482464850712L;
+	private static final long serialVersionUID = 5905430095015779063L;
 
 	private String deviceTypeHid;
 	private String uid;
@@ -35,6 +35,8 @@ public class BaseDeviceConfigBackupModel implements Serializable {
 	private Set<String> tags = new HashSet<>();
 	private YesNoInherit persistTelemetry;
 	private YesNoInherit indexTelemetry;
+	private String softwareName;
+	private String softwareVersion;
 
 	public BaseDeviceConfigBackupModel withDeviceTypeHid(String deviceTypeHid) {
 		setDeviceTypeHid(deviceTypeHid);
@@ -98,6 +100,16 @@ public class BaseDeviceConfigBackupModel implements Serializable {
 
 	public BaseDeviceConfigBackupModel withIndexTelemetry(YesNoInherit indexTelemetry) {
 		setIndexTelemetry(indexTelemetry);
+		return this;
+	}
+	
+	public BaseDeviceConfigBackupModel withSoftwareName(String softwareName) {
+		setSoftwareName(softwareName);
+		return this;
+	}
+
+	public BaseDeviceConfigBackupModel withSoftwareVersion(String softwareVersion) {
+		setSoftwareVersion(softwareVersion);
 		return this;
 	}
 
@@ -203,5 +215,21 @@ public class BaseDeviceConfigBackupModel implements Serializable {
 
 	public void setIndexTelemetry(YesNoInherit indexTelemetry) {
 		this.indexTelemetry = indexTelemetry;
+	}
+	
+	public String getSoftwareName() {
+		return softwareName;
+	}
+
+	public void setSoftwareName(String softwareName) {
+		this.softwareName = softwareName;
+	}
+
+	public String getSoftwareVersion() {
+		return softwareVersion;
+	}
+
+	public void setSoftwareVersion(String softwareVersion) {
+		this.softwareVersion = softwareVersion;
 	}
 }
