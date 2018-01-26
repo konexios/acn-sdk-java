@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.arrow.acn.AcnDeviceCategory;
-import com.arrow.acs.client.model.ModelAbstract;
+import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
-public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseScheduleModel> {
+public class SoftwareReleaseScheduleModel extends AuditableDocumentModelAbstract<SoftwareReleaseScheduleModel> {
 
-	private static final long serialVersionUID = 605752316012531011L;
+	private static final long serialVersionUID = 3666946823955944387L;
 
 	private String applicationHid;
 	private String scheduledDate;
@@ -254,5 +254,5 @@ public class SoftwareReleaseScheduleModel extends ModelAbstract<SoftwareReleaseS
 
 	public void setHardwareVersionHid(String hardwareVersionHid) {
 		this.hardwareVersionHid = hardwareVersionHid;
-	}	
+	}
 }

@@ -51,6 +51,11 @@ public class ConfigBackupModel extends TsModelAbstract<ConfigBackupModel> {
 		return this;
 	}
 
+	public ConfigBackupModel withObjectHid(String objectHid) {
+		setObjectHid(objectHid);
+		return this;
+	}
+
 	public String getName() {
 		return name;
 	}
