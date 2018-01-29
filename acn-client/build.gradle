@@ -46,10 +46,6 @@ task copyJar(dependsOn: jar) << {
     }
     copy {
         with jarToCopy
-        into "../../rhea/lib"
-    }
-    copy {
-        with jarToCopy
         into "../../selene/lib"
     }
     copy {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -12,13 +12,13 @@ package com.arrow.acn.client.cloud;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 import com.arrow.acn.Utils;
 import com.arrow.acn.client.ClientConstants.Mqtt;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
 
 public abstract class MqttConnectorAbstract extends CloudConnectorAbstract implements MessageListener {
@@ -41,7 +41,7 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 		String method = "MqttConnectorAbstract.start";
 		client.setOptions(mqttConnectOptions());
 		String topic = subscriberTopic();
-		if (!StringUtils.isEmpty(topic)) {
+		if (!AcsUtils.isEmpty(topic)) {
 			client.setTopics(topic);
 		} else {
 			logWarn(method, "no topic to subscribe!");

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
+import com.arrow.acs.AcsUtils;
 
 public class SoftwareUpdateModel implements Serializable {
 	private static final long serialVersionUID = -8219969834574648854L;
@@ -20,7 +20,7 @@ public class SoftwareUpdateModel implements Serializable {
 	private String url;
 
 	public void trim() {
-		url = StringUtils.trimToNull(url);
+		url = AcsUtils.trimToNull(url);
 	}
 
 	public SoftwareUpdateModel withUrl(String url) {

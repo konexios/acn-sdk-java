@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -15,11 +15,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.api.CoreEventApi;
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.GatewayPayloadSigner;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.Loggable;
@@ -58,8 +57,8 @@ public abstract class CloudConnectorAbstract extends Loggable {
 	protected void validateAndProcessEvent(String topic, byte[] payload) {
 		String method = "validateAndProcessEvent";
 		GatewayEventModel model = JsonUtils.fromJson(new String(payload, Charset.defaultCharset()),
-				GatewayEventModel.class);
-		if (model == null || StringUtils.isEmpty(model.getName())) {
+		        GatewayEventModel.class);
+		if (model == null || AcsUtils.isEmpty(model.getName())) {
 			logError(method, "ignore invalid payload: %s", payload);
 			return;
 		}
@@ -86,27 +85,27 @@ public abstract class CloudConnectorAbstract extends Loggable {
 
 	private boolean isSignatureValid(GatewayEventModel model) {
 		String method = "isSignatureValid";
-		if (StringUtils.isEmpty(model.getSignature())) {
+		if (AcsUtils.isEmpty(model.getSignature())) {
 			logDebug(method, "skipping signature validation");
 			return true;
 		}
 		logDebug(method, "validating signature");
 		ApiConfig apiConfig = acnClient.getApiConfig();
-		GatewayPayloadSigner signer = GatewayPayloadSigner.create(apiConfig.getSecretKey()).withApiKey(
-				apiConfig.getApiKey()).withHid(model.getHid()).withName(model.getName()).withEncrypted(
-				model.isEncrypted());
+		GatewayPayloadSigner signer = GatewayPayloadSigner.create(apiConfig.getSecretKey())
+		        .withApiKey(apiConfig.getApiKey()).withHid(model.getHid()).withName(model.getName())
+		        .withEncrypted(model.isEncrypted());
 		for (Entry<String, String> entry : model.getParameters().entrySet()) {
 			signer.withParameter(entry.getKey(), entry.getValue());
 		}
 		String signatureVersion = model.getSignatureVersion();
 		switch (signatureVersion) {
-			case GatewayPayloadSigner.PAYLOAD_SIGNATURE_VERSION_1: {
-				return Objects.equals(signer.signV1(), model.getSignature());
-			}
-			default: {
-				logWarn(method, "signature of version %s is not supported", signatureVersion);
-				return false;
-			}
+		case GatewayPayloadSigner.PAYLOAD_SIGNATURE_VERSION_1: {
+			return Objects.equals(signer.signV1(), model.getSignature());
+		}
+		default: {
+			logWarn(method, "signature of version %s is not supported", signatureVersion);
+			return false;
+		}
 		}
 	}
 }

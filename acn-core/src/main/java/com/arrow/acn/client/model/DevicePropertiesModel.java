@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import com.arrow.acs.AcsUtils;
 
 public class DevicePropertiesModel implements Serializable {
 
@@ -24,7 +24,7 @@ public class DevicePropertiesModel implements Serializable {
 	private Map<String, String> properties = new HashMap<>();
 
 	public void trim() {
-		deviceHid = StringUtils.trimToNull(deviceHid);
+		deviceHid = AcsUtils.trimToNull(deviceHid);
 	}
 
 	public DevicePropertiesModel withDeviceHid(String deviceHid) {

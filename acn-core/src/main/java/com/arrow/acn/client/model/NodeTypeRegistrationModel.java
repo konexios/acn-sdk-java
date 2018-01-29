@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
+import com.arrow.acs.AcsUtils;
 
 public class NodeTypeRegistrationModel implements Serializable {
 	private static final long serialVersionUID = -4297835378597209705L;
@@ -23,8 +23,8 @@ public class NodeTypeRegistrationModel implements Serializable {
 	private String deviceCategoryHid;
 
 	public void trim() {
-		name = StringUtils.trimToNull(name);
-		description = StringUtils.trimToNull(description);
+		name = AcsUtils.trimToNull(name);
+		description = AcsUtils.trimToNull(description);
 	}
 
 	public NodeTypeRegistrationModel withName(String name) {
@@ -41,7 +41,7 @@ public class NodeTypeRegistrationModel implements Serializable {
 		setEnabled(enabled);
 		return this;
 	}
-	
+
 	public NodeTypeRegistrationModel withDeviceCategoryHid(String deviceCategoryHid) {
 		setDeviceCategoryHid(deviceCategoryHid);
 		return this;
@@ -70,11 +70,11 @@ public class NodeTypeRegistrationModel implements Serializable {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
 	public String getDeviceCategoryHid() {
 		return deviceCategoryHid;
 	}
-	
+
 	public void setDeviceCategoryHid(String deviceCategoryHid) {
 		this.deviceCategoryHid = deviceCategoryHid;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
+import com.arrow.acs.AcsUtils;
 
 public class DeviceCommandModel implements Serializable {
 
@@ -23,9 +23,9 @@ public class DeviceCommandModel implements Serializable {
 	private String payload;
 
 	public void trim() {
-		deviceHid = StringUtils.trimToNull(deviceHid);
-		command = StringUtils.trimToNull(command);
-		payload = StringUtils.trimToNull(payload);
+		deviceHid = AcsUtils.trimToNull(deviceHid);
+		command = AcsUtils.trimToNull(command);
+		payload = AcsUtils.trimToNull(payload);
 	}
 
 	public DeviceCommandModel withDeviceHid(String deviceHid) {

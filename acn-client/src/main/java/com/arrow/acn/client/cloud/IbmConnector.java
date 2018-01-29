@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -13,14 +13,13 @@ package com.arrow.acn.client.cloud;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.arrow.acn.client.ClientConstants;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.model.IbmConfigModel;
 import com.arrow.acn.client.utils.Utils;
 import com.arrow.acs.AcsLogicalException;
+import com.arrow.acs.AcsUtils;
 import com.ibm.iotf.client.gateway.Command;
 import com.ibm.iotf.client.gateway.GatewayCallback;
 import com.ibm.iotf.client.gateway.GatewayClient;
@@ -86,7 +85,7 @@ public class IbmConnector extends CloudConnectorAbstract {
 			Utils.sleep(ClientConstants.DEFAULT_CLOUD_SENDING_RETRY_MS);
 		}
 
-		if (!StringUtils.isEmpty(payload.getExternalId()) && !StringUtils.isEmpty(payload.getDeviceType())) {
+		if (!AcsUtils.isEmpty(payload.getExternalId()) && !AcsUtils.isEmpty(payload.getDeviceType())) {
 			logDebug(method, "sending message to cloud via device: %s", payload.getExternalId());
 			gatewayClient.publishDeviceEvent(payload.getDeviceType(), payload.getExternalId(), DEFAULT_EVENT, payload,
 			        getQos());

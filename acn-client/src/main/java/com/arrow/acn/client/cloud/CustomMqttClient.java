@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -13,7 +13,6 @@ package com.arrow.acn.client.cloud;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.Validate;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -25,6 +24,7 @@ import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.ClientConstants;
 import com.arrow.acn.client.ClientConstants.Mqtt;
 import com.arrow.acn.client.utils.Utils;
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.Loggable;
 
 public class CustomMqttClient extends Loggable {
@@ -49,7 +49,7 @@ public class CustomMqttClient extends Loggable {
 	}
 
 	private CustomMqttClient(String url, String clientId, boolean cleanSession) {
-		Validate.notBlank(url, "url is not set");
+		AcsUtils.notEmpty(url, "url is not set");
 		this.url = url;
 		this.clientId = clientId;
 		this.cleanSession = cleanSession;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -14,11 +14,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.arrow.acs.AcsUtils;
 
 public class TestProcedureRegistrationModel implements Serializable {
 	private static final long serialVersionUID = 8527833325939436585L;
-	
+
 	private String name;
 	private String description;
 	private boolean enabled = true;
@@ -26,9 +26,9 @@ public class TestProcedureRegistrationModel implements Serializable {
 	private List<TestProcedureStepModel> steps = new ArrayList<>();
 
 	public void trim() {
-		name = StringUtils.trimToNull(name);
-		description = StringUtils.trimToNull(description);
-		deviceTypeHid = StringUtils.trimToNull(deviceTypeHid);
+		name = AcsUtils.trimToNull(name);
+		description = AcsUtils.trimToNull(description);
+		deviceTypeHid = AcsUtils.trimToNull(deviceTypeHid);
 	}
 
 	public List<TestProcedureStepModel> getSteps() {
@@ -46,7 +46,7 @@ public class TestProcedureRegistrationModel implements Serializable {
 	public void setDeviceTypeHid(String deviceTypeHid) {
 		this.deviceTypeHid = deviceTypeHid;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -62,7 +62,7 @@ public class TestProcedureRegistrationModel implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public boolean isEnabled() {
 		return enabled;
 	}

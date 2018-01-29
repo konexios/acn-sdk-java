@@ -13,8 +13,6 @@ jar.doFirst {
 }
 
 dependencies {
-    compile("org.apache.commons:commons-lang3:3.6")
-    
     compile fileTree(dir: '../lib', include: '*.jar')
 }
 
