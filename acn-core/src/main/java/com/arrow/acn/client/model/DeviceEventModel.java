@@ -10,16 +10,20 @@
  *******************************************************************************/
 package com.arrow.acn.client.model;
 
-import java.io.Serializable;
+import com.arrow.acs.client.model.TsModelAbstract;
 
-public class DeviceEventModel implements Serializable {
+public class DeviceEventModel extends TsModelAbstract<DeviceEventModel> {
 
-    private static final long serialVersionUID = -4535923297899013459L;
+    private static final long serialVersionUID = -6550295267735297943L;
 
     private String deviceActionTypeName;
     private String criteria;
-    private String createdDate;
     private String status;
+
+    @Override
+    protected DeviceEventModel self() {
+        return this;
+    }
 
     public DeviceEventModel withDeviceActionTypeName(String deviceActionTypeName) {
         setDeviceActionTypeName(deviceActionTypeName);
@@ -28,11 +32,6 @@ public class DeviceEventModel implements Serializable {
 
     public DeviceEventModel withCriteria(String criteria) {
         setCriteria(criteria);
-        return this;
-    }
-
-    public DeviceEventModel withCreatedDate(String createdDate) {
-        setCreatedDate(createdDate);
         return this;
     }
 
@@ -57,14 +56,6 @@ public class DeviceEventModel implements Serializable {
         this.criteria = criteria;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -72,5 +63,4 @@ public class DeviceEventModel implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-
 }
