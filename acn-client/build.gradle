@@ -13,6 +13,7 @@ jar.doFirst {
 }
 
 dependencies {   
+    compile("commons-codec:commons-codec:1.11")
     compile("com.ibm.messaging:watson-iot:0.2.6")
     compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0")
     
