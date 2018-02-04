@@ -21,13 +21,13 @@ import com.arrow.acs.AcsRuntimeException;
 import com.arrow.acs.AcsSystemException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
-import com.microsoft.azure.iothub.DeviceClient;
-import com.microsoft.azure.iothub.IotHubClientProtocol;
-import com.microsoft.azure.iothub.IotHubEventCallback;
-import com.microsoft.azure.iothub.IotHubMessageResult;
-import com.microsoft.azure.iothub.IotHubStatusCode;
-import com.microsoft.azure.iothub.Message;
-import com.microsoft.azure.iothub.MessageCallback;
+import com.microsoft.azure.sdk.iot.device.DeviceClient;
+import com.microsoft.azure.sdk.iot.device.IotHubClientProtocol;
+import com.microsoft.azure.sdk.iot.device.IotHubEventCallback;
+import com.microsoft.azure.sdk.iot.device.IotHubMessageResult;
+import com.microsoft.azure.sdk.iot.device.IotHubStatusCode;
+import com.microsoft.azure.sdk.iot.device.Message;
+import com.microsoft.azure.sdk.iot.device.MessageCallback;
 
 public class AzureConnector extends CloudConnectorAbstract {
 
@@ -77,7 +77,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 		if (client != null) {
 			try {
 				logInfo(method, "stopping client ...");
-				client.close();
+				client.closeNow();
 			} catch (Throwable e) {
 			}
 			client = null;

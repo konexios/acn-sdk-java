@@ -14,10 +14,18 @@ jar.doFirst {
 
 dependencies {   
     compile("commons-codec:commons-codec:1.11")
-    compile("com.ibm.messaging:watson-iot:0.2.6")
+
     compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0")
     
-    compile("com.microsoft.azure.iothub-java-client:iothub-java-device-client:1.0.16")
+    // ibm
+    compile("com.ibm.messaging:watson-iot:0.2.6")
+    
+    // azure
+    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.7.0")
+        
+    //fix for libraries incompatibility
+    compile("org.bouncycastle:bcprov-jdk15on:1.55")
+    compile("org.bouncycastle:bcpkix-jdk15on:1.55")
         
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
     
