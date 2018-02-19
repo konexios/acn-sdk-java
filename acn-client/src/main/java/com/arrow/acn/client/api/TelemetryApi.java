@@ -10,6 +10,13 @@
  *******************************************************************************/
 package com.arrow.acn.client.api;
 
+import java.net.URI;
+import java.util.List;
+
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.model.TelemetryItemModel;
@@ -19,27 +26,25 @@ import com.arrow.acn.client.search.TelemetryDeleteSearchCriteria;
 import com.arrow.acn.client.search.TelemetrySearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.model.ListResultModel;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-
-import java.net.URI;
-import java.util.List;
 
 public final class TelemetryApi extends ApiAbstract {
 	private final String TELEMETRY_BASE_URL = API_BASE + "/telemetries";
 	private final String FIND_BY_APPLICATION_HID = TELEMETRY_BASE_URL + "/applications/{applicationHid}";
 	private final String FIND_BY_DEVICE_HID = TELEMETRY_BASE_URL + "/devices/{deviceHid}";
+	private final String FIND_LATEST_BY_DEVICE_HID = FIND_BY_DEVICE_HID + "/latest";
 	private final String FIND_BY_NODE_HID = TELEMETRY_BASE_URL + "/nodes/{nodeHid}";
 	private final String CREATE_URL = TELEMETRY_BASE_URL;
 	private final String BATCH_CREATE_URL = CREATE_URL + "/batch";
 	private final String COUNT_BY_DEVICE_HID = FIND_BY_DEVICE_HID + "/count";
-	private final String BULK_DELETE_LAST_TELEMETRY = TELEMETRY_BASE_URL + "/devices/{deviceHid}/bulkDeleteLastTelemetry";
-	private final TypeReference<PagingResultModel<TelemetryItemModel>> TELEMETRY_ITEM_MODEL_TYPE_REF = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
-	};
+	private final String BULK_DELETE_LAST_TELEMETRY = TELEMETRY_BASE_URL
+	        + "/devices/{deviceHid}/bulkDeleteLastTelemetry";
+
+	private TypeReference<PagingResultModel<TelemetryItemModel>> pagingResultTypeRef;
+	private TypeReference<ListResultModel<TelemetryItemModel>> resultTypeRef;
 
 	TelemetryApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -95,7 +100,32 @@ public final class TelemetryApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_BY_APPLICATION_HID.replace("{applicationHid}", applicationHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        TELEMETRY_ITEM_MODEL_TYPE_REF);
+			        getPagingResultTypeRef());
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	/**
+	 * Sends GET request to obtain telemetry by specific {@code deviceHid}
+	 *
+	 * @param deviceHid
+	 *            {@link String} representing specific device Hid
+	 *
+	 * @return list of {@link TelemetryItemModel} containing telemetry
+	 *         parameters.
+	 *
+	 * @throws AcnClientException
+	 *             if request failed
+	 */
+	public ListResultModel<TelemetryItemModel> getLatestTelemetry(String deviceHid) {
+		String method = "getLatestTelemetry";
+		try {
+			URI uri = buildUri(FIND_LATEST_BY_DEVICE_HID.replace("{deviceHid}", deviceHid));
+			ListResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), getResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -127,7 +157,7 @@ public final class TelemetryApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_BY_DEVICE_HID.replace("{deviceHid}", deviceHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        TELEMETRY_ITEM_MODEL_TYPE_REF);
+			        getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -159,7 +189,7 @@ public final class TelemetryApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_BY_NODE_HID.replace("{nodeHid}", nodeHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        TELEMETRY_ITEM_MODEL_TYPE_REF);
+			        getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -226,18 +256,20 @@ public final class TelemetryApi extends ApiAbstract {
 	 * Send DELETE request to remove set of last telemetry items
 	 *
 	 * @param lastTelemetryItemsIds
-	 * 			{@link List<String>} ids of last telemetry items
+	 *            {@link List<String>} ids of last telemetry items
 	 *
 	 * @param deviceHid
-	 * 			{@link String} representing specific device
+	 *            {@link String} representing specific device
 	 *
 	 * @param removeTelemetryDefinition
-	 * 			{@link boolean} true - if needs remove telemetry definition if exists
+	 *            {@link boolean} true - if needs remove telemetry definition if
+	 *            exists
 	 *
-	 * @return {@link StatusModel} containing status of batch telemetry delete request
+	 * @return {@link StatusModel} containing status of batch telemetry delete
+	 *         request
 	 */
-	public StatusModel bulkDeleteLastTelemetries(
-			List<String> lastTelemetryItemsIds, String deviceHid, boolean removeTelemetryDefinition) {
+	public StatusModel bulkDeleteLastTelemetries(List<String> lastTelemetryItemsIds, String deviceHid,
+	        boolean removeTelemetryDefinition) {
 
 		String method = "bulkDeleteLastTelemetries";
 
@@ -253,5 +285,17 @@ public final class TelemetryApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<PagingResultModel<TelemetryItemModel>> getPagingResultTypeRef() {
+		return pagingResultTypeRef != null ? pagingResultTypeRef
+		        : (pagingResultTypeRef = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<ListResultModel<TelemetryItemModel>> getResultTypeRef() {
+		return resultTypeRef != null ? resultTypeRef
+		        : (resultTypeRef = new TypeReference<ListResultModel<TelemetryItemModel>>() {
+		        });
 	}
 }

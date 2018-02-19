@@ -29,8 +29,7 @@ public class DeviceTypeApi extends ApiAbstract {
 	private static final String DEVICE_TYPES_URL = DEVICES_BASE_URL + "/types";
 	private static final String SPECIFIC_DEVICE_TYPE_URL = DEVICE_TYPES_URL + "/{hid}";
 
-	private static final TypeReference<ListResultModel<DeviceTypeModel>> DEVICE_TYPE_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceTypeModel>>() {
-	};
+	private TypeReference<ListResultModel<DeviceTypeModel>> deviceTypeModelTypeRef;
 
 	DeviceTypeApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -48,7 +47,7 @@ public class DeviceTypeApi extends ApiAbstract {
 		String method = "listExistingDeviceTypes";
 		try {
 			URI uri = buildUri(DEVICE_TYPES_URL);
-			ListResultModel<DeviceTypeModel> result = execute(new HttpGet(uri), DEVICE_TYPE_MODEL_TYPE_REF);
+			ListResultModel<DeviceTypeModel> result = execute(new HttpGet(uri), getDeviceTypeModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -110,5 +109,11 @@ public class DeviceTypeApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<ListResultModel<DeviceTypeModel>> getDeviceTypeModelTypeRef() {
+		return deviceTypeModelTypeRef != null ? deviceTypeModelTypeRef
+		        : (deviceTypeModelTypeRef = new TypeReference<ListResultModel<DeviceTypeModel>>() {
+		        });
 	}
 }

@@ -39,10 +39,9 @@ public class DeviceActionApi extends ApiAbstract {
 	private static final String SPECIFIC_NODE_ACTIONS_URL = SPECIFIC_NODE_URL + "/actions";
 	private static final String SPECIFIC_NODE_ACTION_URL = SPECIFIC_NODE_ACTIONS_URL + "/{index}";
 
-	private static final TypeReference<ListResultModel<DeviceActionTypeModel>> DEVICE_ACTION_TYPE_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceActionTypeModel>>() {
-	};
-	private static final TypeReference<ListResultModel<DeviceActionModel>> DEVICE_ACTION_MODEL_TYPE_REF = new TypeReference<ListResultModel<DeviceActionModel>>() {
-	};
+	// instantiation is expensive for these objects
+	private TypeReference<ListResultModel<DeviceActionTypeModel>> deviceActionTypeModelTypeRef;
+	private TypeReference<ListResultModel<DeviceActionModel>> deviceActionModelTypeRef;
 
 	DeviceActionApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -63,7 +62,7 @@ public class DeviceActionApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(ACTION_TYPES_URL);
 			ListResultModel<DeviceActionTypeModel> result = execute(new HttpGet(uri),
-			        DEVICE_ACTION_TYPE_MODEL_TYPE_REF);
+			        getDeviceActionTypeModelTypeRef());
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
@@ -88,7 +87,7 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "listDeviceActions";
 		try {
 			URI uri = buildUri(SPECIFIC_DEVICE_ACTIONS_URL.replace("{hid}", hid));
-			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), DEVICE_ACTION_MODEL_TYPE_REF);
+			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), getDeviceActionModelTypeRef());
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
@@ -181,7 +180,7 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "listDeviceTypeActions";
 		try {
 			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTIONS_URL.replace("{hid}", deviceTypeHid));
-			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), DEVICE_ACTION_MODEL_TYPE_REF);
+			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), getDeviceActionModelTypeRef());
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
@@ -235,7 +234,7 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "listNodeActions";
 		try {
 			URI uri = buildUri(SPECIFIC_NODE_ACTIONS_URL.replace("{hid}", nodeHid));
-			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), DEVICE_ACTION_MODEL_TYPE_REF);
+			ListResultModel<DeviceActionModel> result = execute(new HttpGet(uri), getDeviceActionModelTypeRef());
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
@@ -283,5 +282,17 @@ public class DeviceActionApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<ListResultModel<DeviceActionModel>> getDeviceActionModelTypeRef() {
+		return deviceActionModelTypeRef != null ? deviceActionModelTypeRef
+		        : (deviceActionModelTypeRef = new TypeReference<ListResultModel<DeviceActionModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<ListResultModel<DeviceActionTypeModel>> getDeviceActionTypeModelTypeRef() {
+		return deviceActionTypeModelTypeRef != null ? deviceActionTypeModelTypeRef
+		        : (deviceActionTypeModelTypeRef = new TypeReference<ListResultModel<DeviceActionTypeModel>>() {
+		        });
 	}
 }

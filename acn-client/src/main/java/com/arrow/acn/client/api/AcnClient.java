@@ -15,127 +15,118 @@ import com.arrow.acs.client.api.ApiConfig;
 
 public final class AcnClient {
 	private ApiConfig apiConfig;
-	private final AccountApi accountApi;
-	private final CoreEventApi coreEventApi;
-	private final CoreUserApi coreUserApi;
-	private final DeviceActionApi deviceActionApi;
-	private final DeviceApi deviceApi;
-	private final DeviceStateApi deviceStateApi;
-	private final GatewayApi gatewayApi;
-	private final NodeApi nodeApi;
-	private final NodeTypeApi nodeTypeApi;
-	private final SoftwareReleaseScheduleApi softwareReleaseScheduleApi;
-	private final SoftwareReleaseTransApi softwareReleaseTransApi;
-	private final TelemetryApi telemetryApi;
-	private final ConfigBackupApi configBackupApi;
-	private final DeviceTelemetryClient deviceTelemetryClient;
-	private final NodeTelemetryClient nodeTelemetryClient;
-	private final RTUFirmwareApi rtuFirmwareApi;
+	private AccountApi accountApi;
+	private CoreEventApi coreEventApi;
+	private CoreUserApi coreUserApi;
+	private DeviceActionApi deviceActionApi;
+	private DeviceApi deviceApi;
+	private DeviceStateApi deviceStateApi;
+	private GatewayApi gatewayApi;
+	private NodeApi nodeApi;
+	private NodeTypeApi nodeTypeApi;
+	private SoftwareReleaseScheduleApi softwareReleaseScheduleApi;
+	private SoftwareReleaseTransApi softwareReleaseTransApi;
+	private TelemetryApi telemetryApi;
+	private ConfigBackupApi configBackupApi;
+	private DeviceTelemetryClient deviceTelemetryClient;
+	private NodeTelemetryClient nodeTelemetryClient;
+	private RTUFirmwareApi rtuFirmwareApi;
 
 	public AcnClient(ApiConfig apiConfig) {
 		AcsUtils.notNull(apiConfig, "apiConfig is not set");
 		this.apiConfig = apiConfig;
-		accountApi = new AccountApi(apiConfig);
-		coreEventApi = new CoreEventApi(apiConfig);
-		coreUserApi = new CoreUserApi(apiConfig);
-		deviceActionApi = new DeviceActionApi(apiConfig);
-		deviceApi = new DeviceApi(apiConfig);
-		deviceStateApi = new DeviceStateApi(apiConfig);
-		gatewayApi = new GatewayApi(apiConfig);
-		nodeApi = new NodeApi(apiConfig);
-		nodeTypeApi = new NodeTypeApi(apiConfig);
-		softwareReleaseScheduleApi = new SoftwareReleaseScheduleApi(apiConfig);
-		softwareReleaseTransApi = new SoftwareReleaseTransApi(apiConfig);
-		telemetryApi = new TelemetryApi(apiConfig);
-		configBackupApi = new ConfigBackupApi(apiConfig);
-		deviceTelemetryClient = new DeviceTelemetryClient(apiConfig);
-		nodeTelemetryClient = new NodeTelemetryClient(apiConfig);
-		rtuFirmwareApi = new RTUFirmwareApi(apiConfig);
 	}
 
 	public void setApiConfig(ApiConfig apiConfig) {
+		Validate.notNull(apiConfig, "apiConfig is not set");
 		this.apiConfig = apiConfig;
-		accountApi.setApiConfig(apiConfig);
-		coreEventApi.setApiConfig(apiConfig);
-		coreUserApi.setApiConfig(apiConfig);
-		deviceActionApi.setApiConfig(apiConfig);
-		deviceApi.setApiConfig(apiConfig);
-		gatewayApi.setApiConfig(apiConfig);
-		nodeApi.setApiConfig(apiConfig);
-		softwareReleaseScheduleApi.setApiConfig(apiConfig);
-		telemetryApi.setApiConfig(apiConfig);
-		deviceActionApi.setApiConfig(apiConfig);
-		configBackupApi.setApiConfig(apiConfig);
-		deviceTelemetryClient.setApiConfig(apiConfig);
-		nodeTelemetryClient.setApiConfig(apiConfig);
-		rtuFirmwareApi.setApiConfig(apiConfig);
+		getAccountApi().setApiConfig(apiConfig);
+		getCoreEventApi().setApiConfig(apiConfig);
+		getCoreUserApi().setApiConfig(apiConfig);
+		getDeviceActionApi().setApiConfig(apiConfig);
+		getDeviceApi().setApiConfig(apiConfig);
+		getDeviceStateApi().setApiConfig(apiConfig);
+		getGatewayApi().setApiConfig(apiConfig);
+		getNodeApi().setApiConfig(apiConfig);
+		getSoftwareReleaseScheduleApi().setApiConfig(apiConfig);
+		getSoftwareReleaseTransApi().setApiConfig(apiConfig);
+		getTelemetryApi().setApiConfig(apiConfig);
+		getDeviceActionApi().setApiConfig(apiConfig);
+		getConfigBackupApi().setApiConfig(apiConfig);
+		getDeviceTelemetryClient().setApiConfig(apiConfig);
+		getNodeTelemetryClient().setApiConfig(apiConfig);
+		getRTUFirmwareApi().setApiConfig(apiConfig);
 	}
 
 	public ApiConfig getApiConfig() {
 		return apiConfig;
 	}
 
-	public AccountApi getAccountApi() {
-		return accountApi;
+	public synchronized AccountApi getAccountApi() {
+		return accountApi != null ? accountApi : (accountApi = new AccountApi(apiConfig));
 	}
 
-	public CoreEventApi getCoreEventApi() {
-		return coreEventApi;
+	public synchronized CoreEventApi getCoreEventApi() {
+		return coreEventApi != null ? coreEventApi : (coreEventApi = new CoreEventApi(apiConfig));
 	}
 
-	public CoreUserApi getCoreUserApi() {
-		return coreUserApi;
+	public synchronized CoreUserApi getCoreUserApi() {
+		return coreUserApi != null ? coreUserApi : (coreUserApi = new CoreUserApi(apiConfig));
 	}
 
-	public DeviceActionApi getDeviceActionApi() {
-		return deviceActionApi;
+	public synchronized DeviceActionApi getDeviceActionApi() {
+		return deviceActionApi != null ? deviceActionApi : (deviceActionApi = new DeviceActionApi(apiConfig));
 	}
 
-	public DeviceApi getDeviceApi() {
-		return deviceApi;
+	public synchronized DeviceApi getDeviceApi() {
+		return deviceApi != null ? deviceApi : (deviceApi = new DeviceApi(apiConfig));
 	}
 
-	public DeviceStateApi getDeviceStateApi() {
-		return deviceStateApi;
+	public synchronized DeviceStateApi getDeviceStateApi() {
+		return deviceStateApi != null ? deviceStateApi : (deviceStateApi = new DeviceStateApi(apiConfig));
 	}
 
-	public GatewayApi getGatewayApi() {
-		return gatewayApi;
+	public synchronized GatewayApi getGatewayApi() {
+		return gatewayApi != null ? gatewayApi : (gatewayApi = new GatewayApi(apiConfig));
 	}
 
-	public NodeApi getNodeApi() {
-		return nodeApi;
+	public synchronized NodeApi getNodeApi() {
+		return nodeApi != null ? nodeApi : (nodeApi = new NodeApi(apiConfig));
 	}
 
-	public NodeTypeApi getNodeTypeApi() {
-		return nodeTypeApi;
+	public synchronized NodeTypeApi getNodeTypeApi() {
+		return nodeTypeApi != null ? nodeTypeApi : (nodeTypeApi = new NodeTypeApi(apiConfig));
 	}
 
-	public SoftwareReleaseScheduleApi getSoftwareReleaseScheduleApi() {
-		return softwareReleaseScheduleApi;
+	public synchronized SoftwareReleaseScheduleApi getSoftwareReleaseScheduleApi() {
+		return softwareReleaseScheduleApi != null ? softwareReleaseScheduleApi
+		        : (softwareReleaseScheduleApi = new SoftwareReleaseScheduleApi(apiConfig));
 	}
 
-	public SoftwareReleaseTransApi getSoftwareReleaseTransApi() {
-		return softwareReleaseTransApi;
+	public synchronized SoftwareReleaseTransApi getSoftwareReleaseTransApi() {
+		return softwareReleaseTransApi != null ? softwareReleaseTransApi
+		        : (softwareReleaseTransApi = new SoftwareReleaseTransApi(apiConfig));
 	}
 
-	public TelemetryApi getTelemetryApi() {
-		return telemetryApi;
+	public synchronized TelemetryApi getTelemetryApi() {
+		return telemetryApi != null ? telemetryApi : (telemetryApi = new TelemetryApi(apiConfig));
 	}
 
-	public ConfigBackupApi getConfigBackupApi() {
-		return configBackupApi;
+	public synchronized ConfigBackupApi getConfigBackupApi() {
+		return configBackupApi != null ? configBackupApi : (configBackupApi = new ConfigBackupApi(apiConfig));
 	}
 
-	public DeviceTelemetryClient getDeviceTelemetryClient() {
-		return deviceTelemetryClient;
+	public synchronized DeviceTelemetryClient getDeviceTelemetryClient() {
+		return deviceTelemetryClient != null ? deviceTelemetryClient
+		        : (deviceTelemetryClient = new DeviceTelemetryClient(apiConfig));
 	}
 
-	public NodeTelemetryClient getNodeTelemetryClient() {
-		return nodeTelemetryClient;
+	public synchronized NodeTelemetryClient getNodeTelemetryClient() {
+		return nodeTelemetryClient != null ? nodeTelemetryClient
+		        : (nodeTelemetryClient = new NodeTelemetryClient(apiConfig));
 	}
 
-	public RTUFirmwareApi getRTUFirmwareApi() {
-		return rtuFirmwareApi;
+	public synchronized RTUFirmwareApi getRTUFirmwareApi() {
+		return rtuFirmwareApi != null ? rtuFirmwareApi : (rtuFirmwareApi = new RTUFirmwareApi(apiConfig));
 	}
 }

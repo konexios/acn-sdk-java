@@ -29,15 +29,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public class RTUFirmwareApi extends ApiAbstract {
 
 	private static final String RTU_BASE_URL = API_BASE + "/rtu";
-	private static final String REQUEST_URL = RTU_BASE_URL+ "/request/{softwareReleaseHid}";
+	private static final String REQUEST_URL = RTU_BASE_URL + "/request/{softwareReleaseHid}";
 	private static final String FIND_REQUESTED = RTU_BASE_URL + "/find";
 	private static final String FIND_AVAILABLE = FIND_REQUESTED + "/available";
-	
 
-	private static final TypeReference<List<RTUFirmwareModel>> RTU_FIRMWARE_MODEL = 
-			new TypeReference<List<RTUFirmwareModel>>() {};
-	private static final TypeReference<PagingResultModel<RTURequestedFirmwareModel>> RTU_REQUESTED_FIRMWARE_MODEL = 
-			new TypeReference<PagingResultModel<RTURequestedFirmwareModel>>() {};
+	private TypeReference<List<RTUFirmwareModel>> rtuFirmwareModelTypeRef;
+	private TypeReference<PagingResultModel<RTURequestedFirmwareModel>> rtuRequestFirmwareModelTypeRef;
 
 	RTUFirmwareApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -45,11 +42,10 @@ public class RTUFirmwareApi extends ApiAbstract {
 
 	public StatusModel requestRTU(String softwareReleaseHid) {
 		String method = "requestRTU";
-		
+
 		try {
 			URI uri = buildUri(REQUEST_URL.replace("{softwareReleaseHid}", softwareReleaseHid));
-			StatusModel result = execute(new HttpPut(uri),
-			        StatusModel.class);
+			StatusModel result = execute(new HttpPut(uri), StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -62,8 +58,7 @@ public class RTUFirmwareApi extends ApiAbstract {
 		String method = "findAvailableFirmware";
 		try {
 			URI uri = buildUri(FIND_AVAILABLE, criteria);
-			List<RTUFirmwareModel> result = execute(new HttpGet(uri),
-					RTU_FIRMWARE_MODEL);
+			List<RTUFirmwareModel> result = execute(new HttpGet(uri), getRtuFirmwareModelTypeRef());
 			return result;
 		} catch (Throwable e) {
 			logError(method, e);
@@ -76,11 +71,23 @@ public class RTUFirmwareApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_REQUESTED, criteria);
 			PagingResultModel<RTURequestedFirmwareModel> result = execute(new HttpGet(uri),
-					RTU_REQUESTED_FIRMWARE_MODEL);
+			        getRtuRequestedFirmwareModel());
 			return result;
 		} catch (Throwable e) {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<List<RTUFirmwareModel>> getRtuFirmwareModelTypeRef() {
+		return rtuFirmwareModelTypeRef != null ? rtuFirmwareModelTypeRef
+		        : (rtuFirmwareModelTypeRef = new TypeReference<List<RTUFirmwareModel>>() {
+		        });
+	}
+
+	private synchronized TypeReference<PagingResultModel<RTURequestedFirmwareModel>> getRtuRequestedFirmwareModel() {
+		return rtuRequestFirmwareModelTypeRef != null ? rtuRequestFirmwareModelTypeRef
+		        : (rtuRequestFirmwareModelTypeRef = new TypeReference<PagingResultModel<RTURequestedFirmwareModel>>() {
+		        });
 	}
 }

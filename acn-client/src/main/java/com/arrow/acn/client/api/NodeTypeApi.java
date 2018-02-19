@@ -27,8 +27,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public final class NodeTypeApi extends ApiAbstract {
 	private final String NODE_TYPES_BASE_URL = API_BASE + "/nodes/types";
 	private final String SPECIFIC_NODE_TYPE_URL = NODE_TYPES_BASE_URL + "/{hid}";
-	private final TypeReference<ListResultModel<NodeTypeModel>> NODE_TYPE_MODEL_TYPE_REF = new TypeReference<ListResultModel<NodeTypeModel>>() {
-	};
+
+	private TypeReference<ListResultModel<NodeTypeModel>> nodeTypeModelTypeRef;
 
 	NodeTypeApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -46,7 +46,7 @@ public final class NodeTypeApi extends ApiAbstract {
 		String method = "listExistingNodeTypes";
 		try {
 			URI uri = buildUri(NODE_TYPES_BASE_URL);
-			ListResultModel<NodeTypeModel> result = execute(new HttpGet(uri), NODE_TYPE_MODEL_TYPE_REF);
+			ListResultModel<NodeTypeModel> result = execute(new HttpGet(uri), getNodeTypeModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
@@ -108,5 +108,11 @@ public final class NodeTypeApi extends ApiAbstract {
 			logError(method, e);
 			throw new AcnClientException(method, e);
 		}
+	}
+
+	private synchronized TypeReference<ListResultModel<NodeTypeModel>> getNodeTypeModelTypeRef() {
+		return nodeTypeModelTypeRef != null ? nodeTypeModelTypeRef
+		        : (nodeTypeModelTypeRef = new TypeReference<ListResultModel<NodeTypeModel>>() {
+		        });
 	}
 }
