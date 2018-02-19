@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.arrow.acn.client.api;
 
+import org.apache.commons.lang3.Validate;
+
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.client.api.ApiConfig;
 
