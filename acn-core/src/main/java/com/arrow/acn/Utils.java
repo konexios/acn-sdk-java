@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -14,8 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.Loggable;
 
 public class Utils {
@@ -23,7 +22,7 @@ public class Utils {
 	};
 
 	public static byte[] gzip(String str) {
-		if (StringUtils.isEmpty(str)) {
+		if (AcsUtils.isEmpty(str)) {
 			return null;
 		}
 		return gzip(str.getBytes(StandardCharsets.UTF_8));

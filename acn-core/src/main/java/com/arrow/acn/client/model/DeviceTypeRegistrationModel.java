@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -15,9 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.arrow.acn.AcnDeviceCategory;
+import com.arrow.acs.AcsUtils;
 
 public class DeviceTypeRegistrationModel implements Serializable {
 	private static final long serialVersionUID = 3174634854949378263L;
@@ -30,8 +29,8 @@ public class DeviceTypeRegistrationModel implements Serializable {
 	private AcnDeviceCategory deviceCategory;
 
 	public void trim() {
-		name = StringUtils.trimToNull(name);
-		description = StringUtils.trimToNull(description);
+		name = AcsUtils.trimToNull(name);
+		description = AcsUtils.trimToNull(description);
 	}
 
 	public DeviceTypeRegistrationModel withName(String name) {

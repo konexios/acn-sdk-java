@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.CreateSoftwareReleaseScheduleModel;
+import com.arrow.acn.client.model.SoftwareReleaseScheduleAutomationModel;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleModel;
 import com.arrow.acn.client.model.UpdateSoftwareReleaseScheduleModel;
 import com.arrow.acn.client.search.SoftwareReleaseScheduleSearchCriteria;
@@ -35,6 +36,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 	private static final String UPDATE_URL = SPECIFIC_SOFTWARE_RELEASE_URL;
 	private static final String FIND_BY_HID = SPECIFIC_SOFTWARE_RELEASE_URL;
 	private static final String FIND_ALL_BY_URL = SOFTWARE_RELEASE_SCHEDULE_BASE_URL;
+	private static final String CREATE_AND_START_URL = SOFTWARE_RELEASE_SCHEDULE_BASE_URL + "/start";
 
 	private TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> softwareReleaseScheduleModelTypeRef;
 
@@ -46,6 +48,19 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 		String method = "create";
 		try {
 			URI uri = buildUri(CREATE_URL);
+			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public HidModel createAndStart(SoftwareReleaseScheduleAutomationModel model) {
+		String method = "createAndStart";
+		try {
+			URI uri = buildUri(CREATE_AND_START_URL);
 			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;

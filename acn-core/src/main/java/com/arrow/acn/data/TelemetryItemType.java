@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -10,11 +10,11 @@
  *******************************************************************************/
 package com.arrow.acn.data;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import com.arrow.acs.AcsUtils;
+import com.arrow.acs.KeyValuePair;
 
 public enum TelemetryItemType {
-    // @formatter:off
+	// @formatter:off
     System("_|", true, false, "strValue"),
     String("s|", false, false, "strValue"),
     Integer("i|", false, true, "intValue"),
@@ -29,43 +29,43 @@ public enum TelemetryItemType {
     Binary("bi|", false, false, "binaryValue");
     // @formatter:on
 
-    private final String prefix;
-    private final boolean system;
-    private final boolean chartable;
-    private final String fieldName;
+	private final String prefix;
+	private final boolean system;
+	private final boolean chartable;
+	private final String fieldName;
 
-    private TelemetryItemType(String prefix, boolean system, boolean chartable, String fieldName) {
-        this.prefix = prefix;
-        this.system = system;
-        this.chartable = chartable;
-        this.fieldName = fieldName;
-    }
+	private TelemetryItemType(String prefix, boolean system, boolean chartable, String fieldName) {
+		this.prefix = prefix;
+		this.system = system;
+		this.chartable = chartable;
+		this.fieldName = fieldName;
+	}
 
-    public String getPrefix() {
-        return prefix;
-    }
+	public String getPrefix() {
+		return prefix;
+	}
 
-    public boolean isSystem() {
-        return system;
-    }
+	public boolean isSystem() {
+		return system;
+	}
 
-    public boolean isChartable() {
-        return chartable;
-    }
+	public boolean isChartable() {
+		return chartable;
+	}
 
-    public String getFieldName() {
-        return fieldName;
-    }
+	public String getFieldName() {
+		return fieldName;
+	}
 
-    public String buildName(String name) {
-        return java.lang.String.format("%s%s", prefix, name);
-    }
+	public String buildName(String name) {
+		return java.lang.String.format("%s%s", prefix, name);
+	}
 
-    public static ImmutablePair<TelemetryItemType, String> parse(String name) {
-        if (StringUtils.isNotEmpty(name))
-            for (TelemetryItemType type : TelemetryItemType.values())
-                if (name.startsWith(type.getPrefix()))
-                    return new ImmutablePair<>(type, name.substring(type.getPrefix().length()));
-        return null;
-    }
+	public static KeyValuePair<TelemetryItemType, String> parse(String name) {
+		if (AcsUtils.isNotEmpty(name))
+			for (TelemetryItemType type : TelemetryItemType.values())
+				if (name.startsWith(type.getPrefix()))
+					return new KeyValuePair<>(type, name.substring(type.getPrefix().length()));
+		return null;
+	}
 }

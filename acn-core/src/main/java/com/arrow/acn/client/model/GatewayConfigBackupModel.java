@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -18,12 +18,10 @@ import com.arrow.acs.client.model.ConfigurationPropertyModel;
 
 public class GatewayConfigBackupModel extends BaseDeviceConfigBackupModel {
 
-	private static final long serialVersionUID = -5455425739418112548L;
+	private static final long serialVersionUID = -208697247504709L;
 
 	private GatewayType type;
 	private String osName;
-	private String softwareName;
-	private String softwareVersion;
 	private String sdkVersion;
 	private List<ConfigurationPropertyModel> configurations = new ArrayList<>();
 
@@ -34,16 +32,6 @@ public class GatewayConfigBackupModel extends BaseDeviceConfigBackupModel {
 
 	public GatewayConfigBackupModel withOsName(String osName) {
 		setOsName(osName);
-		return this;
-	}
-
-	public GatewayConfigBackupModel withSoftwareName(String softwareName) {
-		setSoftwareName(softwareName);
-		return this;
-	}
-
-	public GatewayConfigBackupModel withSoftwareVersion(String softwareVersion) {
-		setSoftwareVersion(softwareVersion);
 		return this;
 	}
 
@@ -71,22 +59,6 @@ public class GatewayConfigBackupModel extends BaseDeviceConfigBackupModel {
 
 	public void setOsName(String osName) {
 		this.osName = osName;
-	}
-
-	public String getSoftwareName() {
-		return softwareName;
-	}
-
-	public void setSoftwareName(String softwareName) {
-		this.softwareName = softwareName;
-	}
-
-	public String getSoftwareVersion() {
-		return softwareVersion;
-	}
-
-	public void setSoftwareVersion(String softwareVersion) {
-		this.softwareVersion = softwareVersion;
 	}
 
 	public String getSdkVersion() {

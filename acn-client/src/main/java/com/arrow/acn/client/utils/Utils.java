@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -16,11 +16,10 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.ClientConstants;
 import com.arrow.acn.client.ClientLogger;
-import com.arrow.acn.client.AcnClientException;
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.Loggable;
 
 public class Utils {
@@ -88,7 +87,7 @@ public class Utils {
 
 	public static String getRequiredProperty(Properties props, String property) {
 		String result = props.getProperty(property);
-		if (StringUtils.isEmpty(result)) {
+		if (AcsUtils.isEmpty(result)) {
 			throw new AcnClientException("required property not found: " + property);
 		}
 		return result;

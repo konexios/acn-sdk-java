@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
+import com.arrow.acs.AcsUtils;
 
 public class NodeRegistrationModel implements Serializable {
 	private static final long serialVersionUID = 2661468449210522066L;
@@ -24,10 +24,10 @@ public class NodeRegistrationModel implements Serializable {
 	private boolean enabled = true;
 
 	public void trim() {
-		name = StringUtils.trimToNull(name);
-		description = StringUtils.trimToNull(description);
-		parentNodeHid = StringUtils.trimToNull(parentNodeHid);
-		nodeTypeHid = StringUtils.trimToNull(nodeTypeHid);
+		name = AcsUtils.trimToNull(name);
+		description = AcsUtils.trimToNull(description);
+		parentNodeHid = AcsUtils.trimToNull(parentNodeHid);
+		nodeTypeHid = AcsUtils.trimToNull(nodeTypeHid);
 	}
 
 	public NodeRegistrationModel withName(String name) {

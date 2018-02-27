@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -10,19 +10,24 @@
  *******************************************************************************/
 package com.arrow.acn.client.model;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AuditLogModel implements Serializable {
-	private static final long serialVersionUID = -7499085226611672171L;
+import com.arrow.acs.client.model.TsModelAbstract;
+
+public class AuditLogModel extends TsModelAbstract<AuditLogModel> {
+
+	private static final long serialVersionUID = 4738822771495190726L;
 
 	private String productName;
 	private String type;
 	private String objectHid;
-	private String createdDate;
-	private String createdBy;
 	private Map<String, String> parameters = new HashMap<>();
+
+	@Override
+	protected AuditLogModel self() {
+		return this;
+	}
 
 	public AuditLogModel withProductName(String productName) {
 		setProductName(productName);
@@ -71,22 +76,6 @@ public class AuditLogModel implements Serializable {
 
 	public void setObjectHid(String objectHid) {
 		this.objectHid = objectHid;
-	}
-
-	public String getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(String createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
 	}
 
 	public Map<String, String> getParameters() {

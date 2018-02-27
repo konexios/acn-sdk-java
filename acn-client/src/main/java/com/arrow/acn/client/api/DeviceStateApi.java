@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,6 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -24,6 +23,7 @@ import com.arrow.acn.client.model.DeviceStateModel;
 import com.arrow.acn.client.model.DeviceStateRequestModel;
 import com.arrow.acn.client.model.DeviceStateUpdateModel;
 import com.arrow.acn.client.search.DeviceStateDeleteSearchCriteria;
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.HidModel;
@@ -114,7 +114,7 @@ public class DeviceStateApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(String.format(TRANS_FAILED_URL, deviceHid, transHid));
 			StatusModel result = execute(new HttpPut(uri),
-			        JsonUtils.toJson(Collections.singletonMap("error", StringUtils.trimToEmpty(error))),
+			        JsonUtils.toJson(Collections.singletonMap("error", AcsUtils.trimToEmpty(error))),
 			        StatusModel.class);
 			log(method, result);
 			return result;
@@ -123,33 +123,32 @@ public class DeviceStateApi extends ApiAbstract {
 			throw new AcnClientException(method, e);
 		}
 	}
-	
+
 	/**
 	 * Send PUT request to remove set of device states
 	 *
 	 * @param states
-	 * 			{@link List<String>} names of states
+	 *            {@link List<String>} names of states
 	 *
 	 * @param deviceHid
-	 * 			{@link String} representing specific device
+	 *            {@link String} representing specific device
 	 *
 	 * @param removeStatesDefinition
-	 * 			{@link boolean} true - if needs remove states definition from DeviceType
+	 *            {@link boolean} true - if needs remove states definition from
+	 *            DeviceType
 	 *
-	 * @return {@link StatusModel} containing status of device state update request
+	 * @return {@link StatusModel} containing status of device state update
+	 *         request
 	 */
-	public StatusModel deleteDeviceStates(List<String> states, 
-			String deviceHid, boolean removeStatesDefinition) {
+	public StatusModel deleteDeviceStates(List<String> states, String deviceHid, boolean removeStatesDefinition) {
 		String method = "deleteDeviceStates";
-		
+
 		DeviceStateDeleteSearchCriteria criteria = new DeviceStateDeleteSearchCriteria();
 		criteria.withRemoveDefinitions(removeStatesDefinition);
-		
+
 		try {
 			URI uri = buildUri(DELETE_STATE_URL.replace("{deviceHid}", deviceHid), criteria);
-			StatusModel result = execute(new HttpPut(uri),
-					JsonUtils.toJson(states),
-			        StatusModel.class);
+			StatusModel result = execute(new HttpPut(uri), JsonUtils.toJson(states), StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {

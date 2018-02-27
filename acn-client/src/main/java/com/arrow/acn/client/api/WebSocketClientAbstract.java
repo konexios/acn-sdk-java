@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -13,13 +13,13 @@ package com.arrow.acn.client.api;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import com.arrow.acn.client.websocket.MessageListener;
 import com.arrow.acn.client.websocket.WebSocketEndpoint;
 import com.arrow.acn.client.websocket.WebSocketSubscription;
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.ApiHeaders;
 import com.arrow.acs.client.AcsClientException;
 import com.arrow.acs.client.api.ApiConfig;
@@ -47,7 +47,7 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 	}
 
 	public void setMessageListener(MessageListener messageListener) {
-		Validate.notNull(messageListener, "messageListener is null");
+		AcsUtils.notNull(messageListener, "messageListener is null");
 		this.messageListener = messageListener;
 	}
 
@@ -87,7 +87,7 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 	}
 
 	public void close(WebSocketEndpoint webSocket) {
-		Validate.notNull(webSocket, "webSocket is null");
+		AcsUtils.notNull(webSocket, "webSocket is null");
 		try {
 			webSocket.close();
 		} catch (Exception e) {
@@ -96,7 +96,7 @@ public abstract class WebSocketClientAbstract extends ApiAbstract {
 	}
 
 	private ClientUpgradeRequest addHeaders(ClientUpgradeRequest request) {
-		Validate.notNull(request, "request is null");
+		AcsUtils.notNull(request, "request is null");
 		request.setHeader(ApiHeaders.X_ARROW_APIKEY, getApiConfig().getApiKey());
 		return request;
 	}

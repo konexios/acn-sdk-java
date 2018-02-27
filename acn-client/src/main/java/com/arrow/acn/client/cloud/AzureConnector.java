@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -13,22 +13,21 @@ package com.arrow.acn.client.cloud;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.commons.lang3.Validate;
-
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.model.AzureConfigModel;
 import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsRuntimeException;
 import com.arrow.acs.AcsSystemException;
+import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
-import com.microsoft.azure.iothub.DeviceClient;
-import com.microsoft.azure.iothub.IotHubClientProtocol;
-import com.microsoft.azure.iothub.IotHubEventCallback;
-import com.microsoft.azure.iothub.IotHubMessageResult;
-import com.microsoft.azure.iothub.IotHubStatusCode;
-import com.microsoft.azure.iothub.Message;
-import com.microsoft.azure.iothub.MessageCallback;
+import com.microsoft.azure.sdk.iot.device.DeviceClient;
+import com.microsoft.azure.sdk.iot.device.IotHubClientProtocol;
+import com.microsoft.azure.sdk.iot.device.IotHubEventCallback;
+import com.microsoft.azure.sdk.iot.device.IotHubMessageResult;
+import com.microsoft.azure.sdk.iot.device.IotHubStatusCode;
+import com.microsoft.azure.sdk.iot.device.Message;
+import com.microsoft.azure.sdk.iot.device.MessageCallback;
 
 public class AzureConnector extends CloudConnectorAbstract {
 
@@ -51,8 +50,8 @@ public class AzureConnector extends CloudConnectorAbstract {
 	@Override
 	public void start() {
 		String method = "start";
-		Validate.notNull(model, "model is NULL");
-		Validate.notNull(gatewayUid, "gatewayUid is NULL");
+		AcsUtils.notNull(model, "model is NULL");
+		AcsUtils.notNull(gatewayUid, "gatewayUid is NULL");
 		try {
 			if (client == null) {
 				String connectionString = String.format(CONNECTION_STRING_FORMAT, model.getHost(), gatewayUid,
@@ -78,7 +77,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 		if (client != null) {
 			try {
 				logInfo(method, "stopping client ...");
-				client.close();
+				client.closeNow();
 			} catch (Throwable e) {
 			}
 			client = null;

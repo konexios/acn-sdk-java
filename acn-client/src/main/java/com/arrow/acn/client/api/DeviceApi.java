@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -164,7 +164,7 @@ public class DeviceApi extends ApiAbstract {
 	 *             if request failed
 	 */
 	public HidModel updateExistingDevice(String hid, DeviceRegistrationModel model) {
-		String method = "putFailed";
+		String method = "updateExistingDevice";
 		try {
 			URI uri = buildUri(PATTERN.matcher(UPDATE_EXISTING_URL).replaceAll(Matcher.quoteReplacement(hid)));
 			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);

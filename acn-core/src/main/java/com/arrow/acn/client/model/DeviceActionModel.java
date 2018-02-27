@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Arrow Electronics, Inc.
+ * Copyright (c) 2018 Arrow Electronics, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Apache License 2.0
  * which accompanies this distribution, and is available at
@@ -14,111 +14,112 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import com.arrow.acs.AcsUtils;
 
 public class DeviceActionModel implements Serializable {
 
-    private static final long serialVersionUID = 1837224176636107340L;
+	private static final long serialVersionUID = 1837224176636107340L;
 
-    private String systemName;
-    private String description;
-    private String criteria;
-    // if false - expect criteria is not empty, if true - special case for No Telemetry Enhancement
-    private boolean noTelemetry;
-    private long noTelemetryTime;
-    private long expiration;
-    private boolean enabled = true;
-    private Map<String, String> parameters = new HashMap<>();
-    private int index;
+	private String systemName;
+	private String description;
+	private String criteria;
+	// if false - expect criteria is not empty, if true - special case for No
+	// Telemetry Enhancement
+	private boolean noTelemetry;
+	private long noTelemetryTime;
+	private long expiration;
+	private boolean enabled = true;
+	private Map<String, String> parameters = new HashMap<>();
+	private int index;
 
-    public void trim() {
-        systemName = StringUtils.trimToNull(systemName);
-        description = StringUtils.trimToNull(description);
-        criteria = StringUtils.trimToNull(criteria);
-    }
+	public void trim() {
+		systemName = AcsUtils.trimToNull(systemName);
+		description = AcsUtils.trimToNull(description);
+		criteria = AcsUtils.trimToNull(criteria);
+	}
 
-    public DeviceActionModel withSystemName(String systemName) {
-        setSystemName(systemName);
-        return this;
-    }
+	public DeviceActionModel withSystemName(String systemName) {
+		setSystemName(systemName);
+		return this;
+	}
 
-    public DeviceActionModel withDescription(String description) {
-        setDescription(description);
-        return this;
-    }
+	public DeviceActionModel withDescription(String description) {
+		setDescription(description);
+		return this;
+	}
 
-    public DeviceActionModel withCriteria(String criteria) {
-        setCriteria(criteria);
-        return this;
-    }
-    
-    public DeviceActionModel withNoTelemetry(boolean noTelemetry) {
-        setNoTelemetry(noTelemetry);
-        return this;
-    }
+	public DeviceActionModel withCriteria(String criteria) {
+		setCriteria(criteria);
+		return this;
+	}
 
-    public DeviceActionModel withNoTelemetryTime(long noTelemetryTime) {
-        setNoTelemetryTime(noTelemetryTime);
-        return this;
-    }
+	public DeviceActionModel withNoTelemetry(boolean noTelemetry) {
+		setNoTelemetry(noTelemetry);
+		return this;
+	}
 
-    public DeviceActionModel withExpiration(long expiration) {
-        setExpiration(expiration);
-        return this;
-    }
+	public DeviceActionModel withNoTelemetryTime(long noTelemetryTime) {
+		setNoTelemetryTime(noTelemetryTime);
+		return this;
+	}
 
-    public DeviceActionModel withEnabled(boolean enabled) {
-        setEnabled(enabled);
-        return this;
-    }
+	public DeviceActionModel withExpiration(long expiration) {
+		setExpiration(expiration);
+		return this;
+	}
 
-    public DeviceActionModel withParameters(Map<String, String> parameters) {
-        setParameters(parameters);
-        return this;
-    }
+	public DeviceActionModel withEnabled(boolean enabled) {
+		setEnabled(enabled);
+		return this;
+	}
 
-    public DeviceActionModel withIndex(int index) {
-        setIndex(index);
-        return this;
-    }
+	public DeviceActionModel withParameters(Map<String, String> parameters) {
+		setParameters(parameters);
+		return this;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public DeviceActionModel withIndex(int index) {
+		setIndex(index);
+		return this;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getCriteria() {
-        return criteria;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setCriteria(String criteria) {
-        this.criteria = criteria;
-    }
+	public String getCriteria() {
+		return criteria;
+	}
 
-    public long getExpiration() {
-        return expiration;
-    }
+	public void setCriteria(String criteria) {
+		this.criteria = criteria;
+	}
 
-    public void setExpiration(long expiration) {
-        this.expiration = expiration;
-    }
+	public long getExpiration() {
+		return expiration;
+	}
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+	public void setExpiration(long expiration) {
+		this.expiration = expiration;
+	}
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    public Map<String, String> getParameters() {
-        return parameters;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    public boolean isNoTelemetry() {
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+
+	public boolean isNoTelemetry() {
 		return noTelemetry;
 	}
 
@@ -127,26 +128,26 @@ public class DeviceActionModel implements Serializable {
 	}
 
 	public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
-    }
+		this.parameters = parameters;
+	}
 
-    public String getSystemName() {
-        return systemName;
-    }
+	public String getSystemName() {
+		return systemName;
+	}
 
-    public void setSystemName(String systemName) {
-        this.systemName = systemName;
-    }
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
+	}
 
-    public int getIndex() {
-        return index;
-    }
+	public int getIndex() {
+		return index;
+	}
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
+	public void setIndex(int index) {
+		this.index = index;
+	}
 
-    public void setNoTelemetry(boolean noTelemetry) {
+	public void setNoTelemetry(boolean noTelemetry) {
 		this.noTelemetry = noTelemetry;
 	}
 
@@ -170,7 +171,7 @@ public class DeviceActionModel implements Serializable {
 		return result;
 	}
 
-    @Override
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
