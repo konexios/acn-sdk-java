@@ -86,9 +86,15 @@ public class IbmConnector extends CloudConnectorAbstract {
 		}
 
 		if (!AcsUtils.isEmpty(payload.getExternalId()) && !AcsUtils.isEmpty(payload.getDeviceType())) {
-			logDebug(method, "sending message to cloud via device: %s", payload.getExternalId());
+			logDebug(method, "sending message to cloud via type: %s, device: %s", payload.getDeviceType(),
+			        payload.getExternalId());
 			gatewayClient.publishDeviceEvent(payload.getDeviceType(), payload.getExternalId(), DEFAULT_EVENT, payload,
 			        getQos());
+
+			// workaround due to some change in IBM cloud that the above method
+			// no longer works
+			logDebug(method, "sending message to cloud via gateway: %s", getGatewayHid());
+			gatewayClient.publishGatewayEvent(DEFAULT_EVENT, payload, getQos());
 		} else {
 			logDebug(method, "sending message to cloud via gateway: %s", getGatewayHid());
 			gatewayClient.publishGatewayEvent(DEFAULT_EVENT, payload, getQos());

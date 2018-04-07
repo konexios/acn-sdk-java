@@ -21,7 +21,7 @@ dependencies {
     compile("com.ibm.messaging:watson-iot:0.2.6")
     
     // azure
-    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.7.0")
+    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.9.0")
         
     //fix for libraries incompatibility
     compile("org.bouncycastle:bcprov-jdk15on:1.55")
