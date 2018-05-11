@@ -22,10 +22,10 @@ import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.StatusModel;
 
 public class CoreEventApi extends ApiAbstract {
-	private static final String CORE_EVENT_BASE_URL = "/api/v1/core/events";
-	private static final String PUT_FAILED_URL = CORE_EVENT_BASE_URL + "/{hid}/failed";
-	private static final String PUT_RECEIVED_URL = CORE_EVENT_BASE_URL + "/{hid}/received";
-	private static final String PUT_SUCCEEDED_URL = CORE_EVENT_BASE_URL + "/{hid}/succeeded";
+	public static final String CORE_EVENT_BASE_URL = "/api/v1/core/events";
+	public static final String PUT_FAILED_URL = CORE_EVENT_BASE_URL + "/{hid}/failed";
+	public static final String PUT_RECEIVED_URL = CORE_EVENT_BASE_URL + "/{hid}/received";
+	public static final String PUT_SUCCEEDED_URL = CORE_EVENT_BASE_URL + "/{hid}/succeeded";
 
 	CoreEventApi(ApiConfig apiConfig) {
 		super(apiConfig);
