@@ -60,8 +60,22 @@ public class AwsConnector extends MqttConnectorAbstract {
 		throw new AcnClientException("GzipBatch mode is not supported for AWS integration at this time");
 	}
 
+	
+	
+	@Override
+	protected String publisherCloudRequestTopic() {
+		throw new AcnClientException("Cloud Request is not supported for AWS integration at this time");
+	}
+
 	@Override
 	protected String subscriberTopic() {
 		return null;
 	}
+
+	@Override
+	protected String subscriberCloudResponseTopic() {
+		return null;
+	}
+	
+	
 }

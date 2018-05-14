@@ -17,6 +17,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import com.arrow.acn.MqttConstants;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
+import com.arrow.acs.client.model.CloudRequestModel;
 
 public class IotConnectConnector extends MqttConnectorAbstract {
     private String iotConnectMqttVHost;
@@ -48,9 +49,20 @@ public class IotConnectConnector extends MqttConnectorAbstract {
     protected String publisherGzipBatchTopic(List<IotParameters> payload) {
         return MqttConstants.gatewayToServerTelemetryGzipBatchRouting(getGatewayHid());
     }
-
     @Override
+	protected String publisherCloudRequestTopic() {
+    	return MqttConstants.gatewayToServerMqttApiRouting(getGatewayHid());
+	}
+
+	@Override
     protected String subscriberTopic() {
         return MqttConstants.serverToGatewayCommandRouting(getGatewayHid());
     }
+
+	@Override
+	protected String subscriberCloudResponseTopic() {
+		return MqttConstants.serverToGatewayMqttApiRouting(getGatewayHid());
+	}
+	
+	
 }

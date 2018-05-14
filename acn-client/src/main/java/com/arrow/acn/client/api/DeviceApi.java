@@ -40,20 +40,20 @@ import com.arrow.acs.client.model.StatusModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public class DeviceApi extends ApiAbstract {
-	private static final String DEVICES_BASE_URL = API_BASE + "/devices";
-	private static final String CREATE_OR_UPDATE_URL = DEVICES_BASE_URL;
-	private static final String FIND_ALL_BY_URL = DEVICES_BASE_URL;
-	private static final String SPECIFIC_DEVICE_URL = DEVICES_BASE_URL + "/{hid}";
-	private static final String FIND_BY_HID_URL = SPECIFIC_DEVICE_URL;
-	private static final String UPDATE_EXISTING_URL = SPECIFIC_DEVICE_URL;
-	private static final String SPECIFIC_EVENTS_URL = SPECIFIC_DEVICE_URL + "/events";
-	private static final String SPECIFIC_LOGS_URL = SPECIFIC_DEVICE_URL + "/logs";
-	private static final String SEND_ERROR_URL = SPECIFIC_DEVICE_URL + "/errors";
-	private static final String CONFIGURATION_BACKUP_URL = SPECIFIC_DEVICE_URL + "/config-backups";
-	private static final String SPECIFIC_CONFIGURATION_BACKUP_URL = CONFIGURATION_BACKUP_URL + "/{configBackupHid}";
-	private static final String RESTORE_CONFIGURATION_URL = SPECIFIC_CONFIGURATION_BACKUP_URL + "/restore";
+	public static final String DEVICES_BASE_URL = API_BASE + "/devices";
+	public static final String CREATE_OR_UPDATE_URL = DEVICES_BASE_URL;
+	public static final String FIND_ALL_BY_URL = DEVICES_BASE_URL;
+	public static final String SPECIFIC_DEVICE_URL = DEVICES_BASE_URL + "/{hid}";
+	public static final String FIND_BY_HID_URL = SPECIFIC_DEVICE_URL;
+	public static final String UPDATE_EXISTING_URL = SPECIFIC_DEVICE_URL;
+	public static final String SPECIFIC_EVENTS_URL = SPECIFIC_DEVICE_URL + "/events";
+	public static final String SPECIFIC_LOGS_URL = SPECIFIC_DEVICE_URL + "/logs";
+	public static final String SEND_ERROR_URL = SPECIFIC_DEVICE_URL + "/errors";
+	public static final String CONFIGURATION_BACKUP_URL = SPECIFIC_DEVICE_URL + "/config-backups";
+	public static final String SPECIFIC_CONFIGURATION_BACKUP_URL = CONFIGURATION_BACKUP_URL + "/{configBackupHid}";
+	public static final String RESTORE_CONFIGURATION_URL = SPECIFIC_CONFIGURATION_BACKUP_URL + "/restore";
 
-	private static final Pattern PATTERN = Pattern.compile("{hid}", Pattern.LITERAL);
+	public static final Pattern PATTERN = Pattern.compile("{hid}", Pattern.LITERAL);
 
 	// instantiation is expensive for these objects
 	private TypeReference<PagingResultModel<DeviceModel>> deviceModelTypeRef;
@@ -320,7 +320,7 @@ public class DeviceApi extends ApiAbstract {
 		}
 	}
 
-	private synchronized TypeReference<PagingResultModel<DeviceModel>> getDeviceModelTypeRef() {
+	public synchronized TypeReference<PagingResultModel<DeviceModel>> getDeviceModelTypeRef() {
 		return deviceModelTypeRef != null ? deviceModelTypeRef
 		        : (deviceModelTypeRef = new TypeReference<PagingResultModel<DeviceModel>>() {
 		        });
