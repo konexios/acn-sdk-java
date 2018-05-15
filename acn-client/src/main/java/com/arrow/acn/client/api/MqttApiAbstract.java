@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2018 Arrow Electronics, Inc.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License 2.0
+ * which accompanies this distribution, and is available at
+ * http://apache.org/licenses/LICENSE-2.0
+ *
+ * Contributors:
+ *     Arrow Electronics, Inc.
+ *******************************************************************************/
 package com.arrow.acn.client.api;
 
 import java.time.Instant;
@@ -6,6 +16,7 @@ import java.util.Map.Entry;
 import org.apache.http.NameValuePair;
 
 import com.arrow.acn.AcnEventNames;
+import com.arrow.acn.client.AcnClientException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.ApiHeaders;
 import com.arrow.acs.ApiRequestSigner;
@@ -15,6 +26,7 @@ import com.arrow.acs.client.model.CloudMqttRequestParams;
 import com.arrow.acs.client.model.CloudRequestMethodName;
 import com.arrow.acs.client.model.CloudRequestModel;
 import com.arrow.acs.client.model.CloudRequestParameters;
+import com.arrow.acs.client.model.CloudResponseModel;
 import com.arrow.acs.client.search.SearchCriteria;
 
 public class MqttApiAbstract extends ApiAbstract{
@@ -102,6 +114,14 @@ public class MqttApiAbstract extends ApiAbstract{
 		AcsUtils.notEmpty(apiConfig.getSecretKey(), "secretKey is empty");
 		return ApiRequestSigner.create(apiConfig.getSecretKey()).method(String.valueOf(method)).canonicalUri(uri)
 				.apiKey(apiConfig.getApiKey()).timestamp(timestamp.toString());
+	}
+	
+	static void verifyCloudResponseResponse(CloudResponseModel cloudResponse) {
+		String status = cloudResponse.getParameters().get(CloudResponseModel.STATUS_PARAMETER_NAME);
+		if (!status.equals("OK")) {
+			String message = cloudResponse.getParameters().get(CloudResponseModel.MESSAGE_PARAMETER_NAME);
+			throw new AcnClientException(message);
+		}
 	}
 	
 }

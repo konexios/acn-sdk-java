@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2018 Arrow Electronics, Inc.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License 2.0
+ * which accompanies this distribution, and is available at
+ * http://apache.org/licenses/LICENSE-2.0
+ *
+ * Contributors:
+ *     Arrow Electronics, Inc.
+ *******************************************************************************/
 package com.arrow.acn.client.api;
 
 import java.net.URI;
@@ -28,10 +38,12 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			// get string path
 			String strPath = uri.getPath();
 			// prepare message params
+			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
 			params.setRequestId(requestId);
 			params.setHttpMethod(CloudRequestMethodName.GET);
 			params.setUrl(strPath);
+			params.setCriteria(criteria);
 			send(params);
 			logDebug(method, "message sent with requestId: " + requestId);
 		} catch (Throwable e) {
@@ -49,6 +61,7 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			// get string path
 			String strPath = uri.getPath();
 			// prepare message params
+			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
 			params.setRequestId(requestId);
 			params.setHttpMethod(CloudRequestMethodName.GET);
@@ -62,8 +75,11 @@ public class DeviceMqttApi extends MqttApiAbstract {
 	}
 
 	public static PagingResultModel<DeviceModel> parseFindAllByResponse(CloudResponseModel responseModel) {
+		verifyCloudResponseResponse(responseModel);
+
 		try {
-			PagingResultModel<DeviceModel> result = JsonUtils.fromJson(responseModel.getParameters().get("payload"),
+			PagingResultModel<DeviceModel> result = JsonUtils.fromJson(
+					responseModel.getParameters().get(CloudResponseModel.PAYLOAD_PARAMETER_NAME),
 					new TypeReference<PagingResultModel<DeviceModel>>() {
 					});
 			return result;
@@ -74,8 +90,11 @@ public class DeviceMqttApi extends MqttApiAbstract {
 	}
 
 	public static DeviceModel parseFindByHidResponse(CloudResponseModel responseModel) {
+		verifyCloudResponseResponse(responseModel);
+
 		try {
-			DeviceModel result = JsonUtils.fromJson(responseModel.getParameters().get("payload"), DeviceModel.class);
+			DeviceModel result = JsonUtils.fromJson(
+					responseModel.getParameters().get(CloudResponseModel.PAYLOAD_PARAMETER_NAME), DeviceModel.class);
 			return result;
 		} catch (Throwable e) {
 			// TODO: handle exception

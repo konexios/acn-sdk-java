@@ -11,7 +11,6 @@
 package com.arrow.acn.client.cloud;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -104,7 +103,7 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 
 	@Override
 	public void processMessage(String topic, byte[] payload) {
-		if (topic.equals(cloudResponseTopic)) {
+		if (topic.equals(cloudResponseTopic.replace(".", "/"))) {
 			validateAndProcessCloudResponse(topic, payload);
 		} else {
 			validateAndProcessEvent(topic, payload);

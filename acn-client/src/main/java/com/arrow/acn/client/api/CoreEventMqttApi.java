@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2018 Arrow Electronics, Inc.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License 2.0
+ * which accompanies this distribution, and is available at
+ * http://apache.org/licenses/LICENSE-2.0
+ *
+ * Contributors:
+ *     Arrow Electronics, Inc.
+ *******************************************************************************/
 package com.arrow.acn.client.api;
 
 import java.net.URI;
@@ -27,6 +37,7 @@ public class CoreEventMqttApi extends MqttApiAbstract {
 			// build JSON body similar as for http call
 			String jsonBody = JsonUtils.toJson(Collections.singletonMap("error", error));
 			// prepare message params
+			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
 			params.setRequestId(requestId);
 			params.setHttpMethod(CloudRequestMethodName.PUT);
@@ -49,6 +60,7 @@ public class CoreEventMqttApi extends MqttApiAbstract {
 			// get string path
 			String strPath = uri.getPath();
 			// prepare message params
+			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
 			params.setRequestId(requestId);
 			params.setHttpMethod(CloudRequestMethodName.PUT);
@@ -70,6 +82,7 @@ public class CoreEventMqttApi extends MqttApiAbstract {
 			// get string path
 			String strPath = uri.getPath();
 			// prepare message params
+			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
 			params.setRequestId(requestId);
 			params.setHttpMethod(CloudRequestMethodName.PUT);
@@ -96,10 +109,11 @@ public class CoreEventMqttApi extends MqttApiAbstract {
 	}
 
 	private static StatusModel parseAnyResponse(CloudResponseModel responseModel) {
+		verifyCloudResponseResponse(responseModel);
 		try {
 			StatusModel statusModel = new StatusModel();
-			statusModel.setStatus(responseModel.getParameters().get("status"));
-			statusModel.setMessage(responseModel.getParameters().get("message"));
+			statusModel.setStatus(responseModel.getParameters().get(CloudResponseModel.STATUS_PARAMETER_NAME));
+			statusModel.setMessage(responseModel.getParameters().get(CloudResponseModel.MESSAGE_PARAMETER_NAME));
 			return statusModel;
 		} catch (Throwable e) {
 			// TODO: handle exception
