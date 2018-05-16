@@ -14,9 +14,13 @@ import java.net.URI;
 import java.util.regex.Matcher;
 
 import com.arrow.acn.client.AcnClientException;
+import com.arrow.acn.client.model.AuditLogModel;
+import com.arrow.acn.client.model.DeviceEventModel;
 import com.arrow.acn.client.model.DeviceModel;
 import com.arrow.acn.client.model.DeviceRegistrationModel;
 import com.arrow.acn.client.search.DeviceSearchCriteria;
+import com.arrow.acn.client.search.EventsSearchCriteria;
+import com.arrow.acn.client.search.LogsSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.CloudMqttRequestParams;
@@ -40,7 +44,7 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			// build the same URI as for http call
 			URI uri = buildUri(DeviceApi.FIND_ALL_BY_URL, criteria);
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// prepare message params
 			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
@@ -63,7 +67,7 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			URI uri = buildUri(
 					DeviceApi.PATTERN.matcher(DeviceApi.FIND_BY_HID_URL).replaceAll(Matcher.quoteReplacement(hid)));
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// prepare message params
 			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
@@ -84,7 +88,7 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			// build the same URI as for http call
 			URI uri = buildUri(DeviceApi.CREATE_OR_UPDATE_URL);
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// prepare message params
 			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
@@ -106,7 +110,7 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			// build the same URI as for http call
 			URI uri = buildUri(DeviceApi.PATTERN.matcher(DeviceApi.UPDATE_EXISTING_URL).replaceAll(Matcher.quoteReplacement(hid)));
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// prepare message params
 			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
@@ -128,7 +132,7 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			// build the same URI as for http call
 			URI uri = buildUri(DeviceApi.SPECIFIC_DEVICE_URL.replace("{hid}", hid));
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// prepare message params
 			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
@@ -142,6 +146,52 @@ public class DeviceMqttApi extends MqttApiAbstract {
 			throw new AcnClientException(method, e);
 		}
 	}
+	
+	public void listHistoricalDeviceEvents(String requestId, String hid, EventsSearchCriteria criteria) {
+		String method = "listHistoricalDeviceEvents";
+		try {
+			// build the same URI as for http call
+			URI uri = buildUri(DeviceApi.PATTERN.matcher(DeviceApi.SPECIFIC_EVENTS_URL).replaceAll(Matcher.quoteReplacement(hid)),
+			        criteria);
+			// get string path
+			String strPath = getUrlString(uri);
+			// prepare message params
+			// NOTE: encrypted is false by default
+			CloudMqttRequestParams params = new CloudMqttRequestParams();
+			params.setRequestId(requestId);
+			params.setHttpMethod(CloudRequestMethodName.GET);
+			params.setUrl(strPath);
+			params.setCriteria(criteria);
+			send(params);
+			logDebug(method, "message sent with requestId: " + requestId);
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+	
+	public void listDeviceAuditLogs(String requestId, String hid, LogsSearchCriteria criteria) {
+		String method = "listDeviceAuditLogs";
+		try {
+			// build the same URI as for http call
+			URI uri = buildUri(DeviceApi.PATTERN.matcher(DeviceApi.SPECIFIC_LOGS_URL).replaceAll(Matcher.quoteReplacement(hid)), criteria);
+			// get string path
+			String strPath = getUrlString(uri);
+			// prepare message params
+			// NOTE: encrypted is false by default
+			CloudMqttRequestParams params = new CloudMqttRequestParams();
+			params.setRequestId(requestId);
+			params.setHttpMethod(CloudRequestMethodName.GET);
+			params.setUrl(strPath);
+			params.setCriteria(criteria);
+			send(params);
+			logDebug(method, "message sent with requestId: " + requestId);
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
 	
 	public static PagingResultModel<DeviceModel> parseFindAllByResponse(CloudResponseModel responseModel) {
 		verifyCloudResponseResponse(responseModel);
@@ -203,6 +253,34 @@ public class DeviceMqttApi extends MqttApiAbstract {
 		try {
 			StatusModel result = JsonUtils.fromJson(
 					responseModel.getParameters().get(CloudResponseModel.PAYLOAD_PARAMETER_NAME), StatusModel.class);
+			return result;
+		} catch (Throwable e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+	
+	public static PagingResultModel<DeviceEventModel> parseListHistoricalDeviceEventsResponse(CloudResponseModel responseModel) {
+		verifyCloudResponseResponse(responseModel);
+
+		try {
+			PagingResultModel<DeviceEventModel> result = JsonUtils.fromJson(
+					responseModel.getParameters().get(CloudResponseModel.PAYLOAD_PARAMETER_NAME), new TypeReference<PagingResultModel<DeviceEventModel>>() {
+			        });
+			return result;
+		} catch (Throwable e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+	
+	public static PagingResultModel<AuditLogModel> parseListDeviceAuditLogsResponse(CloudResponseModel responseModel) {
+		verifyCloudResponseResponse(responseModel);
+
+		try {
+			PagingResultModel<AuditLogModel> result = JsonUtils.fromJson(
+					responseModel.getParameters().get(CloudResponseModel.PAYLOAD_PARAMETER_NAME), new TypeReference<PagingResultModel<AuditLogModel>>() {
+			        });
 			return result;
 		} catch (Throwable e) {
 			// TODO: handle exception

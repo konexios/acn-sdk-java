@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.arrow.acn.client.api;
 
+import java.net.URI;
 import java.time.Instant;
 import java.util.Map.Entry;
 
@@ -29,15 +30,19 @@ import com.arrow.acs.client.model.CloudRequestParameters;
 import com.arrow.acs.client.model.CloudResponseModel;
 import com.arrow.acs.client.search.SearchCriteria;
 
-public class MqttApiAbstract extends ApiAbstract{
+public class MqttApiAbstract extends ApiAbstract {
 
 	private CouldResponseProcessorApi couldResponseProcessorApi;
-	
+
 	MqttApiAbstract(ApiConfig apiConfig, CouldResponseProcessorApi couldResponseProcessorApi) {
 		super(apiConfig);
 		this.couldResponseProcessorApi = couldResponseProcessorApi;
 	}
-	
+
+	public String getUrlString(URI uri) {
+		return uri.getPath() + (uri.getQuery() == null ? "" : "?" + uri.getQuery());
+	}
+
 	public void send(CloudMqttRequestParams params) {
 		AcsUtils.notNull(couldResponseProcessorApi.getCloudConnector(), "cloud connector is null");
 		String method = "send";
@@ -48,8 +53,9 @@ public class MqttApiAbstract extends ApiAbstract{
 				params.getJsonBody(), params.getCriteria());
 
 		// build request model
-		CloudRequestModel requestModel = buildCloudRequestModel(params.getRequestId(), params.isEncrypted(), parameters);
-		
+		CloudRequestModel requestModel = buildCloudRequestModel(params.getRequestId(), params.isEncrypted(),
+				parameters);
+
 		couldResponseProcessorApi.getCloudConnector().sendCloudRequest(requestModel);
 	}
 
@@ -104,7 +110,7 @@ public class MqttApiAbstract extends ApiAbstract{
 
 		return requestModel;
 	}
-	
+
 	private ApiRequestSigner getMqttRequestParametersSigner(CloudRequestMethodName method, String uri,
 			Instant timestamp) {
 		AcsUtils.notNull(method, "method is null");
@@ -115,7 +121,7 @@ public class MqttApiAbstract extends ApiAbstract{
 		return ApiRequestSigner.create(apiConfig.getSecretKey()).method(String.valueOf(method)).canonicalUri(uri)
 				.apiKey(apiConfig.getApiKey()).timestamp(timestamp.toString());
 	}
-	
+
 	static void verifyCloudResponseResponse(CloudResponseModel cloudResponse) {
 		String status = cloudResponse.getParameters().get(CloudResponseModel.STATUS_PARAMETER_NAME);
 		if (!status.equals("OK")) {
@@ -123,5 +129,5 @@ public class MqttApiAbstract extends ApiAbstract{
 			throw new AcnClientException(message);
 		}
 	}
-	
+
 }

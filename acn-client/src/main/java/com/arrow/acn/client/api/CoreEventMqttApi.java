@@ -33,7 +33,7 @@ public class CoreEventMqttApi extends MqttApiAbstract {
 			// build the same URI as for http call
 			URI uri = buildUri(CoreEventApi.PUT_FAILED_URL.replace("{hid}", hid));
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// build JSON body similar as for http call
 			String jsonBody = JsonUtils.toJson(Collections.singletonMap("error", error));
 			// prepare message params
@@ -58,7 +58,7 @@ public class CoreEventMqttApi extends MqttApiAbstract {
 			// build the same URI as for http call
 			URI uri = buildUri(CoreEventApi.PUT_RECEIVED_URL.replace("{hid}", hid));
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// prepare message params
 			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();
@@ -80,7 +80,7 @@ public class CoreEventMqttApi extends MqttApiAbstract {
 			// build the same URI as for http call
 			URI uri = buildUri(CoreEventApi.PUT_SUCCEEDED_URL.replace("{hid}", hid));
 			// get string path
-			String strPath = uri.getPath();
+			String strPath = getUrlString(uri);
 			// prepare message params
 			// NOTE: encrypted is false by default
 			CloudMqttRequestParams params = new CloudMqttRequestParams();

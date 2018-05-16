@@ -320,7 +320,7 @@ public class DeviceApi extends ApiAbstract {
 		}
 	}
 
-	public synchronized TypeReference<PagingResultModel<DeviceModel>> getDeviceModelTypeRef() {
+	private synchronized TypeReference<PagingResultModel<DeviceModel>> getDeviceModelTypeRef() {
 		return deviceModelTypeRef != null ? deviceModelTypeRef
 		        : (deviceModelTypeRef = new TypeReference<PagingResultModel<DeviceModel>>() {
 		        });
