@@ -14,6 +14,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 
 import com.arrow.acn.AcnEventNames;
@@ -40,7 +41,7 @@ public class MqttApiAbstract extends ApiAbstract {
 	}
 
 	public String getUrlString(URI uri) {
-		return uri.getPath() + (uri.getQuery() == null ? "" : "?" + uri.getQuery());
+		return uri.getPath() + (StringUtils.isEmpty(uri.getQuery())? "" : "?" + uri.getQuery());
 	}
 
 	public void send(CloudMqttRequestParams params) {
