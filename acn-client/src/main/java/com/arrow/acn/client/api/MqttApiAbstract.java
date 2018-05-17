@@ -72,7 +72,6 @@ public class MqttApiAbstract extends ApiAbstract {
 		parameters.setUri(uri);
 		parameters.setMethod(method);
 		parameters.setApiKey(getApiConfig().getApiKey());
-		parameters.setBody(body);
 
 		Instant timestamp = Instant.now();
 		ApiRequestSigner signer = getMqttRequestParametersSigner(method, uri, timestamp);
@@ -80,6 +79,10 @@ public class MqttApiAbstract extends ApiAbstract {
 			for (NameValuePair pair : criteria.getAllCriteria()) {
 				signer.parameter(pair.getName(), pair.getValue());
 			}
+		}
+		if (AcsUtils.isNotEmpty(body)){
+			parameters.setBody(body);
+			signer.payload(body);
 		}
 		String signature = signer.signV1();
 		parameters.setApiRequestSignature(signature);
@@ -119,10 +122,15 @@ public class MqttApiAbstract extends ApiAbstract {
 		ApiConfig apiConfig = getApiConfig();
 		AcsUtils.notEmpty(apiConfig.getApiKey(), "apiKey is empty");
 		AcsUtils.notEmpty(apiConfig.getSecretKey(), "secretKey is empty");
-		return ApiRequestSigner.create(apiConfig.getSecretKey()).method(String.valueOf(method)).canonicalUri(uri)
+		
+		return ApiRequestSigner.create(apiConfig.getSecretKey()).method(String.valueOf(method)).canonicalUri(buildCanonicalUri(uri))
 				.apiKey(apiConfig.getApiKey()).timestamp(timestamp.toString());
 	}
 
+	private String buildCanonicalUri(String uri) {
+		return uri.replaceAll("\\?.*$", "");
+	}
+	
 	static void verifyCloudResponseResponse(CloudResponseModel cloudResponse) {
 		String status = cloudResponse.getParameters().get(CloudResponseModel.STATUS_PARAMETER_NAME);
 		if (!status.equals("OK")) {
