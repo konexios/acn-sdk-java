@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.arrow.acn.client.cloud;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -20,10 +21,12 @@ import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
+import com.arrow.acs.client.model.CloudRequestModel;
 
 public abstract class MqttConnectorAbstract extends CloudConnectorAbstract implements MessageListener {
 	private int qos;
 	private CustomMqttClient client;
+	private String cloudResponseTopic;
 
 	protected MqttConnectorAbstract(String url, AcnClient acnClient) {
 		super(acnClient);
@@ -41,11 +44,20 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 		String method = "MqttConnectorAbstract.start";
 		client.setOptions(mqttConnectOptions());
 		String topic = subscriberTopic();
+		String cloudResponseTopic = subscriberCloudResponseTopic();
+		List<String> topics = new ArrayList<>();
 		if (!AcsUtils.isEmpty(topic)) {
-			client.setTopics(topic);
+			topics.add(topic);
 		} else {
 			logWarn(method, "no topic to subscribe!");
 		}
+		if (!AcsUtils.isEmpty(cloudResponseTopic)) {
+			this.cloudResponseTopic = cloudResponseTopic;
+			topics.add(cloudResponseTopic);
+		} else {
+			logWarn(method, "no cloud response topic to subscribe!");
+		}
+		client.setTopics(topics.toArray(new String[topics.size()]));
 		client.setListener(this);
 		client.connect(false);
 	}
@@ -91,7 +103,16 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 
 	@Override
 	public void processMessage(String topic, byte[] payload) {
-		validateAndProcessEvent(topic, payload);
+		if (topic.equals(cloudResponseTopic.replace(".", "/"))) {
+			validateAndProcessCloudResponse(topic, payload);
+		} else {
+			validateAndProcessEvent(topic, payload);
+		}
+	}
+
+	@Override
+	public void sendCloudRequest(CloudRequestModel cloudRequest) {
+		client.publish(publisherCloudRequestTopic(), JsonUtils.toJsonBytes(cloudRequest), getQos());
 	}
 
 	protected abstract String publisherTopic(IotParameters payload);
@@ -100,5 +121,9 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 
 	protected abstract String publisherGzipBatchTopic(List<IotParameters> payload);
 
+	protected abstract String publisherCloudRequestTopic();
+
 	protected abstract String subscriberTopic();
+
+	protected abstract String subscriberCloudResponseTopic();
 }

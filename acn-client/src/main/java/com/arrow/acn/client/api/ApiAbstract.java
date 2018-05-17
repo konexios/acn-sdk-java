@@ -19,4 +19,5 @@ public abstract class ApiAbstract extends com.arrow.acs.client.api.ApiAbstract {
 		super();
 		setApiConfig(apiConfig);
 	}
+
 }

@@ -17,11 +17,16 @@ import com.arrow.acs.client.api.ApiConfig;
 
 public final class AcnClient {
 	private ApiConfig apiConfig;
+	private CouldResponseProcessorApi couldResponseProcessorApi;
 	private AccountApi accountApi;
 	private CoreEventApi coreEventApi;
+	// FIXME correct name. probably to ..CloudCommandApi
+	private CoreEventMqttApi coreEventMqttApi;
 	private CoreUserApi coreUserApi;
 	private DeviceActionApi deviceActionApi;
 	private DeviceApi deviceApi;
+	// FIXME correct name. probably to ..CloudCommandApi
+	private DeviceMqttApi deviceMqttApi;
 	private DeviceStateApi deviceStateApi;
 	private GatewayApi gatewayApi;
 	private NodeApi nodeApi;
@@ -44,9 +49,11 @@ public final class AcnClient {
 		this.apiConfig = apiConfig;
 		getAccountApi().setApiConfig(apiConfig);
 		getCoreEventApi().setApiConfig(apiConfig);
+		getCoreEventMqttApi().setApiConfig(apiConfig);
 		getCoreUserApi().setApiConfig(apiConfig);
 		getDeviceActionApi().setApiConfig(apiConfig);
 		getDeviceApi().setApiConfig(apiConfig);
+		getDeviceMqttApi().setApiConfig(apiConfig);
 		getDeviceStateApi().setApiConfig(apiConfig);
 		getGatewayApi().setApiConfig(apiConfig);
 		getNodeApi().setApiConfig(apiConfig);
@@ -63,13 +70,21 @@ public final class AcnClient {
 	public ApiConfig getApiConfig() {
 		return apiConfig;
 	}
-
+	
+	public synchronized CouldResponseProcessorApi getCouldResponseProcessorApi() {
+		return couldResponseProcessorApi != null ? couldResponseProcessorApi : (couldResponseProcessorApi = new CouldResponseProcessorApi());
+	}
+	
 	public synchronized AccountApi getAccountApi() {
 		return accountApi != null ? accountApi : (accountApi = new AccountApi(apiConfig));
 	}
 
 	public synchronized CoreEventApi getCoreEventApi() {
 		return coreEventApi != null ? coreEventApi : (coreEventApi = new CoreEventApi(apiConfig));
+	}
+	
+	public synchronized CoreEventMqttApi getCoreEventMqttApi() {
+		return coreEventMqttApi != null ? coreEventMqttApi : (coreEventMqttApi = new CoreEventMqttApi(apiConfig, getCouldResponseProcessorApi()));
 	}
 
 	public synchronized CoreUserApi getCoreUserApi() {
@@ -82,6 +97,10 @@ public final class AcnClient {
 
 	public synchronized DeviceApi getDeviceApi() {
 		return deviceApi != null ? deviceApi : (deviceApi = new DeviceApi(apiConfig));
+	}
+	
+	public synchronized DeviceMqttApi getDeviceMqttApi() {
+		return deviceMqttApi != null ? deviceMqttApi : (deviceMqttApi = new DeviceMqttApi(apiConfig, getCouldResponseProcessorApi()));
 	}
 
 	public synchronized DeviceStateApi getDeviceStateApi() {

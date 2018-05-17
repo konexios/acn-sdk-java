@@ -48,9 +48,20 @@ public class IotConnectConnector extends MqttConnectorAbstract {
     protected String publisherGzipBatchTopic(List<IotParameters> payload) {
         return MqttConstants.gatewayToServerTelemetryGzipBatchRouting(getGatewayHid());
     }
-
     @Override
+	protected String publisherCloudRequestTopic() {
+    	return MqttConstants.gatewayToServerMqttApiRouting(getGatewayHid());
+	}
+
+	@Override
     protected String subscriberTopic() {
         return MqttConstants.serverToGatewayCommandRouting(getGatewayHid());
     }
+
+	@Override
+	protected String subscriberCloudResponseTopic() {
+		return MqttConstants.serverToGatewayMqttApiRouting(getGatewayHid());
+	}
+	
+	
 }
