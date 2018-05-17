@@ -32,5 +32,10 @@ public interface AcnEventNames {
 
 		final static String GATEWAY_CONFIGURATION_RESTORE = "ServerToGateway_GatewayConfigurationRestore";
 		final static String DEVICE_CONFIGURATION_RESTORE = "ServerToGateway_DeviceConfigurationRestore";
+
+	}
+
+	public interface GatewayToServer {
+		final static String API_REQUEST = "GatewayToServer_ApiRequest";
 	}
 }
