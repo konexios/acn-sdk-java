@@ -19,6 +19,7 @@ public interface MqttConstants {
 	final static String DEFAULT_RABBITMQ_TELEMETRY_BATCH_QUEUE = "kronos.telemetry.batch";
 	final static String DEFAULT_RABBITMQ_TELEMTRY_GZIP_BATCH_QUEUE = "kronos.telemetry.gzip.batch";
 	final static String DEFAULT_RABBITMQ_COMMAND_QUEUE = "kronos.command";
+	final static String DEFAULT_RABBITMQ_MQTT_API_QUEUE = "kronos.api";
 
 	// application telemetry direct exchange
 	final static String APPLICATION_TELEMETRY_EXCHANGE = "kronos.application.telemetry";
@@ -61,5 +62,13 @@ public interface MqttConstants {
 
 	static String serverToGatewayCommandRouting(String gatewayHid) {
 		return String.format("krs.cmd.stg.%s", gatewayHid);
+	}
+
+	static String gatewayToServerMqttApiRouting(String gatewayHid) {
+		return String.format("krs.api.gts.%s", gatewayHid);
+	}
+
+	static String serverToGatewayMqttApiRouting(String gatewayHid) {
+		return String.format("krs.api.stg.%s", gatewayHid);
 	}
 }
