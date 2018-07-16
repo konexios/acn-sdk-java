@@ -33,6 +33,7 @@ public class CreateSoftwareReleaseScheduleModel implements Serializable {
 	private boolean onDemand;
 	private String deviceTypeHid;
 	private String hardwareVersionHid;
+	private Long timeToExpireSeconds;
 
 	public CreateSoftwareReleaseScheduleModel withScheduledDate(String scheduledDate) {
 		setScheduledDate(scheduledDate);
@@ -206,5 +207,13 @@ public class CreateSoftwareReleaseScheduleModel implements Serializable {
 
 	public void setHardwareVersionHid(String hardwareVersionHid) {
 		this.hardwareVersionHid = hardwareVersionHid;
+	}
+
+	public Long getTimeToExpireSeconds() {
+		return timeToExpireSeconds;
+	}
+
+	public void setTimeToExpireSeconds(Long timeToExpireSeconds) {
+		this.timeToExpireSeconds = timeToExpireSeconds;
 	}
 }
