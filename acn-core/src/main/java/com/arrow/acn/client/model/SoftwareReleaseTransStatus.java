@@ -11,5 +11,5 @@
 package com.arrow.acn.client.model;
 
 public enum SoftwareReleaseTransStatus {
-	PENDING, INPROGRESS, RECEIVED, COMPLETE, ERROR
+	PENDING, INPROGRESS, EXPIRED, RECEIVED, COMPLETE, ERROR, CANCELLED
 }

@@ -36,6 +36,7 @@ public class SoftwareReleaseScheduleModel extends AuditableDocumentModelAbstract
 	private boolean onDemand;
 	private String deviceTypeHid;
 	private String hardwareVersionHid;
+	private Long timeToExpireSeconds;
 
 	@Override
 	protected SoftwareReleaseScheduleModel self() {
@@ -133,6 +134,11 @@ public class SoftwareReleaseScheduleModel extends AuditableDocumentModelAbstract
 
 	public SoftwareReleaseScheduleModel withHardwareVersionHid(String hardwareVersionHid) {
 		setHardwareVersionHid(hardwareVersionHid);
+		return this;
+	}
+
+	public SoftwareReleaseScheduleModel withTimeToExpireSeconds(Long timeToExpireSeconds) {
+		setTimeToExpireSeconds(timeToExpireSeconds);
 		return this;
 	}
 
@@ -254,5 +260,13 @@ public class SoftwareReleaseScheduleModel extends AuditableDocumentModelAbstract
 
 	public void setHardwareVersionHid(String hardwareVersionHid) {
 		this.hardwareVersionHid = hardwareVersionHid;
+	}
+
+	public Long getTimeToExpireSeconds() {
+		return timeToExpireSeconds;
+	}
+
+	public void setTimeToExpireSeconds(Long timeToExpireSeconds) {
+		this.timeToExpireSeconds = timeToExpireSeconds;
 	}
 }
