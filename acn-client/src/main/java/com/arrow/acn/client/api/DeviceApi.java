@@ -11,6 +11,7 @@
 package com.arrow.acn.client.api;
 
 import java.net.URI;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,11 +22,13 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.AuditLogModel;
+import com.arrow.acn.client.model.AvailableFirmwareModel;
 import com.arrow.acn.client.model.ConfigBackupModel;
 import com.arrow.acn.client.model.CreateConfigBackupModel;
 import com.arrow.acn.client.model.DeviceEventModel;
 import com.arrow.acn.client.model.DeviceModel;
 import com.arrow.acn.client.model.DeviceRegistrationModel;
+import com.arrow.acn.client.model.RTUFirmwareModels.RTUFirmwareModel;
 import com.arrow.acn.client.search.DeviceSearchCriteria;
 import com.arrow.acn.client.search.EventsSearchCriteria;
 import com.arrow.acn.client.search.LogsSearchCriteria;
@@ -50,6 +53,7 @@ public class DeviceApi extends ApiAbstract {
 	private static final String SPECIFIC_LOGS_URL = SPECIFIC_DEVICE_URL + "/logs";
 	private static final String SEND_ERROR_URL = SPECIFIC_DEVICE_URL + "/errors";
 	private static final String CONFIGURATION_BACKUP_URL = SPECIFIC_DEVICE_URL + "/config-backups";
+	private static final String AVAILABLE_FIRMWARE = SPECIFIC_DEVICE_URL + "/firmware/available";
 	private static final String SPECIFIC_CONFIGURATION_BACKUP_URL = CONFIGURATION_BACKUP_URL + "/{configBackupHid}";
 	private static final String RESTORE_CONFIGURATION_URL = SPECIFIC_CONFIGURATION_BACKUP_URL + "/restore";
 
@@ -60,6 +64,7 @@ public class DeviceApi extends ApiAbstract {
 	private TypeReference<PagingResultModel<DeviceEventModel>> deviceEventModelTypeRef;
 	private TypeReference<PagingResultModel<AuditLogModel>> auditLogModelTypeRef;
 	private TypeReference<PagingResultModel<ConfigBackupModel>> configBackupModelTypeRef;
+	private TypeReference<List<AvailableFirmwareModel>> rtuAvailableFirmwareModelTypeRef;
 
 	DeviceApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -307,6 +312,19 @@ public class DeviceApi extends ApiAbstract {
 		}
 	}
 
+	public List<AvailableFirmwareModel> availableFirmware(String hid) {
+		String method = "availableFirmware";
+		try {
+			URI uri = buildUri(AVAILABLE_FIRMWARE.replace("{hid}", hid));
+			List<AvailableFirmwareModel> result = execute(new HttpGet(uri),
+					getAvailableFirmwareModelTypeRef());
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+	
 	public StatusModel deleteDevice(String hid) {
 		String method = "deleteDevice";
 		try {
@@ -341,6 +359,12 @@ public class DeviceApi extends ApiAbstract {
 	private synchronized TypeReference<PagingResultModel<ConfigBackupModel>> getConfigBackupModelTypeRef() {
 		return configBackupModelTypeRef != null ? configBackupModelTypeRef
 		        : (configBackupModelTypeRef = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
+		        });
+	}
+	
+	private synchronized TypeReference<List<AvailableFirmwareModel>> getAvailableFirmwareModelTypeRef() {
+		return rtuAvailableFirmwareModelTypeRef != null ? rtuAvailableFirmwareModelTypeRef
+		        : (rtuAvailableFirmwareModelTypeRef = new TypeReference<List<AvailableFirmwareModel>>() {
 		        });
 	}
 }
