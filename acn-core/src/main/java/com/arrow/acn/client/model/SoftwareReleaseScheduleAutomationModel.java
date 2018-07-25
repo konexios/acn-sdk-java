@@ -25,6 +25,7 @@ public class SoftwareReleaseScheduleAutomationModel implements Serializable {
 	private String softwareReleaseHid;
 	private String userHid;
 	private Long timeToExpireSeconds;
+	private String jobName;
 
 	public AcnDeviceCategory getDeviceCategory() {
 		return deviceCategory;
@@ -64,5 +65,13 @@ public class SoftwareReleaseScheduleAutomationModel implements Serializable {
 
 	public void setTimeToExpireSeconds(Long timeToExpireSeconds) {
 		this.timeToExpireSeconds = timeToExpireSeconds;
+	}
+	
+	public String getJobName() {
+		return jobName;
+	}
+	
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
 	}
 }
