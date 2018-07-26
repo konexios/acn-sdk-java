@@ -28,6 +28,7 @@ public class SoftwareReleaseTransModel extends AuditableDocumentModelAbstract<So
 	private String relatedSoftwareReleaseTransHid;
 	private String started;
 	private String ended;
+	private Long timeToExpireSeconds;
 
 	@Override
 	protected SoftwareReleaseTransModel self() {
@@ -170,5 +171,13 @@ public class SoftwareReleaseTransModel extends AuditableDocumentModelAbstract<So
 
 	public void setEnded(String ended) {
 		this.ended = ended;
+	}
+
+	public Long getTimeToExpireSeconds() {
+		return timeToExpireSeconds;
+	}
+
+	public void setTimeToExpireSeconds(Long timeToExpireSeconds) {
+		this.timeToExpireSeconds = timeToExpireSeconds;
 	}
 }

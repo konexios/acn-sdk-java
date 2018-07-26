@@ -20,8 +20,10 @@ import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.CreateSoftwareReleaseScheduleModel;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleAutomationModel;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleModel;
+import com.arrow.acn.client.model.SoftwareReleaseTransModel;
 import com.arrow.acn.client.model.UpdateSoftwareReleaseScheduleModel;
 import com.arrow.acn.client.search.SoftwareReleaseScheduleSearchCriteria;
+import com.arrow.acn.client.search.SoftwareReleaseScheduleTransactionsListSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.HidModel;
@@ -35,10 +37,12 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 	private static final String SPECIFIC_SOFTWARE_RELEASE_URL = SOFTWARE_RELEASE_SCHEDULE_BASE_URL + "/%s";
 	private static final String UPDATE_URL = SPECIFIC_SOFTWARE_RELEASE_URL;
 	private static final String FIND_BY_HID = SPECIFIC_SOFTWARE_RELEASE_URL;
+	private static final String LIST_ALL_TRANSACTIONS = SPECIFIC_SOFTWARE_RELEASE_URL + "/transactions";
 	private static final String FIND_ALL_BY_URL = SOFTWARE_RELEASE_SCHEDULE_BASE_URL;
 	private static final String CREATE_AND_START_URL = SOFTWARE_RELEASE_SCHEDULE_BASE_URL + "/start";
 
 	private TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> softwareReleaseScheduleModelTypeRef;
+	private TypeReference<PagingResultModel<SoftwareReleaseTransModel>> softwareReleaseTransModelTypeRef;
 
 	SoftwareReleaseScheduleApi(ApiConfig apiConfig) {
 		super(apiConfig);
@@ -109,10 +113,30 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 			throw new AcnClientException(method, e);
 		}
 	}
+	
+	public PagingResultModel<SoftwareReleaseTransModel> listTransactions(String hid, SoftwareReleaseScheduleTransactionsListSearchCriteria criteria) {
+		String method = "listTransactions";
+		try {
+			URI uri = buildUri(String.format(LIST_ALL_TRANSACTIONS, hid), criteria);
+			PagingResultModel<SoftwareReleaseTransModel> result = execute(new HttpGet(uri),
+					getSoftwareReleaseTransModelTypeRef());
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
 
 	private synchronized TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> getSoftwareReleaseScheduleModelTypeRef() {
 		return softwareReleaseScheduleModelTypeRef != null ? softwareReleaseScheduleModelTypeRef
 		        : (softwareReleaseScheduleModelTypeRef = new TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>>() {
+		        });
+	}
+	
+	private synchronized TypeReference<PagingResultModel<SoftwareReleaseTransModel>> getSoftwareReleaseTransModelTypeRef() {
+		return softwareReleaseTransModelTypeRef != null ? softwareReleaseTransModelTypeRef
+		        : (softwareReleaseTransModelTypeRef = new TypeReference<PagingResultModel<SoftwareReleaseTransModel>>() {
 		        });
 	}
 }

@@ -13,155 +13,169 @@ package com.arrow.acn.client.model;
 import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
-	private static final long serialVersionUID = 8738104557146056949L;
+    private static final long serialVersionUID = 8738104557146056949L;
 
-	public enum GatewayType {
-		Local, Cloud, Mobile
-	}
+    public enum GatewayType {
+        Local, Cloud, Mobile
+    }
 
-	private String uid;
-	private String name;
-	private GatewayType type;
-	private String deviceType;
-	private String userHid;
-	private String osName;
-	private String softwareName;
-	private String softwareVersion;
-	private String sdkVersion;
-	private String applicationHid;
+    private String uid;
+    private String name;
+    private GatewayType type;
+    private String deviceType;
+    private String userHid;
+    private String osName;
+    private String softwareName;
+    private String softwareVersion;
+    private String sdkVersion;
+    private String applicationHid;
+    private String nodeHid;
 
-	@Override
-	protected GatewayModel self() {
-		return this;
-	}
+    @Override
+    protected GatewayModel self() {
+        return this;
+    }
 
-	public GatewayModel withSdkVersion(String sdkVersion) {
-		setSdkVersion(sdkVersion);
-		return this;
-	}
+    public GatewayModel withSdkVersion(String sdkVersion) {
+        setSdkVersion(sdkVersion);
+        return this;
+    }
 
-	public GatewayModel withUid(String uid) {
-		setUid(uid);
-		return this;
-	}
+    public GatewayModel withUid(String uid) {
+        setUid(uid);
+        return this;
+    }
 
-	public GatewayModel withName(String name) {
-		setName(name);
-		return this;
-	}
+    public GatewayModel withName(String name) {
+        setName(name);
+        return this;
+    }
 
-	public GatewayModel withType(GatewayType type) {
-		setType(type);
-		return this;
-	}
+    public GatewayModel withType(GatewayType type) {
+        setType(type);
+        return this;
+    }
 
-	public GatewayModel withDeviceType(String deviceType) {
-		setDeviceType(deviceType);
-		return this;
-	}
+    public GatewayModel withDeviceType(String deviceType) {
+        setDeviceType(deviceType);
+        return this;
+    }
 
-	public GatewayModel withUserHid(String userHid) {
-		setUserHid(userHid);
-		return this;
-	}
+    public GatewayModel withUserHid(String userHid) {
+        setUserHid(userHid);
+        return this;
+    }
 
-	public GatewayModel withOsName(String osName) {
-		setOsName(osName);
-		return this;
-	}
+    public GatewayModel withOsName(String osName) {
+        setOsName(osName);
+        return this;
+    }
 
-	public GatewayModel withSoftwareName(String softwareName) {
-		setSoftwareName(softwareName);
-		return this;
-	}
+    public GatewayModel withSoftwareName(String softwareName) {
+        setSoftwareName(softwareName);
+        return this;
+    }
 
-	public GatewayModel withSoftwareVersion(String softwareVersion) {
-		setSoftwareVersion(softwareVersion);
-		return this;
-	}
+    public GatewayModel withSoftwareVersion(String softwareVersion) {
+        setSoftwareVersion(softwareVersion);
+        return this;
+    }
 
-	public GatewayModel withApplicationHid(String applicationHid) {
-		setApplicationHid(applicationHid);
-		return this;
-	}
+    public GatewayModel withApplicationHid(String applicationHid) {
+        setApplicationHid(applicationHid);
+        return this;
+    }
 
-	public GatewayType getType() {
-		return type;
-	}
+    public GatewayModel withNodeHid(String nodeHid) {
+        setNodeHid(nodeHid);
+        return this;
+    }
 
-	public void setType(GatewayType type) {
-		this.type = type;
-	}
+    public GatewayType getType() {
+        return type;
+    }
 
-	public String getDeviceType() {
-		return deviceType;
-	}
+    public void setType(GatewayType type) {
+        this.type = type;
+    }
 
-	public void setDeviceType(String deviceType) {
-		this.deviceType = deviceType;
-	}
+    public String getDeviceType() {
+        return deviceType;
+    }
 
-	public String getUid() {
-		return uid;
-	}
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
+    public String getUid() {
+        return uid;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getOsName() {
-		return osName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setOsName(String osName) {
-		this.osName = osName;
-	}
+    public String getOsName() {
+        return osName;
+    }
 
-	public String getSoftwareName() {
-		return softwareName;
-	}
+    public void setOsName(String osName) {
+        this.osName = osName;
+    }
 
-	public void setSoftwareName(String softwareName) {
-		this.softwareName = softwareName;
-	}
+    public String getSoftwareName() {
+        return softwareName;
+    }
 
-	public String getSoftwareVersion() {
-		return softwareVersion;
-	}
+    public void setSoftwareName(String softwareName) {
+        this.softwareName = softwareName;
+    }
 
-	public void setSoftwareVersion(String softwareVersion) {
-		this.softwareVersion = softwareVersion;
-	}
+    public String getSoftwareVersion() {
+        return softwareVersion;
+    }
 
-	public String getUserHid() {
-		return userHid;
-	}
+    public void setSoftwareVersion(String softwareVersion) {
+        this.softwareVersion = softwareVersion;
+    }
 
-	public void setUserHid(String userHid) {
-		this.userHid = userHid;
-	}
+    public String getUserHid() {
+        return userHid;
+    }
 
-	public void setApplicationHid(String applicationHid) {
-		this.applicationHid = applicationHid;
-	}
+    public void setUserHid(String userHid) {
+        this.userHid = userHid;
+    }
 
-	public String getApplicationHid() {
-		return applicationHid;
-	}
+    public void setApplicationHid(String applicationHid) {
+        this.applicationHid = applicationHid;
+    }
 
-	public String getSdkVersion() {
-		return sdkVersion;
-	}
+    public String getApplicationHid() {
+        return applicationHid;
+    }
 
-	public void setSdkVersion(String sdkVersion) {
-		this.sdkVersion = sdkVersion;
-	}
+    public String getSdkVersion() {
+        return sdkVersion;
+    }
+
+    public void setSdkVersion(String sdkVersion) {
+        this.sdkVersion = sdkVersion;
+    }
+
+    public String getNodeHid() {
+        return nodeHid;
+    }
+
+    public void setNodeHid(String nodeHid) {
+        this.nodeHid = nodeHid;
+    }
 }

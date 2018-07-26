@@ -13,6 +13,7 @@ package com.arrow.acn.client.search;
 import java.time.Instant;
 import java.util.Arrays;
 
+import com.arrow.acn.AcnDeviceCategory;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleStatus;
 import com.arrow.acs.client.search.SearchCriteria;
 
@@ -21,7 +22,7 @@ public class SoftwareReleaseScheduleSearchCriteria extends SearchCriteria {
 	private static final String FROM_SCHEDULED_DATE = "fromScheduledDate";
 	private static final String TO_SCHEDULED_DATE = "toScheduledDate";
 	private static final String SOFTWARE_RELEASE_HIDS = "softwareReleaseHids";
-	private static final String DEVICE_CATEGORY_HID = "deviceCategoryHid";
+	private static final String DEVICE_CATEGORY = "deviceCategory";
 	private static final String OBJECT_HIDS = "objectHids";
 	private static final String STATUSES = "statuses";
 	private static final String NOTIFY_ON_START = "notifyOnStart";
@@ -44,8 +45,8 @@ public class SoftwareReleaseScheduleSearchCriteria extends SearchCriteria {
 		return this;
 	}
 
-	public SoftwareReleaseScheduleSearchCriteria withDeviceCategoryHid(String deviceCategoryHid) {
-		simpleCriteria.put(DEVICE_CATEGORY_HID, deviceCategoryHid);
+	public SoftwareReleaseScheduleSearchCriteria withDeviceCategory(AcnDeviceCategory deviceCategory) {
+		simpleCriteria.put(DEVICE_CATEGORY, String.valueOf(deviceCategory));
 		return this;
 	}
 
