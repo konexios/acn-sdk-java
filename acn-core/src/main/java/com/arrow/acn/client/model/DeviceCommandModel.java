@@ -21,6 +21,7 @@ public class DeviceCommandModel implements Serializable {
 	private String deviceHid;
 	private String command;
 	private String payload;
+	private Long messageExpiration;
 
 	public void trim() {
 		deviceHid = AcsUtils.trimToNull(deviceHid);
@@ -40,6 +41,11 @@ public class DeviceCommandModel implements Serializable {
 
 	public DeviceCommandModel withPayload(String payload) {
 		setPayload(payload);
+		return this;
+	}
+
+	public DeviceCommandModel withMessageExpiration(Long expiration) {
+		setMessageExpiration(expiration);
 		return this;
 	}
 
@@ -67,4 +73,11 @@ public class DeviceCommandModel implements Serializable {
 		this.payload = payload;
 	}
 
+	public Long getMessageExpiration() {
+		return messageExpiration;
+	}
+
+	public void setMessageExpiration(Long expiration) {
+		this.messageExpiration = expiration;
+	}
 }
