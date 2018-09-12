@@ -33,6 +33,7 @@ public final class AcnClient {
 	private DeviceTelemetryClient deviceTelemetryClient;
 	private NodeTelemetryClient nodeTelemetryClient;
 	private RTUFirmwareApi rtuFirmwareApi;
+	private TelemetryUnitApi telemetryUnitApi;
 
 	public AcnClient(ApiConfig apiConfig) {
 		AcsUtils.notNull(apiConfig, "apiConfig is not set");
@@ -58,6 +59,7 @@ public final class AcnClient {
 		getDeviceTelemetryClient().setApiConfig(apiConfig);
 		getNodeTelemetryClient().setApiConfig(apiConfig);
 		getRTUFirmwareApi().setApiConfig(apiConfig);
+		getTelemetryUnitApi().setApiConfig(apiConfig);
 	}
 
 	public ApiConfig getApiConfig() {
@@ -130,5 +132,9 @@ public final class AcnClient {
 
 	public synchronized RTUFirmwareApi getRTUFirmwareApi() {
 		return rtuFirmwareApi != null ? rtuFirmwareApi : (rtuFirmwareApi = new RTUFirmwareApi(apiConfig));
+	}
+
+	public synchronized TelemetryUnitApi getTelemetryUnitApi() {
+		return telemetryUnitApi != null ? telemetryUnitApi : (telemetryUnitApi = new TelemetryUnitApi(apiConfig));
 	}
 }
