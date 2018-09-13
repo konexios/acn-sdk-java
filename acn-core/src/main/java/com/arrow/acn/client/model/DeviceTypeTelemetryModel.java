@@ -21,6 +21,7 @@ public class DeviceTypeTelemetryModel implements Serializable {
 	private String name;
 	private String type;
 	private Map<String, String> variables;
+	private String telemetryUnitHid;
 
 	public DeviceTypeTelemetryModel withDescription(String description) {
 		setDescription(description);
@@ -39,6 +40,11 @@ public class DeviceTypeTelemetryModel implements Serializable {
 
 	public DeviceTypeTelemetryModel withVariables(Map<String, String> variables) {
 		setVariables(variables);
+		return this;
+	}
+
+	public DeviceTypeTelemetryModel withTelemetryUnitHid(String telemetryUnitHid) {
+		setTelemetryUnitHid(telemetryUnitHid);
 		return this;
 	}
 
@@ -74,6 +80,14 @@ public class DeviceTypeTelemetryModel implements Serializable {
 		this.variables = variables;
 	}
 
+	public String getTelemetryUnitHid() {
+		return telemetryUnitHid;
+	}
+
+	public void setTelemetryUnitHid(String telemetryUnitHid) {
+		this.telemetryUnitHid = telemetryUnitHid;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -81,6 +95,7 @@ public class DeviceTypeTelemetryModel implements Serializable {
 		result = prime * result + (name != null ? name.hashCode() : 0);
 		result = prime * result + (type != null ? type.hashCode() : 0);
 		result = prime * result + (variables != null ? variables.hashCode() : 0);
+		result = prime * result + (telemetryUnitHid != null ? telemetryUnitHid.hashCode() : 0);
 		return result;
 	}
 
@@ -102,6 +117,10 @@ public class DeviceTypeTelemetryModel implements Serializable {
 			return false;
 		}
 		if (type != null ? !type.equals(that.type) : that.type != null) {
+			return false;
+		}
+		if (telemetryUnitHid != null ? !telemetryUnitHid.equals(that.telemetryUnitHid)
+		        : that.telemetryUnitHid != null) {
 			return false;
 		}
 		return variables != null ? variables.equals(that.variables) : that.variables == null;
