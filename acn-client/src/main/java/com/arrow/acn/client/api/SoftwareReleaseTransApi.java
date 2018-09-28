@@ -32,6 +32,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 	private static final String RECEIVED_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s/received";
 	private static final String SUCCEEDED_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s/succeeded";
 	private static final String FAILED_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s/failed";
+	private static final String RETRY_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s/retry";
 	private static final String CREATE_URL = SOFTWARE_RELEASE_TRANS_BASE_URL;
 	private static final String UPGRADE_GATEWAY_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/gateways/upgrade";
 	private static final String UPGRADE_DEVICE_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/devices/upgrade";
@@ -88,6 +89,19 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			StatusModel result = execute(new HttpPut(uri),
 			        JsonUtils.toJson(Collections.singletonMap("error", AcsUtils.trimToEmpty(error))),
 			        StatusModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			logError(method, e);
+			throw new AcnClientException(method, e);
+		}
+	}
+
+	public StatusModel retry(String hid) {
+		String method = "retry";
+		try {
+			URI uri = buildUri(String.format(RETRY_URL, hid));
+			StatusModel result = execute(new HttpPut(uri), StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
