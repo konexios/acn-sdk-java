@@ -21,7 +21,7 @@ dependencies {
     compile("com.ibm.messaging:watson-iot:0.2.6")
     
     // azure
-    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.9.0")
+    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.14.0")
         
     //fix for libraries incompatibility
     compile("org.bouncycastle:bcprov-jdk15on:1.55")
@@ -32,7 +32,7 @@ dependencies {
     compile("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
     compile("org.apache.logging.log4j:log4j-core:${log4jVersion}")
     
-    compile("org.eclipse.jetty.websocket:websocket-client:9.4.7.v20170914")
+    compile("org.eclipse.jetty.websocket:websocket-client:9.4.12.v20180830")
     
     testCompile("junit:junit:4.+")
     
