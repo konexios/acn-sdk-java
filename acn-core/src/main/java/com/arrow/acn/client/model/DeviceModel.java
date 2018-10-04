@@ -29,6 +29,7 @@ public class DeviceModel extends AuditableDocumentModelAbstract<DeviceModel> {
     private String softwareName;
     private String softwareVersion;
     private String nodeHid;
+    private String softwareReleaseHid;
 
     @Override
     protected DeviceModel self() {
@@ -82,6 +83,11 @@ public class DeviceModel extends AuditableDocumentModelAbstract<DeviceModel> {
 
     public DeviceModel withNodeHid(String nodeHid) {
         setNodeHid(nodeHid);
+        return this;
+    }
+
+    public DeviceModel withSoftwareReleaseHid(String softwareReleaseHid) {
+        setSoftwareReleaseHid(softwareReleaseHid);
         return this;
     }
 
@@ -179,5 +185,13 @@ public class DeviceModel extends AuditableDocumentModelAbstract<DeviceModel> {
 
     public void setNodeHid(String nodeHid) {
         this.nodeHid = nodeHid;
+    }
+
+    public String getSoftwareReleaseHid() {
+        return softwareReleaseHid;
+    }
+
+    public void setSoftwareReleaseHid(String softwareReleaseHid) {
+        this.softwareReleaseHid = softwareReleaseHid;
     }
 }
