@@ -30,6 +30,7 @@ public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
     private String sdkVersion;
     private String applicationHid;
     private String nodeHid;
+    private String softwareReleaseHid;
 
     @Override
     protected GatewayModel self() {
@@ -88,6 +89,11 @@ public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
 
     public GatewayModel withNodeHid(String nodeHid) {
         setNodeHid(nodeHid);
+        return this;
+    }
+
+    public GatewayModel withSoftwareReleaseHid(String softwareReleaseHid) {
+        setSoftwareReleaseHid(softwareReleaseHid);
         return this;
     }
 
@@ -177,5 +183,13 @@ public class GatewayModel extends AuditableDocumentModelAbstract<GatewayModel> {
 
     public void setNodeHid(String nodeHid) {
         this.nodeHid = nodeHid;
+    }
+
+    public String getSoftwareReleaseHid() {
+        return softwareReleaseHid;
+    }
+
+    public void setSoftwareReleaseHid(String softwareReleaseHid) {
+        this.softwareReleaseHid = softwareReleaseHid;
     }
 }
