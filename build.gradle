@@ -58,16 +58,9 @@ subprojects {
     configurations {
         all*.exclude module: "logback-classic"
         all*.exclude module: "slf4j-log4j12"
+        all*.exclude module: "log4j"
     }
-
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.name == 'log4j') {
-                details.useTarget 'log4j:log4j:1.2.+'
-            }
-        }
-    }
-    
+        
     eclipse {
         classpath {
              containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
