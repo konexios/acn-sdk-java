@@ -11,6 +11,7 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class CreateGatewayModel implements Serializable {
 	private static final long serialVersionUID = -7283768476053595318L;
@@ -29,6 +30,9 @@ public class CreateGatewayModel implements Serializable {
 	private String softwareVersion;
 	private String sdkVersion;
 	private String applicationHid;
+
+	protected Map<String, String> info;
+	protected Map<String, String> properties;
 
 	public String getUid() {
 		return uid;
@@ -108,5 +112,21 @@ public class CreateGatewayModel implements Serializable {
 
 	public void setApplicationHid(String applicationHid) {
 		this.applicationHid = applicationHid;
+	}
+
+	public Map<String, String> getInfo() {
+		return info;
+	}
+
+	public void setInfo(Map<String, String> info) {
+		this.info = info;
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
 	}
 }
