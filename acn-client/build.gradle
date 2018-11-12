@@ -12,16 +12,18 @@ jar.doFirst {
     }
 }
 
-dependencies {   
+dependencies {      
+    compile("org.apache.httpcomponents:httpclient:4.5.6")
+    compile("org.bouncycastle:bcprov-jdk16:1.46")    
     compile("commons-codec:commons-codec:1.11")
 
     compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0")
-    
+
     // ibm
     compile("com.ibm.messaging:watson-iot:0.2.6")
     
     // azure
-    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.9.0")
+    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.14.0")
         
     //fix for libraries incompatibility
     compile("org.bouncycastle:bcprov-jdk15on:1.55")
@@ -32,9 +34,11 @@ dependencies {
     compile("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
     compile("org.apache.logging.log4j:log4j-core:${log4jVersion}")
     
-    compile("org.eclipse.jetty.websocket:websocket-client:9.4.7.v20170914")
+    compile("org.eclipse.jetty.websocket:websocket-client:9.4.12.v20180830")
     
     testCompile("junit:junit:4.+")
+
+    compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.11.1'    
     
     compile fileTree(dir: '../lib', include: '*.jar')    
 }

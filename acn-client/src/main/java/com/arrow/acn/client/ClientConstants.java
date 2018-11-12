@@ -20,5 +20,6 @@ public interface ClientConstants {
         int DEFAULT_CONNECTION_TIMEOUT_SECS = 60;
         int DEFAULT_KEEP_ALIVE_INTERVAL_SECS = 60;
         long DEFAULT_CHECK_CONNECTION_RETRY_INTERVAL_MS = 5000L;
+        long DEFAULT_PAUSE_BEFORE_RECONNECT_MS = 2000L;
     }
 }
