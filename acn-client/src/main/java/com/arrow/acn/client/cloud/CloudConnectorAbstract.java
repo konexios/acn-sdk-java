@@ -56,8 +56,12 @@ public abstract class CloudConnectorAbstract extends Loggable {
 
 	protected void validateAndProcessEvent(String topic, byte[] payload) {
 		String method = "validateAndProcessEvent";
-		GatewayEventModel model = JsonUtils.fromJson(new String(payload, Charset.defaultCharset()),
-		        GatewayEventModel.class);
+//		GatewayEventModel model = JsonUtils.fromJson(new String(payload, Charset.defaultCharset()),
+//		        GatewayEventModel.class);
+
+		GatewayEventModel model = JsonUtils.fromJson(new String(payload, Charset.forName("UTF-8")),
+				GatewayEventModel.class);
+
 		if (model == null || AcsUtils.isEmpty(model.getName())) {
 			logError(method, "ignore invalid payload: %s", payload);
 			return;
@@ -78,7 +82,7 @@ public abstract class CloudConnectorAbstract extends Loggable {
 				}
 			}
 		} else {
-			logWarn(method, "signature is invalid");
+			logWarn(method, "signature is invalid, even with UTF-8 charset");
 			eventApi.putFailed(model.getHid(), "Signature is invalid");
 		}
 	}
@@ -92,8 +96,8 @@ public abstract class CloudConnectorAbstract extends Loggable {
 		logDebug(method, "validating signature");
 		ApiConfig apiConfig = acnClient.getApiConfig();
 		GatewayPayloadSigner signer = GatewayPayloadSigner.create(apiConfig.getSecretKey())
-		        .withApiKey(apiConfig.getApiKey()).withHid(model.getHid()).withName(model.getName())
-		        .withEncrypted(model.isEncrypted());
+				.withApiKey(apiConfig.getApiKey()).withHid(model.getHid()).withName(model.getName())
+				.withEncrypted(model.isEncrypted());
 		for (Entry<String, String> entry : model.getParameters().entrySet()) {
 			signer.withParameter(entry.getKey(), entry.getValue());
 		}
