@@ -9,3 +9,5 @@ acn-core/bin/
 acn-core/build/
 acn-client/bin/
 acn-client/build/
+
+acn-client/src/test/java/com/arrow/acn/client/RabbitLoadTest\.java
