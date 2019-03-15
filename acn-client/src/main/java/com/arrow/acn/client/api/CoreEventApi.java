@@ -52,10 +52,10 @@ public class CoreEventApi extends ApiAbstract {
 			StatusModel result = execute(new HttpPut(uri), StatusModel.class);
 			log(method, result);
 			return result;
-		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
-		}
+        } catch (Throwable e) {
+            logError(method, e);
+            throw new AcnClientException(method, e);
+        }
 	}
 
 	public StatusModel putSucceeded(String hid) {
@@ -66,7 +66,7 @@ public class CoreEventApi extends ApiAbstract {
 		String method = "putSucceeded";
 		try {
 			URI uri = buildUri(PUT_SUCCEEDED_URL.replace("{hid}", hid));
-			StatusModel result = execute(new HttpPut(uri), StatusModel.class);
+			StatusModel result = execute(new HttpPut(uri), JsonUtils.toJson(parameters), StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
