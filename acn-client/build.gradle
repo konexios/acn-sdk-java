@@ -37,6 +37,7 @@ dependencies {
     compile("org.eclipse.jetty.websocket:websocket-client:9.4.12.v20180830")
     
     testCompile("junit:junit:4.+")
+    testCompile("org.apache.commons:commons-lang3:3.8.1")    
 
     compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.11.1'    
     
