@@ -18,21 +18,22 @@ import com.arrow.acs.client.api.ApiConfig;
 public final class AcnClient {
 	private ApiConfig apiConfig;
 	private AccountApi accountApi;
+	private ConfigBackupApi configBackupApi;
 	private CoreEventApi coreEventApi;
 	private CoreUserApi coreUserApi;
 	private DeviceActionApi deviceActionApi;
 	private DeviceApi deviceApi;
 	private DeviceStateApi deviceStateApi;
+	private DeviceTelemetryClient deviceTelemetryClient;
+	private DeviceTypeApi deviceTypeApi;
 	private GatewayApi gatewayApi;
 	private NodeApi nodeApi;
+	private NodeTelemetryClient nodeTelemetryClient;
 	private NodeTypeApi nodeTypeApi;
+	private RTUFirmwareApi rtuFirmwareApi;
 	private SoftwareReleaseScheduleApi softwareReleaseScheduleApi;
 	private SoftwareReleaseTransApi softwareReleaseTransApi;
 	private TelemetryApi telemetryApi;
-	private ConfigBackupApi configBackupApi;
-	private DeviceTelemetryClient deviceTelemetryClient;
-	private NodeTelemetryClient nodeTelemetryClient;
-	private RTUFirmwareApi rtuFirmwareApi;
 	private TelemetryUnitApi telemetryUnitApi;
 
 	public AcnClient(ApiConfig apiConfig) {
@@ -60,6 +61,7 @@ public final class AcnClient {
 		getNodeTelemetryClient().setApiConfig(apiConfig);
 		getRTUFirmwareApi().setApiConfig(apiConfig);
 		getTelemetryUnitApi().setApiConfig(apiConfig);
+		getDeviceTypeApi().setApiConfig(apiConfig);
 	}
 
 	public ApiConfig getApiConfig() {
@@ -104,12 +106,12 @@ public final class AcnClient {
 
 	public synchronized SoftwareReleaseScheduleApi getSoftwareReleaseScheduleApi() {
 		return softwareReleaseScheduleApi != null ? softwareReleaseScheduleApi
-		        : (softwareReleaseScheduleApi = new SoftwareReleaseScheduleApi(apiConfig));
+				: (softwareReleaseScheduleApi = new SoftwareReleaseScheduleApi(apiConfig));
 	}
 
 	public synchronized SoftwareReleaseTransApi getSoftwareReleaseTransApi() {
 		return softwareReleaseTransApi != null ? softwareReleaseTransApi
-		        : (softwareReleaseTransApi = new SoftwareReleaseTransApi(apiConfig));
+				: (softwareReleaseTransApi = new SoftwareReleaseTransApi(apiConfig));
 	}
 
 	public synchronized TelemetryApi getTelemetryApi() {
@@ -122,12 +124,12 @@ public final class AcnClient {
 
 	public synchronized DeviceTelemetryClient getDeviceTelemetryClient() {
 		return deviceTelemetryClient != null ? deviceTelemetryClient
-		        : (deviceTelemetryClient = new DeviceTelemetryClient(apiConfig));
+				: (deviceTelemetryClient = new DeviceTelemetryClient(apiConfig));
 	}
 
 	public synchronized NodeTelemetryClient getNodeTelemetryClient() {
 		return nodeTelemetryClient != null ? nodeTelemetryClient
-		        : (nodeTelemetryClient = new NodeTelemetryClient(apiConfig));
+				: (nodeTelemetryClient = new NodeTelemetryClient(apiConfig));
 	}
 
 	public synchronized RTUFirmwareApi getRTUFirmwareApi() {
@@ -136,5 +138,9 @@ public final class AcnClient {
 
 	public synchronized TelemetryUnitApi getTelemetryUnitApi() {
 		return telemetryUnitApi != null ? telemetryUnitApi : (telemetryUnitApi = new TelemetryUnitApi(apiConfig));
+	}
+
+	public synchronized DeviceTypeApi getDeviceTypeApi() {
+		return deviceTypeApi != null ? deviceTypeApi : (deviceTypeApi = new DeviceTypeApi(apiConfig));
 	}
 }

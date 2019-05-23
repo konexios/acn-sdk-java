@@ -49,43 +49,49 @@ def jarToCopy = copySpec {
     from "build/libs/${jar.archiveName}"
 }
 
-task copyJar(dependsOn: jar) << {
-    copy {
-        with jarToCopy
-        into "../../lib"
-    }
-    copy {
-        with jarToCopy
-        into "../../kronos/lib"
-    }
-    copy {
-        with jarToCopy
-        into "../../selene/lib"
-    }
-    copy {
-        with jarToCopy
-        into "../../hyperion/lib"
-    }
-    copy {
-        with jarToCopy
-        into "../../apollo/lib"
+task copyJar(dependsOn: jar) {
+    doLast {
+        copy {
+            with jarToCopy
+            into "../../lib"
+        }
+        copy {
+            with jarToCopy
+            into "../../kronos/lib"
+        }
+        copy {
+            with jarToCopy
+            into "../../selene/lib"
+        }
+        copy {
+            with jarToCopy
+            into "../../hyperion/lib"
+        }
+        copy {
+            with jarToCopy
+            into "../../apollo/lib"
+        }
     }
 }
 
-task jenkinsInput() << {
-   delete fileTree('lib') {
-       include '**/acs*'
-   }
-   copy {
-       from('/data1/jenkins/workspace/global-libs')  { include '**/acs*' }
-       into 'lib'
-   }
+task jenkinsInput() {
+    doLast {
+       delete fileTree('lib') {
+           include '**/acs*'
+       }
+       copy {
+           from('/data1/jenkins/workspace/global-libs')  { include '**/acs*' }
+           into 'lib'
+       }
+    }
 }
 
-task jenkinsOutput() << {
-    copy {
-        with jarToCopy
-        into "/data1/jenkins/workspace/global-libs"
+task jenkinsOutput() {
+    doLast {
+        copy {
+            with jarToCopy
+            into "/data1/jenkins/workspace/global-libs"
+        }
     }
 }
 
