@@ -10,12 +10,13 @@
  *******************************************************************************/
 package com.arrow.acn.client.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public abstract class BaseDeviceModelAbstract<T extends BaseDeviceModelAbstract<T>>
-        extends AuditableDocumentModelAbstract<T> {
+		extends AuditableDocumentModelAbstract<T> {
 	private static final long serialVersionUID = -5456674946112674229L;
 
 	protected String uid;
@@ -28,8 +29,8 @@ public abstract class BaseDeviceModelAbstract<T extends BaseDeviceModelAbstract<
 	protected String softwareReleaseName;
 	protected String softwareReleaseVersion;
 
-	protected Map<String, String> info;
-	protected Map<String, String> properties;
+	protected Map<String, String> info = new HashMap<>();
+	protected Map<String, String> properties = new HashMap<>();
 
 	public T withUid(String uid) {
 		setUid(uid);

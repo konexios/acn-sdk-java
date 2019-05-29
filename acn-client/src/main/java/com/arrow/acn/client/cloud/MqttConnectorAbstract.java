@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
-import com.arrow.acn.Utils;
 import com.arrow.acn.client.ClientConstants.Mqtt;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
@@ -60,7 +59,7 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 		byte[] input = JsonUtils.toJsonBytes(batch);
 		if (input != null && input.length > 0) {
 			if (transferMode == TransferMode.GZIP_BATCH) {
-				client.publish(publisherGzipBatchTopic(batch), Utils.gzip(input), getQos());
+				client.publish(publisherGzipBatchTopic(batch), AcsUtils.gzip(input), getQos());
 			} else {
 				client.publish(publisherBatchTopic(batch), input, getQos());
 			}

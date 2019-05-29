@@ -24,11 +24,9 @@ public final class AcnClient {
 	private DeviceActionApi deviceActionApi;
 	private DeviceApi deviceApi;
 	private DeviceStateApi deviceStateApi;
-	private DeviceTelemetryClient deviceTelemetryClient;
 	private DeviceTypeApi deviceTypeApi;
 	private GatewayApi gatewayApi;
 	private NodeApi nodeApi;
-	private NodeTelemetryClient nodeTelemetryClient;
 	private NodeTypeApi nodeTypeApi;
 	private RTUFirmwareApi rtuFirmwareApi;
 	private SoftwareReleaseScheduleApi softwareReleaseScheduleApi;
@@ -44,24 +42,38 @@ public final class AcnClient {
 	public void setApiConfig(ApiConfig apiConfig) {
 		Validate.notNull(apiConfig, "apiConfig is not set");
 		this.apiConfig = apiConfig;
-		getAccountApi().setApiConfig(apiConfig);
-		getCoreEventApi().setApiConfig(apiConfig);
-		getCoreUserApi().setApiConfig(apiConfig);
-		getDeviceActionApi().setApiConfig(apiConfig);
-		getDeviceApi().setApiConfig(apiConfig);
-		getDeviceStateApi().setApiConfig(apiConfig);
-		getGatewayApi().setApiConfig(apiConfig);
-		getNodeApi().setApiConfig(apiConfig);
-		getSoftwareReleaseScheduleApi().setApiConfig(apiConfig);
-		getSoftwareReleaseTransApi().setApiConfig(apiConfig);
-		getTelemetryApi().setApiConfig(apiConfig);
-		getDeviceActionApi().setApiConfig(apiConfig);
-		getConfigBackupApi().setApiConfig(apiConfig);
-		getDeviceTelemetryClient().setApiConfig(apiConfig);
-		getNodeTelemetryClient().setApiConfig(apiConfig);
-		getRTUFirmwareApi().setApiConfig(apiConfig);
-		getTelemetryUnitApi().setApiConfig(apiConfig);
-		getDeviceTypeApi().setApiConfig(apiConfig);
+		if (accountApi != null)
+			getAccountApi().setApiConfig(apiConfig);
+		if (configBackupApi != null)
+			getConfigBackupApi().setApiConfig(apiConfig);
+		if (coreEventApi != null)
+			getCoreEventApi().setApiConfig(apiConfig);
+		if (coreUserApi != null)
+			getCoreUserApi().setApiConfig(apiConfig);
+		if (deviceActionApi != null)
+			getDeviceActionApi().setApiConfig(apiConfig);
+		if (deviceApi != null)
+			getDeviceApi().setApiConfig(apiConfig);
+		if (deviceStateApi != null)
+			getDeviceStateApi().setApiConfig(apiConfig);
+		if (deviceTypeApi != null)
+			getDeviceTypeApi().setApiConfig(apiConfig);
+		if (gatewayApi != null)
+			getGatewayApi().setApiConfig(apiConfig);
+		if (nodeApi != null)
+			getNodeApi().setApiConfig(apiConfig);
+		if (nodeTypeApi != null)
+			getNodeTypeApi().setApiConfig(apiConfig);
+		if (rtuFirmwareApi != null)
+			getRTUFirmwareApi().setApiConfig(apiConfig);
+		if (softwareReleaseScheduleApi != null)
+			getSoftwareReleaseScheduleApi().setApiConfig(apiConfig);
+		if (softwareReleaseTransApi != null)
+			getSoftwareReleaseTransApi().setApiConfig(apiConfig);
+		if (telemetryApi != null)
+			getTelemetryApi().setApiConfig(apiConfig);
+		if (telemetryUnitApi != null)
+			getTelemetryUnitApi().setApiConfig(apiConfig);
 	}
 
 	public ApiConfig getApiConfig() {
@@ -120,16 +132,6 @@ public final class AcnClient {
 
 	public synchronized ConfigBackupApi getConfigBackupApi() {
 		return configBackupApi != null ? configBackupApi : (configBackupApi = new ConfigBackupApi(apiConfig));
-	}
-
-	public synchronized DeviceTelemetryClient getDeviceTelemetryClient() {
-		return deviceTelemetryClient != null ? deviceTelemetryClient
-				: (deviceTelemetryClient = new DeviceTelemetryClient(apiConfig));
-	}
-
-	public synchronized NodeTelemetryClient getNodeTelemetryClient() {
-		return nodeTelemetryClient != null ? nodeTelemetryClient
-				: (nodeTelemetryClient = new NodeTelemetryClient(apiConfig));
 	}
 
 	public synchronized RTUFirmwareApi getRTUFirmwareApi() {

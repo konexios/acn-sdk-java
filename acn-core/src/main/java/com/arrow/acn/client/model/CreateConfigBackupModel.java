@@ -18,6 +18,11 @@ public class CreateConfigBackupModel implements Serializable {
 
 	private String name;
 
+	public CreateConfigBackupModel withName(String name) {
+		setName(name);
+		return this;
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -8,7 +8,7 @@
  * Contributors:
  *     Arrow Electronics, Inc.
  *******************************************************************************/
-package com.arrow.acn;
+package com.arrow.acn.client.model;
 
 public enum AcnDeviceCategory {
 	GATEWAY, DEVICE

@@ -11,6 +11,7 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DeviceTypeTelemetryModel implements Serializable {
@@ -20,7 +21,7 @@ public class DeviceTypeTelemetryModel implements Serializable {
 	private String description;
 	private String name;
 	private String type;
-	private Map<String, String> variables;
+	private Map<String, String> variables = new HashMap<>();
 	private String telemetryUnitHid;
 
 	public DeviceTypeTelemetryModel withDescription(String description) {
@@ -120,7 +121,7 @@ public class DeviceTypeTelemetryModel implements Serializable {
 			return false;
 		}
 		if (telemetryUnitHid != null ? !telemetryUnitHid.equals(that.telemetryUnitHid)
-		        : that.telemetryUnitHid != null) {
+				: that.telemetryUnitHid != null) {
 			return false;
 		}
 		return variables != null ? variables.equals(that.variables) : that.variables == null;

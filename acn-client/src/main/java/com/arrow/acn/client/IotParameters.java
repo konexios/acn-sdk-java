@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HashMap;
 
-import com.arrow.acn.data.TelemetryItemType;
+import com.arrow.acn.client.model.TelemetryItemType;
 
 public class IotParameters extends HashMap<String, String> {
 	private static final long serialVersionUID = 9127332851010386582L;

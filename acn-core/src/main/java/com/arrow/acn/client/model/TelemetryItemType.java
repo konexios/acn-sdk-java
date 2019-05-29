@@ -8,7 +8,7 @@
  * Contributors:
  *     Arrow Electronics, Inc.
  *******************************************************************************/
-package com.arrow.acn.data;
+package com.arrow.acn.client.model;
 
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.KeyValuePair;

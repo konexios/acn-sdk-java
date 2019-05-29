@@ -13,7 +13,7 @@ package com.arrow.acn.client.search;
 import java.time.Instant;
 import java.util.Arrays;
 
-import com.arrow.acn.AcnDeviceCategory;
+import com.arrow.acn.client.model.AcnDeviceCategory;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleStatus;
 import com.arrow.acs.client.search.SearchCriteria;
 

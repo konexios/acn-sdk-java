@@ -12,8 +12,6 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-import com.arrow.acn.AcnDeviceCategory;
-
 public class SoftwareReleaseTransRegistrationModel implements Serializable {
 
 	private static final long serialVersionUID = -5156352330326271900L;
