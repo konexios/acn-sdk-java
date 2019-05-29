@@ -40,16 +40,13 @@ public final class NodeApi extends ApiAbstract {
 	}
 
 	/**
-	 * Sends GET request to obtain parameters of node specified by its
-	 * {@code hid}
+	 * Sends GET request to obtain parameters of node specified by its {@code hid}
 	 *
-	 * @param hid
-	 *            {@link String} representing specific node
+	 * @param hid {@link String} representing specific node
 	 *
 	 * @return {@link NodeModel} containing node parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public NodeModel findByHid(String hid) {
 		String method = "findByHid";
@@ -59,8 +56,7 @@ public final class NodeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -69,8 +65,7 @@ public final class NodeApi extends ApiAbstract {
 	 *
 	 * @return list of {@link NodeModel} containing node parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ListResultModel<NodeModel> listExistingNodes() {
 		String method = "listExistingNodes";
@@ -80,22 +75,18 @@ public final class NodeApi extends ApiAbstract {
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends POST request to create new node according to {@code model} passed
 	 * 
-	 * @param model
-	 *            {@link NodeModel} representing parameters of node to be
-	 *            created
+	 * @param model {@link NodeModel} representing parameters of node to be created
 	 *
 	 * @return {@link HidModel} containing {@code hid} of node created
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel createNewNode(NodeModel model) {
 		String method = "createNewNode";
@@ -105,24 +96,19 @@ public final class NodeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
-	 * Sends PUT request to update existing node according to {@code model}
-	 * passed
+	 * Sends PUT request to update existing node according to {@code model} passed
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of node to be updated
-	 * @param model
-	 *            {@link NodeModel} representing node parameters to be updated
+	 * @param hid   {@link String} representing {@code hid} of node to be updated
+	 * @param model {@link NodeModel} representing node parameters to be updated
 	 *
 	 * @return {@link HidModel} containing {@code hid} of node updated
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel updateExistingNode(String hid, NodeModel model) {
 		String method = "updateExistingNode";
@@ -132,14 +118,13 @@ public final class NodeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<ListResultModel<NodeModel>> getNodeModelTypeRef() {
 		return nodeModelTypeRef != null ? nodeModelTypeRef
-		        : (nodeModelTypeRef = new TypeReference<ListResultModel<NodeModel>>() {
-		        });
+				: (nodeModelTypeRef = new TypeReference<ListResultModel<NodeModel>>() {
+				});
 	}
 }

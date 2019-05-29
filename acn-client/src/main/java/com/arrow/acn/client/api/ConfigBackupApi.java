@@ -14,7 +14,6 @@ import java.net.URI;
 
 import org.apache.http.client.methods.HttpGet;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.ConfigBackupModel;
 import com.arrow.acs.client.api.ApiConfig;
 
@@ -35,8 +34,7 @@ public class ConfigBackupApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 }

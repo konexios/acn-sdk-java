@@ -18,7 +18,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.DeviceStateModel;
 import com.arrow.acn.client.model.DeviceStateRequestModel;
 import com.arrow.acn.client.model.DeviceStateUpdateModel;
@@ -52,8 +51,7 @@ public class DeviceStateApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -65,8 +63,7 @@ public class DeviceStateApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -78,8 +75,7 @@ public class DeviceStateApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -91,8 +87,7 @@ public class DeviceStateApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -104,8 +99,7 @@ public class DeviceStateApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -114,31 +108,26 @@ public class DeviceStateApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(String.format(TRANS_FAILED_URL, deviceHid, transHid));
 			StatusModel result = execute(new HttpPut(uri),
-			        JsonUtils.toJson(Collections.singletonMap("error", AcsUtils.trimToEmpty(error))),
-			        StatusModel.class);
+					JsonUtils.toJson(Collections.singletonMap("error", AcsUtils.trimToEmpty(error))),
+					StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Send PUT request to remove set of device states
 	 *
-	 * @param states
-	 *            {@link List<String>} names of states
+	 * @param states                 {@link List<String>} names of states
 	 *
-	 * @param deviceHid
-	 *            {@link String} representing specific device
+	 * @param deviceHid              {@link String} representing specific device
 	 *
-	 * @param removeStatesDefinition
-	 *            {@link boolean} true - if needs remove states definition from
-	 *            DeviceType
+	 * @param removeStatesDefinition {@link boolean} true - if needs remove states
+	 *                               definition from DeviceType
 	 *
-	 * @return {@link StatusModel} containing status of device state update
-	 *         request
+	 * @return {@link StatusModel} containing status of device state update request
 	 */
 	public StatusModel deleteDeviceStates(List<String> states, String deviceHid, boolean removeStatesDefinition) {
 		String method = "deleteDeviceStates";
@@ -152,8 +141,7 @@ public class DeviceStateApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 }

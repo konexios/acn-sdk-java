@@ -16,7 +16,6 @@ import java.util.List;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.RTUFirmwareModels.RTUFirmwareModel;
 import com.arrow.acn.client.model.RTUFirmwareModels.RTURequestedFirmwareModel;
 import com.arrow.acn.client.search.RTUAvailableSearchCriteria;
@@ -49,45 +48,40 @@ public class RTUFirmwareApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	public List<RTUFirmwareModel> findAvailableFirmware(RTUAvailableSearchCriteria criteria) {
-		String method = "findAvailableFirmware";
 		try {
 			URI uri = buildUri(FIND_AVAILABLE, criteria);
 			List<RTUFirmwareModel> result = execute(new HttpGet(uri), getRtuFirmwareModelTypeRef());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	public PagingResultModel<RTURequestedFirmwareModel> findRequestedFirmware(RTURequestSearchCriteria criteria) {
-		String method = "findRequestedFirmware";
 		try {
 			URI uri = buildUri(FIND_REQUESTED, criteria);
 			PagingResultModel<RTURequestedFirmwareModel> result = execute(new HttpGet(uri),
-			        getRtuRequestedFirmwareModel());
+					getRtuRequestedFirmwareModel());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<List<RTUFirmwareModel>> getRtuFirmwareModelTypeRef() {
 		return rtuFirmwareModelTypeRef != null ? rtuFirmwareModelTypeRef
-		        : (rtuFirmwareModelTypeRef = new TypeReference<List<RTUFirmwareModel>>() {
-		        });
+				: (rtuFirmwareModelTypeRef = new TypeReference<List<RTUFirmwareModel>>() {
+				});
 	}
 
 	private synchronized TypeReference<PagingResultModel<RTURequestedFirmwareModel>> getRtuRequestedFirmwareModel() {
 		return rtuRequestFirmwareModelTypeRef != null ? rtuRequestFirmwareModelTypeRef
-		        : (rtuRequestFirmwareModelTypeRef = new TypeReference<PagingResultModel<RTURequestedFirmwareModel>>() {
-		        });
+				: (rtuRequestFirmwareModelTypeRef = new TypeReference<PagingResultModel<RTURequestedFirmwareModel>>() {
+				});
 	}
 }

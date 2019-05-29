@@ -40,8 +40,7 @@ public class DeviceTypeApi extends ApiAbstract {
 	 *
 	 * @return list of {@link DeviceTypeModel} containing type parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ListResultModel<DeviceTypeModel> listExistingDeviceTypes() {
 		String method = "listExistingDeviceTypes";
@@ -51,8 +50,7 @@ public class DeviceTypeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -60,14 +58,12 @@ public class DeviceTypeApi extends ApiAbstract {
 	 * Sends POST request to create new device type according to {@code model}
 	 * passed
 	 * 
-	 * @param model
-	 *            {@link DeviceTypeModel} representing parameters of device type
-	 *            to be created
+	 * @param model {@link DeviceTypeModel} representing parameters of device type
+	 *              to be created
 	 *
 	 * @return {@link HidModel} containing {@code hid} of device type created
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel createNewDeviceType(DeviceTypeModel model) {
 		String method = "createNewDeviceType";
@@ -77,26 +73,22 @@ public class DeviceTypeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
-	 * Sends PUT request to update existing device type according to
-	 * {@code model} passed
+	 * Sends PUT request to update existing device type according to {@code model}
+	 * passed
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of device type to be
-	 *            updated
-	 * @param model
-	 *            {@link DeviceTypeModel} representing device type parameters to
-	 *            be updated
+	 * @param hid   {@link String} representing {@code hid} of device type to be
+	 *              updated
+	 * @param model {@link DeviceTypeModel} representing device type parameters to
+	 *              be updated
 	 *
 	 * @return {@link HidModel} containing {@code hid} of device type updated
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel updateDeviceType(String hid, DeviceTypeModel model) {
 		String method = "updateDeviceAction";
@@ -106,14 +98,13 @@ public class DeviceTypeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<ListResultModel<DeviceTypeModel>> getDeviceTypeModelTypeRef() {
 		return deviceTypeModelTypeRef != null ? deviceTypeModelTypeRef
-		        : (deviceTypeModelTypeRef = new TypeReference<ListResultModel<DeviceTypeModel>>() {
-		        });
+				: (deviceTypeModelTypeRef = new TypeReference<ListResultModel<DeviceTypeModel>>() {
+				});
 	}
 }

@@ -14,7 +14,6 @@ import java.net.URI;
 
 import org.apache.http.client.methods.HttpGet;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.TelemetryUnitModel;
 import com.arrow.acn.client.search.TelemetryUnitSearchCriteria;
 import com.arrow.acs.client.api.ApiConfig;
@@ -39,14 +38,13 @@ public class TelemetryUnitApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<ListResultModel<TelemetryUnitModel>> getTelemetryUnitModelTypeRef() {
 		return telemetryUnitModelTypeRef != null ? telemetryUnitModelTypeRef
-		        : (telemetryUnitModelTypeRef = new TypeReference<ListResultModel<TelemetryUnitModel>>() {
-		        });
+				: (telemetryUnitModelTypeRef = new TypeReference<ListResultModel<TelemetryUnitModel>>() {
+				});
 	}
 }

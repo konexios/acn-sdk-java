@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.apache.http.client.methods.HttpPost;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.SamlAccountModel;
@@ -37,8 +36,7 @@ public class CoreUserApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 }
