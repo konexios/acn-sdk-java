@@ -86,6 +86,9 @@ public class RabbitLoadTest extends Loggable {
 	Map<String, String> statuses = new HashMap<>();
 	long commandCounter;
 	long commandTime;
+	long commandFailed;
+	long telemetryCounter;
+	long telemetryFailed;
 	AcnClient client;
 	Config config;
 
@@ -261,6 +264,18 @@ public class RabbitLoadTest extends Loggable {
 		commandTime += time;
 	}
 
+	synchronized void updateCommandFailed() {
+		commandFailed++;
+	}
+
+	synchronized void updateTelemetryCounter() {
+		telemetryCounter++;
+	}
+
+	synchronized void updateTelemetryFailed() {
+		telemetryFailed++;
+	}
+
 	synchronized void printStatuses() {
 		String method = "printStatuses";
 		Map<String, int[]> result = new HashMap<>();
@@ -279,8 +294,9 @@ public class RabbitLoadTest extends Loggable {
 			sb.append(key + "=" + result.get(key)[0]);
 		}
 		long average = commandCounter == 0 ? 0 : commandTime / commandCounter;
-		logInfo(method, "===========> commandCounter: %d, avgTime (ms): %d, statuses: %s", commandCounter, average,
-				sb.toString());
+		logInfo(method,
+				"command: %d, avgTime(ms): %d, commandFailed: %d, telemetry: %d, telemetryFailed: %d, statuses: %s",
+				commandCounter, average, commandFailed, telemetryCounter, telemetryFailed, sb.toString());
 		statuses.clear();
 	}
 
@@ -317,7 +333,7 @@ public class RabbitLoadTest extends Loggable {
 		}
 
 		@Override
-		protected void sendTelemetry(String topic, String data) {
+		protected void sendTelemetry(String topic, String data) throws Exception {
 			mqtt.publish(topic, data.getBytes(StandardCharsets.UTF_8), 1);
 		}
 	}
@@ -378,11 +394,8 @@ public class RabbitLoadTest extends Loggable {
 		}
 
 		@Override
-		protected void sendTelemetry(String topic, String data) {
-			try {
-				mqtt.publish(topic, data.getBytes(StandardCharsets.UTF_8), 1, false);
-			} catch (Exception e) {
-			}
+		protected void sendTelemetry(String topic, String data) throws Exception {
+			mqtt.publish(topic, data.getBytes(StandardCharsets.UTF_8), 1, false);
 		}
 	}
 
@@ -396,12 +409,16 @@ public class RabbitLoadTest extends Loggable {
 		Timer timer;
 		String deviceUid = "";
 		String gatewayHid = "";
+		String randomTelemetry;
+		String randomCommand;
 
 		ClientAbstract(DeviceModel device) {
 			String method = "ClientAbstract";
 			this.device = device;
 			this.deviceUid = device.getUid();
 			this.gatewayHid = device.getGatewayHid();
+			this.randomTelemetry = RandomStringUtils.randomAlphanumeric(config.telemetrySize);
+			this.randomCommand = RandomStringUtils.randomAlphanumeric(config.commandSize);
 			info(method, "downloading gateway info ...");
 			GatewayConfigModel cfg = globalAcnClient().getGatewayApi()
 					.downloadGatewayConfiguration(device.getGatewayHid());
@@ -501,24 +518,33 @@ public class RabbitLoadTest extends Loggable {
 
 		protected void sendNextCommand() {
 			String method = "sendNextCommand";
-			try {
-				Integer command = commandCounter.getAndIncrement();
-				Long ts = System.currentTimeMillis();
-				commandMap.put(command, ts);
 
+			Integer command = commandCounter.getAndIncrement();
+			Long ts = System.currentTimeMillis();
+			commandMap.put(command, ts);
+
+			boolean hasError = false;
+			try {
 				if (config.printMessage)
 					info(method, "sending command %d", command);
 
 				Map<String, String> payload = new HashMap<>();
 				payload.put("ts", ts.toString());
-				payload.put("data", RandomStringUtils.randomAlphanumeric(config.commandSize));
+				payload.put("data", randomCommand);
 				HidModel response = client.getGatewayApi().sendCommandToGatewayAndDevice(device.getGatewayHid(),
 						new DeviceCommandModel().withDeviceHid(device.getHid()).withCommand("" + command)
 								.withPayload(JsonUtils.toJson(payload)).withMessageExpiration(300000L));
+				hasError = AcsUtils.isEmpty(response.getHid());
 				if (config.printMessage)
 					info(method, "response eventHid: %s", response.getHid());
 			} catch (Exception e) {
 				error(method, "error sending command", e);
+				hasError = true;
+			} finally {
+				if (hasError) {
+					commandMap.remove(command);
+					updateCommandFailed();
+				}
 			}
 		}
 
@@ -555,16 +581,18 @@ public class RabbitLoadTest extends Loggable {
 			try {
 				IotParameters params = new IotParameters();
 				params.setDeviceHid(device.getHid());
-				params.setString("data", RandomStringUtils.randomAlphanumeric(config.telemetrySize));
+				params.setString("data", randomTelemetry);
 				sendTelemetry(MqttConstants.gatewayToServerTelemetryRouting(gatewayHid), JsonUtils.toJson(params));
 				if (config.printMessage)
 					info(method, "telemetry sent");
+				updateTelemetryCounter();
 			} catch (Exception e) {
 				error(method, "error sending telemetry", e);
+				updateTelemetryFailed();
 			}
 		}
 
-		protected abstract void sendTelemetry(String topic, String data);
+		protected abstract void sendTelemetry(String topic, String data) throws Exception;
 
 		protected MqttConnectOptions createMqttOptions() {
 			MqttConnectOptions options = new MqttConnectOptions();

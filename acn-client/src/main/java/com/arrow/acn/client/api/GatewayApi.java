@@ -222,7 +222,7 @@ public final class GatewayApi extends ApiAbstract {
 	 * @throws AcnClientException if request failed
 	 */
 	public HidModel sendCommandToGatewayAndDevice(String hid, DeviceCommandModel model) {
-		String method = "registerNewGateway";
+		String method = "sendCommandToGatewayAndDevice";
 		try {
 			URI uri = buildUri(DEVICE_COMMAND_URL.replace("{hid}", hid));
 			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
