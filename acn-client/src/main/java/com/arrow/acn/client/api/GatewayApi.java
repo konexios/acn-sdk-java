@@ -72,17 +72,15 @@ public final class GatewayApi extends ApiAbstract {
 	 * Sends GET request to obtain parameters of gateways corresponding
 	 * {@code criteria}
 	 *
-	 * @param criteria
-	 *            {@link GatewaySearchCriteria} representing search filter
-	 *            parameters
+	 * @param criteria {@link GatewaySearchCriteria} representing search filter
+	 *                 parameters
 	 *
 	 * @return subset of {@link GatewayModel} containing gateway parameters.
 	 *         <b>Note:</b> resulting subset may contain not all gateways
-	 *         corresponding to search parameters because it cannot exceed page
-	 *         size passed in {@code criteria}
+	 *         corresponding to search parameters because it cannot exceed page size
+	 *         passed in {@code criteria}
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public PagingResultModel<GatewayModel> findAllBy(GatewaySearchCriteria criteria) {
 		String method = "findAllBy";
@@ -92,24 +90,21 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
-	 * Sends POST request to register new or update existing gateway according
-	 * to {@code model} passed
+	 * Sends POST request to register new or update existing gateway according to
+	 * {@code model} passed
 	 *
-	 * @param model
-	 *            {@link GatewayModel} representing parameters of gateway to be
-	 *            created/updated
+	 * @param model {@link GatewayModel} representing parameters of gateway to be
+	 *              created/updated
 	 *
-	 * @return {@link ExternalHidModel} containing external {@code hid} of
-	 *         gateway created/updated
+	 * @return {@link ExternalHidModel} containing external {@code hid} of gateway
+	 *         created/updated
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ExternalHidModel registerNewGateway(CreateGatewayModel model) {
 		String method = "registerNewGateway";
@@ -120,8 +115,7 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -129,13 +123,11 @@ public final class GatewayApi extends ApiAbstract {
 	 * Sends GET request to obtain parameters of gateway specified by its
 	 * {@code hid}
 	 *
-	 * @param hid
-	 *            {@link String} representing specific gateway
+	 * @param hid {@link String} representing specific gateway
 	 *
 	 * @return {@link GatewayModel} containing gateway parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public GatewayModel find(String hid) {
 		String method = "find";
@@ -145,22 +137,19 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
-	 * Sends GET request to obtain all devices associated with gateway specified
-	 * by its {@code hid}
+	 * Sends GET request to obtain all devices associated with gateway specified by
+	 * its {@code hid}
 	 *
-	 * @param hid
-	 *            {@link String} representing specific gateway
+	 * @param hid {@link String} representing specific gateway
 	 *
 	 * @return list of {@link DeviceModel} containing device parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ListResultModel<DeviceModel> listGatewayDevices(String hid) {
 		String method = "find";
@@ -170,8 +159,7 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -179,17 +167,13 @@ public final class GatewayApi extends ApiAbstract {
 	 * Sends PUT request to update specific existing gateway according to
 	 * {@code model} passed
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of gateway to be
-	 *            updated
-	 * @param model
-	 *            {@link GatewayModel} representing gateway parameters to be
-	 *            updated
+	 * @param hid   {@link String} representing {@code hid} of gateway to be updated
+	 * @param model {@link GatewayModel} representing gateway parameters to be
+	 *              updated
 	 *
 	 * @return {@link HidModel} containing {@code hid} of gateway updated
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel updateExistingGateway(String hid, UpdateGatewayModel model) {
 		String method = "updateExistingGateway";
@@ -199,22 +183,19 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends PUT request to check-in existing gateway on portal
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of gateway to be
+	 * @param hid {@link String} representing {@code hid} of gateway to be
 	 *            checked-in
 	 *
 	 * @return {@link StatusModel} containing status of check-in request
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public StatusModel checkin(String hid) {
 		String method = "checkin";
@@ -224,50 +205,43 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends POST request to force portal send command to gateway and device
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of gateway, to which
-	 *            command should be sent
-	 * @param model
-	 *            {@link DeviceCommandModel} representing command parameters to
-	 *            be sent to device
+	 * @param hid   {@link String} representing {@code hid} of gateway, to which
+	 *              command should be sent
+	 * @param model {@link DeviceCommandModel} representing command parameters to be
+	 *              sent to device
 	 *
 	 * @return {@link HidModel} containing {@code hid} of gateway
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel sendCommandToGatewayAndDevice(String hid, DeviceCommandModel model) {
-		String method = "registerNewGateway";
+		String method = "sendCommandToGatewayAndDevice";
 		try {
 			URI uri = buildUri(DEVICE_COMMAND_URL.replace("{hid}", hid));
 			HidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends GET request to download configuration of specific gateway
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of gateway, which
+	 * @param hid {@link String} representing {@code hid} of gateway, which
 	 *            configuration should be downloaded
 	 *
 	 * @return {@link GatewayConfigModel} containing gateway configuration
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public GatewayConfigModel downloadGatewayConfiguration(String hid) {
 		String method = "downloadGatewayConfiguration";
@@ -275,25 +249,22 @@ public final class GatewayApi extends ApiAbstract {
 			URI uri = buildUri(CONFIG_URL.replace("{hid}", hid));
 			GatewayConfigModel result = execute(new HttpGet(uri), GatewayConfigModel.class);
 			logDebug(method, "hasKey: %s, hasAws: %s, hasIbm: %s", result.getKey() != null, result.getAws() != null,
-			        result.getIbm() != null);
+					result.getIbm() != null);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends PUT request to pass heartbeat of existing gateway to portal
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of gateway to be kept
+	 * @param hid {@link String} representing {@code hid} of gateway to be kept
 	 *            alive
 	 *
 	 * @return {@link StatusModel} containing status of heartbeat request
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public StatusModel heartbeat(String hid) {
 		String method = "heartbeat";
@@ -303,8 +274,7 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -312,19 +282,16 @@ public final class GatewayApi extends ApiAbstract {
 	 * Sends GET request to obtain logs related to specific gateway and
 	 * corresponding {@code criteria}
 	 *
-	 * @param hid
-	 *            {@link String} representing gateway {@code hid}
-	 * @param criteria
-	 *            {@link LogsSearchCriteria} representing search filter
-	 *            parameters.
+	 * @param hid      {@link String} representing gateway {@code hid}
+	 * @param criteria {@link LogsSearchCriteria} representing search filter
+	 *                 parameters.
 	 *
 	 * @return subset of {@link AuditLogModel} containing event parameters.
-	 *         <b>Note:</b> resulting subset may contain not all logs
-	 *         corresponding to search parameters because it cannot exceed page
-	 *         size passed in {@code criteria}
+	 *         <b>Note:</b> resulting subset may contain not all logs corresponding
+	 *         to search parameters because it cannot exceed page size passed in
+	 *         {@code criteria}
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public PagingResultModel<AuditLogModel> listGatewayAuditLogs(String hid, LogsSearchCriteria criteria) {
 		String method = "listGatewayAuditLogs";
@@ -334,22 +301,19 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends POST request to submit an error
 	 *
-	 * @param model
-	 *            {@link ErrorModel} content of the error (code and message)
+	 * @param model {@link ErrorModel} content of the error (code and message)
 	 *
-	 * @return {@link HidModel} containing external {@code hid} of the created
-	 *         audit log
+	 * @return {@link HidModel} containing external {@code hid} of the created audit
+	 *         log
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel sendError(String hid, ErrorModel model) {
 		String method = "sendError";
@@ -359,8 +323,7 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -372,8 +335,7 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -381,13 +343,12 @@ public final class GatewayApi extends ApiAbstract {
 		String method = "restoreConfiguration";
 		try {
 			URI uri = buildUri(RESTORE_CONFIGURATION_URL.replace("{hid}", gatewayHid).replace("{configBackupHid}",
-			        configBackupHid));
+					configBackupHid));
 			StatusModel result = execute(new HttpPost(uri), StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -396,12 +357,11 @@ public final class GatewayApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(CONFIGURATION_BACKUP_URL.replace("{hid}", hid), criteria);
 			PagingResultModel<ConfigBackupModel> result = execute(new HttpGet(uri), criteria,
-			        getConfigBackupModelTypeRef());
+					getConfigBackupModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -413,32 +373,31 @@ public final class GatewayApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<PagingResultModel<GatewayModel>> getGatewayModelTypeRef() {
 		return gatewayModelTypeRef != null ? gatewayModelTypeRef
-		        : (gatewayModelTypeRef = new TypeReference<PagingResultModel<GatewayModel>>() {
-		        });
+				: (gatewayModelTypeRef = new TypeReference<PagingResultModel<GatewayModel>>() {
+				});
 	}
 
 	private synchronized TypeReference<PagingResultModel<AuditLogModel>> getAuditLogModelTypeRef() {
 		return auditLogModelTypeRef != null ? auditLogModelTypeRef
-		        : (auditLogModelTypeRef = new TypeReference<PagingResultModel<AuditLogModel>>() {
-		        });
+				: (auditLogModelTypeRef = new TypeReference<PagingResultModel<AuditLogModel>>() {
+				});
 	}
 
 	private synchronized TypeReference<ListResultModel<DeviceModel>> getDeviceModelTypeRef() {
 		return deviceModelTypeRef != null ? deviceModelTypeRef
-		        : (deviceModelTypeRef = new TypeReference<ListResultModel<DeviceModel>>() {
-		        });
+				: (deviceModelTypeRef = new TypeReference<ListResultModel<DeviceModel>>() {
+				});
 	}
 
 	private synchronized TypeReference<PagingResultModel<ConfigBackupModel>> getConfigBackupModelTypeRef() {
 		return configBackupModelTypeRef != null ? configBackupModelTypeRef
-		        : (configBackupModelTypeRef = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
-		        });
+				: (configBackupModelTypeRef = new TypeReference<PagingResultModel<ConfigBackupModel>>() {
+				});
 	}
 }

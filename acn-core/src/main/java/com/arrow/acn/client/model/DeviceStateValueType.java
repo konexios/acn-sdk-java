@@ -8,13 +8,8 @@
  * Contributors:
  *     Arrow Electronics, Inc.
  *******************************************************************************/
-package com.arrow.acn.client.websocket;
+package com.arrow.acn.client.model;
 
-public interface MessageListener {
-
-	default void onMessage(String message) {
-	}
-
-	default void onMessage(byte[] payload, int offset, int len) {
-	}
+public enum DeviceStateValueType {
+	String, StringList, Integer, IntegerList, Float, Boolean
 }

@@ -11,7 +11,7 @@
 package com.arrow.acn;
 
 public interface AcnEventNames {
-	public interface ServerToGateway {
+	interface ServerToGateway {
 		final static String GATEWAY_SOFTWARE_UPDATE = "ServerToGateway_GatewaySoftwareUpdate";
 
 		final static String DEVICE_START = "ServerToGateway_DeviceStart";
@@ -35,7 +35,7 @@ public interface AcnEventNames {
 
 	}
 
-	public interface GatewayToServer {
+	interface GatewayToServer {
 		final static String API_REQUEST = "GatewayToServer_ApiRequest";
 	}
 }

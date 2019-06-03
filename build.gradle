@@ -1,7 +1,8 @@
 buildscript {
     ext {
-        log4jVersion = '2.11.1'
-        jacksonVersion = '2.9.7'
+        log4jVersion = '2.11.2'
+        jacksonVersion = '2.9.9'
+        httpclientVersion = '4.5.8'
     }
     repositories {
         mavenCentral()
@@ -51,7 +52,7 @@ subprojects {
         testCompile 'junit:junit:4.12'
     }
 
-    version = '9.6'
+    version = '9.6.0'
     
     compileJava.dependsOn(processResources)
 

@@ -10,7 +10,6 @@
  *******************************************************************************/
 package com.arrow.acn.client.model;
 
-import com.arrow.acn.data.TelemetryItemType;
 import com.arrow.acs.AcsSystemException;
 import com.arrow.acs.client.model.ModelAbstract;
 

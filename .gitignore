@@ -10,8 +10,6 @@ acn-core/build/
 acn-client/bin/
 acn-client/build/
 
-acn-client/src/test/java/com/arrow/acn/client/RabbitLoadTest\.java
-
 acn-client/src/test/resources/RabbitLoadTest\.json
 
 \.DS_Store

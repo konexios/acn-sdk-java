@@ -10,7 +10,6 @@
  *******************************************************************************/
 package com.arrow.acn.client.model;
 
-import com.arrow.acn.AcnDeviceCategory;
 import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public class SoftwareReleaseTransModel extends AuditableDocumentModelAbstract<SoftwareReleaseTransModel> {

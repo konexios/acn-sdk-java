@@ -14,8 +14,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.arrow.acn.AcnDeviceCategory;
-
 public class SoftwareReleaseScheduleAutomationModel implements Serializable {
 
 	private static final long serialVersionUID = 650773309220706022L;
