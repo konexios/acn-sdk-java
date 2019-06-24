@@ -87,7 +87,7 @@ public class DeviceApi extends ApiAbstract {
 		String method = "findAllBy";
 		try {
 			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
-			PagingResultModel<DeviceModel> result = execute(new HttpGet(uri), getDeviceModelTypeRef());
+			PagingResultModel<DeviceModel> result = execute(new HttpGet(uri), criteria, getDeviceModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
