@@ -86,7 +86,7 @@ public final class GatewayApi extends ApiAbstract {
 		String method = "findAllBy";
 		try {
 			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
-			PagingResultModel<GatewayModel> result = execute(new HttpGet(uri), getGatewayModelTypeRef());
+			PagingResultModel<GatewayModel> result = execute(new HttpGet(uri), criteria, getGatewayModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
