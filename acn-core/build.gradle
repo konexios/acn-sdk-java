@@ -2,9 +2,9 @@ jar.doFirst {
     from sourceSets.main.allSource
     manifest {
         attributes(
-            "Implementation-Title": "Arrow Connect Core",
+            "Implementation-Title": "Kronos SDK Core",
             "Implementation-Version": version,
-            "Implementation-Vendor": "Arrow Electronics, Inc.",
+            "Implementation-Vendor": "Konexios, Inc.",
             "Built-By": System.getProperty('user.name'),
             "Built-Date": new Date().format("yyyy-MM-dd"),
             "Built-Jdk": "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
@@ -26,10 +26,6 @@ task copyJar(dependsOn: jar) {
     doLast {
         copy {
             with jarToCopy
-            into "../../lib"
-        }
-        copy {
-            with jarToCopy
             into "../../kronos/lib"
         }
         copy {
@@ -42,36 +38,7 @@ task copyJar(dependsOn: jar) {
         }
         copy {
             with jarToCopy
-            into "../../hyperion/lib"
-        }
-        copy {
-            with jarToCopy
             into "../../apollo/lib"
         }
     }
-}
-
-task jenkinsInput() {
-    doLast {
-        delete fileTree('lib') {
-            include '**/acs*'
-        }
-        copy {
-            from('/data1/jenkins/workspace/global-libs')  { include '**/acs*' }
-            into 'lib'
-        }
-    }    
-}
-
-task jenkinsOutput() {
-    doLast {
-        copy {
-            with jarToCopy
-            into "/data1/jenkins/workspace/global-libs"
-        }
-    }
-}
-
-task jenkinsBuild(type: GradleBuild) {
-    tasks = ['jenkinsInput', 'jar', 'jenkinsOutput']
 }
