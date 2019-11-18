@@ -8,8 +8,8 @@
  * Contributors:
  *     Arrow Electronics, Inc.
  *******************************************************************************/
-package com.arrow.acn.data;
+package com.arrow.acn.client.model;
 
-public enum DeviceStateValueType {
-	String, StringList, Integer, IntegerList, Float, Boolean
+public enum AcnDeviceCategory {
+	GATEWAY, DEVICE
 }

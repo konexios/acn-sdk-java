@@ -12,8 +12,6 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-import com.arrow.acn.data.DeviceStateValueType;
-
 public class DeviceStateValueMetadataModel implements Serializable {
 	private static final long serialVersionUID = 2160270507833662715L;
 

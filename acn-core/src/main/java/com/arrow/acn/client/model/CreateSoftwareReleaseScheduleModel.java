@@ -11,16 +11,15 @@
 package com.arrow.acn.client.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.arrow.acn.AcnDeviceCategory;
 
 public class CreateSoftwareReleaseScheduleModel implements Serializable {
 
 	private static final long serialVersionUID = -8598243732118576300L;
 
-	private String scheduledDate;
+	private Instant scheduledDate;
 	private String softwareReleaseHid;
 	private AcnDeviceCategory deviceCategory;
 	private String comments;
@@ -35,7 +34,12 @@ public class CreateSoftwareReleaseScheduleModel implements Serializable {
 	private String hardwareVersionHid;
 	private Long timeToExpireSeconds;
 
-	public CreateSoftwareReleaseScheduleModel withScheduledDate(String scheduledDate) {
+	public CreateSoftwareReleaseScheduleModel withTimeToExpireSeconds(Long timeToExpireSeconds) {
+		setTimeToExpireSeconds(timeToExpireSeconds);
+		return this;
+	}
+
+	public CreateSoftwareReleaseScheduleModel withScheduledDate(Instant scheduledDate) {
 		setScheduledDate(scheduledDate);
 		return this;
 	}
@@ -105,11 +109,11 @@ public class CreateSoftwareReleaseScheduleModel implements Serializable {
 		return this;
 	}
 
-	public String getScheduledDate() {
+	public Instant getScheduledDate() {
 		return scheduledDate;
 	}
 
-	public void setScheduledDate(String scheduledDate) {
+	public void setScheduledDate(Instant scheduledDate) {
 		this.scheduledDate = scheduledDate;
 	}
 
@@ -215,5 +219,93 @@ public class CreateSoftwareReleaseScheduleModel implements Serializable {
 
 	public void setTimeToExpireSeconds(Long timeToExpireSeconds) {
 		this.timeToExpireSeconds = timeToExpireSeconds;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((deviceCategory == null) ? 0 : deviceCategory.hashCode());
+		result = prime * result + ((deviceTypeHid == null) ? 0 : deviceTypeHid.hashCode());
+		result = prime * result + ((hardwareVersionHid == null) ? 0 : hardwareVersionHid.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((notifyEmails == null) ? 0 : notifyEmails.hashCode());
+		result = prime * result + (notifyOnEnd ? 1231 : 1237);
+		result = prime * result + (notifyOnStart ? 1231 : 1237);
+		result = prime * result + (notifyOnSubmit ? 1231 : 1237);
+		result = prime * result + ((objectHids == null) ? 0 : objectHids.hashCode());
+		result = prime * result + (onDemand ? 1231 : 1237);
+		result = prime * result + ((scheduledDate == null) ? 0 : scheduledDate.hashCode());
+		result = prime * result + ((softwareReleaseHid == null) ? 0 : softwareReleaseHid.hashCode());
+		result = prime * result + ((timeToExpireSeconds == null) ? 0 : timeToExpireSeconds.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CreateSoftwareReleaseScheduleModel other = (CreateSoftwareReleaseScheduleModel) obj;
+		if (comments == null) {
+			if (other.comments != null)
+				return false;
+		} else if (!comments.equals(other.comments))
+			return false;
+		if (deviceCategory != other.deviceCategory)
+			return false;
+		if (deviceTypeHid == null) {
+			if (other.deviceTypeHid != null)
+				return false;
+		} else if (!deviceTypeHid.equals(other.deviceTypeHid))
+			return false;
+		if (hardwareVersionHid == null) {
+			if (other.hardwareVersionHid != null)
+				return false;
+		} else if (!hardwareVersionHid.equals(other.hardwareVersionHid))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (notifyEmails == null) {
+			if (other.notifyEmails != null)
+				return false;
+		} else if (!notifyEmails.equals(other.notifyEmails))
+			return false;
+		if (notifyOnEnd != other.notifyOnEnd)
+			return false;
+		if (notifyOnStart != other.notifyOnStart)
+			return false;
+		if (notifyOnSubmit != other.notifyOnSubmit)
+			return false;
+		if (objectHids == null) {
+			if (other.objectHids != null)
+				return false;
+		} else if (!objectHids.equals(other.objectHids))
+			return false;
+		if (onDemand != other.onDemand)
+			return false;
+		if (scheduledDate == null) {
+			if (other.scheduledDate != null)
+				return false;
+		} else if (!scheduledDate.equals(other.scheduledDate))
+			return false;
+		if (softwareReleaseHid == null) {
+			if (other.softwareReleaseHid != null)
+				return false;
+		} else if (!softwareReleaseHid.equals(other.softwareReleaseHid))
+			return false;
+		if (timeToExpireSeconds == null) {
+			if (other.timeToExpireSeconds != null)
+				return false;
+		} else if (!timeToExpireSeconds.equals(other.timeToExpireSeconds))
+			return false;
+		return true;
 	}
 }

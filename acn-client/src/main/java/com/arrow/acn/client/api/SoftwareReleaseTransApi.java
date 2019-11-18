@@ -17,7 +17,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.SoftwareReleaseTransRegistrationModel;
 import com.arrow.acn.client.model.SoftwareReleaseUpgradeModel;
 import com.arrow.acs.AcsUtils;
@@ -51,8 +50,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -64,8 +62,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -77,8 +74,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -87,13 +83,12 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(String.format(FAILED_URL, hid));
 			StatusModel result = execute(new HttpPut(uri),
-			        JsonUtils.toJson(Collections.singletonMap("error", AcsUtils.trimToEmpty(error))),
-			        StatusModel.class);
+					JsonUtils.toJson(Collections.singletonMap("error", AcsUtils.trimToEmpty(error))),
+					StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -105,8 +100,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -118,8 +112,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -131,8 +124,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -144,8 +136,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -157,8 +148,7 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 }

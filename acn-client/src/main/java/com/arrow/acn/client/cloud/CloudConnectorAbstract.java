@@ -10,10 +10,11 @@
  *******************************************************************************/
 package com.arrow.acn.client.cloud;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Objects;
+
+import org.apache.commons.codec.binary.StringUtils;
 
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
@@ -56,20 +57,19 @@ public abstract class CloudConnectorAbstract extends Loggable {
 
 	protected void validateAndProcessEvent(String topic, byte[] payload) {
 		String method = "validateAndProcessEvent";
-//		GatewayEventModel model = JsonUtils.fromJson(new String(payload, Charset.defaultCharset()),
-//		        GatewayEventModel.class);
-
-		GatewayEventModel model = JsonUtils.fromJson(new String(payload, Charset.forName("UTF-8")),
+		GatewayEventModel model = JsonUtils.fromJson(new String(payload, StandardCharsets.UTF_8),
 				GatewayEventModel.class);
+		logInfo(method, "payload model: %s", JsonUtils.toJson(model));
 
 		if (model == null || AcsUtils.isEmpty(model.getName())) {
 			logError(method, "ignore invalid payload: %s", payload);
 			return;
 		}
+
 		CoreEventApi eventApi = acnClient.getCoreEventApi();
 		eventApi.putReceived(model.getHid());
 		if (isSignatureValid(model)) {
-			logDebug(method, "signature is valid");
+			logInfo(method, "signature is valid");
 			if (listener == null) {
 				logError(method, "listener is not defined");
 				eventApi.putFailed(model.getHid(), "Listener is not defined");
@@ -89,11 +89,11 @@ public abstract class CloudConnectorAbstract extends Loggable {
 
 	private boolean isSignatureValid(GatewayEventModel model) {
 		String method = "isSignatureValid";
+		logInfo(method, "...");
 		if (AcsUtils.isEmpty(model.getSignature())) {
 			logDebug(method, "skipping signature validation");
 			return true;
 		}
-		logDebug(method, "validating signature");
 		ApiConfig apiConfig = acnClient.getApiConfig();
 		GatewayPayloadSigner signer = GatewayPayloadSigner.create(apiConfig.getSecretKey())
 				.withApiKey(apiConfig.getApiKey()).withHid(model.getHid()).withName(model.getName())
@@ -104,7 +104,10 @@ public abstract class CloudConnectorAbstract extends Loggable {
 		String signatureVersion = model.getSignatureVersion();
 		switch (signatureVersion) {
 		case GatewayPayloadSigner.PAYLOAD_SIGNATURE_VERSION_1: {
-			return Objects.equals(signer.signV1(), model.getSignature());
+			String signature = signer.signV1();
+			logInfo(method, "model signature: %s", model.getSignature());
+			logInfo(method, "local signature: %s", signature);
+			return StringUtils.equals(signature, model.getSignature());
 		}
 		default: {
 			logWarn(method, "signature of version %s is not supported", signatureVersion);

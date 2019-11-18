@@ -39,8 +39,7 @@ public final class NodeTypeApi extends ApiAbstract {
 	 *
 	 * @return list of {@link NodeTypeModel} containing type parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ListResultModel<NodeTypeModel> listExistingNodeTypes() {
 		String method = "listExistingNodeTypes";
@@ -50,23 +49,19 @@ public final class NodeTypeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
-	 * Sends POST request to create new node type according to {@code model}
-	 * passed
+	 * Sends POST request to create new node type according to {@code model} passed
 	 * 
-	 * @param model
-	 *            {@link NodeTypeModel} representing parameters of node type to
-	 *            be created
+	 * @param model {@link NodeTypeModel} representing parameters of node type to be
+	 *              created
 	 *
 	 * @return {@link HidModel} containing {@code hid} of node type created
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel createNewNodeType(NodeTypeModel model) {
 		String method = "createNewNodeType";
@@ -76,8 +71,7 @@ public final class NodeTypeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -85,17 +79,14 @@ public final class NodeTypeApi extends ApiAbstract {
 	 * Sends PUT request to update existing node type according to {@code model}
 	 * passed
 	 *
-	 * @param hid
-	 *            {@link String} representing {@code hid} of node type to be
-	 *            updated
-	 * @param model
-	 *            {@link NodeTypeModel} representing node type parameters to be
-	 *            updated
+	 * @param hid   {@link String} representing {@code hid} of node type to be
+	 *              updated
+	 * @param model {@link NodeTypeModel} representing node type parameters to be
+	 *              updated
 	 *
 	 * @return {@link HidModel} containing {@code hid} of node type updated
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel updateExistingNodeType(String hid, NodeTypeModel model) {
 		String method = "updateExistingNodeType";
@@ -105,14 +96,13 @@ public final class NodeTypeApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<ListResultModel<NodeTypeModel>> getNodeTypeModelTypeRef() {
 		return nodeTypeModelTypeRef != null ? nodeTypeModelTypeRef
-		        : (nodeTypeModelTypeRef = new TypeReference<ListResultModel<NodeTypeModel>>() {
-		        });
+				: (nodeTypeModelTypeRef = new TypeReference<ListResultModel<NodeTypeModel>>() {
+				});
 	}
 }

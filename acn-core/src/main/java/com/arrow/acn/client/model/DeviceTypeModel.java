@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.arrow.acn.AcnDeviceCategory;
 import com.arrow.acs.client.model.DefinitionModelAbstract;
 
 public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {

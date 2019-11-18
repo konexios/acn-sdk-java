@@ -16,7 +16,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.CreateSoftwareReleaseScheduleModel;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleAutomationModel;
 import com.arrow.acn.client.model.SoftwareReleaseScheduleModel;
@@ -56,8 +55,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -69,8 +67,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -82,8 +79,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -95,8 +91,7 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -105,16 +100,16 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(FIND_ALL_BY_URL, criteria);
 			PagingResultModel<SoftwareReleaseScheduleModel> result = execute(new HttpGet(uri),
-			        getSoftwareReleaseScheduleModelTypeRef());
+					getSoftwareReleaseScheduleModelTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
-	
-	public PagingResultModel<SoftwareReleaseTransModel> listTransactions(String hid, SoftwareReleaseScheduleTransactionsListSearchCriteria criteria) {
+
+	public PagingResultModel<SoftwareReleaseTransModel> listTransactions(String hid,
+			SoftwareReleaseScheduleTransactionsListSearchCriteria criteria) {
 		String method = "listTransactions";
 		try {
 			URI uri = buildUri(String.format(LIST_ALL_TRANSACTIONS, hid), criteria);
@@ -123,20 +118,19 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> getSoftwareReleaseScheduleModelTypeRef() {
 		return softwareReleaseScheduleModelTypeRef != null ? softwareReleaseScheduleModelTypeRef
-		        : (softwareReleaseScheduleModelTypeRef = new TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>>() {
-		        });
+				: (softwareReleaseScheduleModelTypeRef = new TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>>() {
+				});
 	}
-	
+
 	private synchronized TypeReference<PagingResultModel<SoftwareReleaseTransModel>> getSoftwareReleaseTransModelTypeRef() {
 		return softwareReleaseTransModelTypeRef != null ? softwareReleaseTransModelTypeRef
-		        : (softwareReleaseTransModelTypeRef = new TypeReference<PagingResultModel<SoftwareReleaseTransModel>>() {
-		        });
+				: (softwareReleaseTransModelTypeRef = new TypeReference<PagingResultModel<SoftwareReleaseTransModel>>() {
+				});
 	}
 }

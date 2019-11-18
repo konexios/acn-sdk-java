@@ -41,7 +41,7 @@ public final class TelemetryApi extends ApiAbstract {
 	private final String BATCH_CREATE_URL = CREATE_URL + "/batch";
 	private final String COUNT_BY_DEVICE_HID = FIND_BY_DEVICE_HID + "/count";
 	private final String BULK_DELETE_LAST_TELEMETRY = TELEMETRY_BASE_URL
-	        + "/devices/{deviceHid}/bulkDeleteLastTelemetry";
+			+ "/devices/{deviceHid}/bulkDeleteLastTelemetry";
 
 	private TypeReference<PagingResultModel<TelemetryItemModel>> pagingResultTypeRef;
 	private TypeReference<ListResultModel<TelemetryItemModel>> resultTypeRef;
@@ -53,15 +53,12 @@ public final class TelemetryApi extends ApiAbstract {
 	/**
 	 * Sends POST request to store telemetry
 	 *
-	 * @param parameters
-	 *            {@link IotParameters} representing bunch of telemetry received
-	 *            from a device
+	 * @param parameters {@link IotParameters} representing bunch of telemetry
+	 *                   received from a device
 	 *
-	 * @return {@link StatusModel} containing status of telemetry storing
-	 *         request
+	 * @return {@link StatusModel} containing status of telemetry storing request
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public StatusModel create(IotParameters parameters) {
 		String method = "create";
@@ -71,55 +68,47 @@ public final class TelemetryApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
-	 * Sends GET request to obtain telemetry by specific {@code applicationHid}
-	 * and corresponding to {@code criteria}
+	 * Sends GET request to obtain telemetry by specific {@code applicationHid} and
+	 * corresponding to {@code criteria}
 	 *
-	 * @param applicationHid
-	 *            {@link String} representing specific application Hid
-	 * @param criteria
-	 *            {@link TelemetrySearchCriteria} representing search filter
-	 *            parameters
+	 * @param applicationHid {@link String} representing specific application Hid
+	 * @param criteria       {@link TelemetrySearchCriteria} representing search
+	 *                       filter parameters
 	 *
-	 * @return subset of {@link TelemetryItemModel} containing telemetry
-	 *         parameters. <b>Note:</b> resulting subset may contain not all
-	 *         telemetry corresponding to search parameters because it cannot
-	 *         exceed page size passed in {@code criteria}
+	 * @return subset of {@link TelemetryItemModel} containing telemetry parameters.
+	 *         <b>Note:</b> resulting subset may contain not all telemetry
+	 *         corresponding to search parameters because it cannot exceed page size
+	 *         passed in {@code criteria}
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public PagingResultModel<TelemetryItemModel> findByApplicationHid(String applicationHid,
-	        TelemetrySearchCriteria criteria) {
+			TelemetrySearchCriteria criteria) {
 		String method = "findByApplicationHid";
 		try {
 			URI uri = buildUri(FIND_BY_APPLICATION_HID.replace("{applicationHid}", applicationHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        getPagingResultTypeRef());
+					getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends GET request to obtain telemetry by specific {@code deviceHid}
 	 *
-	 * @param deviceHid
-	 *            {@link String} representing specific device Hid
+	 * @param deviceHid {@link String} representing specific device Hid
 	 *
-	 * @return list of {@link TelemetryItemModel} containing telemetry
-	 *         parameters.
+	 * @return list of {@link TelemetryItemModel} containing telemetry parameters.
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ListResultModel<TelemetryItemModel> getLatestTelemetry(String deviceHid) {
 		String method = "getLatestTelemetry";
@@ -129,40 +118,35 @@ public final class TelemetryApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
-	 * Sends GET request to obtain telemetry of specific device and
-	 * corresponding to {@code criteria}
+	 * Sends GET request to obtain telemetry of specific device and corresponding to
+	 * {@code criteria}
 	 *
-	 * @param deviceHid
-	 *            {@link String} representing specific device
-	 * @param criteria
-	 *            {@link TelemetrySearchCriteria} representing search filter
-	 *            parameters
+	 * @param deviceHid {@link String} representing specific device
+	 * @param criteria  {@link TelemetrySearchCriteria} representing search filter
+	 *                  parameters
 	 *
-	 * @return subset of {@link TelemetryItemModel} containing telemetry
-	 *         parameters. <b>Note:</b> resulting subset may contain not all
-	 *         telemetry corresponding to search parameters because it cannot
-	 *         exceed page size passed in {@code criteria}
+	 * @return subset of {@link TelemetryItemModel} containing telemetry parameters.
+	 *         <b>Note:</b> resulting subset may contain not all telemetry
+	 *         corresponding to search parameters because it cannot exceed page size
+	 *         passed in {@code criteria}
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public PagingResultModel<TelemetryItemModel> findByDeviceHid(String deviceHid, TelemetrySearchCriteria criteria) {
 		String method = "findByDeviceHid";
 		try {
 			URI uri = buildUri(FIND_BY_DEVICE_HID.replace("{deviceHid}", deviceHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        getPagingResultTypeRef());
+					getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -170,46 +154,40 @@ public final class TelemetryApi extends ApiAbstract {
 	 * Sends GET request to obtain telemetry by specific {@code nodeHid} and
 	 * corresponding to {@code criteria}
 	 *
-	 * @param nodeHid
-	 *            {@link String} representing specific node Hid
-	 * @param criteria
-	 *            {@link TelemetrySearchCriteria} representing search filter
-	 *            parameters
+	 * @param nodeHid  {@link String} representing specific node Hid
+	 * @param criteria {@link TelemetrySearchCriteria} representing search filter
+	 *                 parameters
 	 *
-	 * @return subset of {@link TelemetryItemModel} containing telemetry
-	 *         parameters. <b>Note:</b> resulting subset may contain not all
-	 *         telemetry corresponding to search parameters because it cannot
-	 *         exceed page size passed in {@code criteria}
+	 * @return subset of {@link TelemetryItemModel} containing telemetry parameters.
+	 *         <b>Note:</b> resulting subset may contain not all telemetry
+	 *         corresponding to search parameters because it cannot exceed page size
+	 *         passed in {@code criteria}
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public PagingResultModel<TelemetryItemModel> findByNodeHid(String nodeHid, TelemetrySearchCriteria criteria) {
 		String method = "findByNodeHid";
 		try {
 			URI uri = buildUri(FIND_BY_NODE_HID.replace("{nodeHid}", nodeHid), criteria);
 			PagingResultModel<TelemetryItemModel> result = execute(new HttpGet(uri), criteria,
-			        getPagingResultTypeRef());
+					getPagingResultTypeRef());
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends POST request to store set of telemetry
 	 *
-	 * @param parameters
-	 *            {@link IotParameters} representing set of telemetry bunches
-	 *            received from devices
+	 * @param parameters {@link IotParameters} representing set of telemetry bunches
+	 *                   received from devices
 	 *
 	 * @return {@link StatusModel} containing status of batch telemetry creation
 	 *         request
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public StatusModel batchCreate(List<IotParameters> parameters) {
 		String method = "batchCreate";
@@ -219,8 +197,7 @@ public final class TelemetryApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -228,16 +205,13 @@ public final class TelemetryApi extends ApiAbstract {
 	 * Sends GET request to obtain telemetry count of specific device and
 	 * corresponding to {@code criteria}
 	 *
-	 * @param deviceHid
-	 *            {@link String} representing specific device
-	 * @param criteria
-	 *            {@link TelemetryCountSearchCriteria} representing search
-	 *            filter parameters
+	 * @param deviceHid {@link String} representing specific device
+	 * @param criteria  {@link TelemetryCountSearchCriteria} representing search
+	 *                  filter parameters
 	 *
 	 * @return {@link TelemetryStatModel} containing telemetry count
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public TelemetryStatModel countByDeviceHid(String deviceHid, TelemetryCountSearchCriteria criteria) {
 		String method = "countByDeviceHid";
@@ -247,29 +221,26 @@ public final class TelemetryApi extends ApiAbstract {
 			logDebug(method, "device hid: %s", result.getDeviceHid());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Send DELETE request to remove set of last telemetry items
 	 *
-	 * @param lastTelemetryItemsIds
-	 *            {@link List<String>} ids of last telemetry items
+	 * @param lastTelemetryItemsIds     {@link List<String>} ids of last telemetry
+	 *                                  items
 	 *
-	 * @param deviceHid
-	 *            {@link String} representing specific device
+	 * @param deviceHid                 {@link String} representing specific device
 	 *
-	 * @param removeTelemetryDefinition
-	 *            {@link boolean} true - if needs remove telemetry definition if
-	 *            exists
+	 * @param removeTelemetryDefinition {@link boolean} true - if needs remove
+	 *                                  telemetry definition if exists
 	 *
 	 * @return {@link StatusModel} containing status of batch telemetry delete
 	 *         request
 	 */
 	public StatusModel bulkDeleteLastTelemetries(List<String> lastTelemetryItemsIds, String deviceHid,
-	        boolean removeTelemetryDefinition) {
+			boolean removeTelemetryDefinition) {
 
 		String method = "bulkDeleteLastTelemetries";
 
@@ -282,20 +253,19 @@ public final class TelemetryApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<PagingResultModel<TelemetryItemModel>> getPagingResultTypeRef() {
 		return pagingResultTypeRef != null ? pagingResultTypeRef
-		        : (pagingResultTypeRef = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
-		        });
+				: (pagingResultTypeRef = new TypeReference<PagingResultModel<TelemetryItemModel>>() {
+				});
 	}
 
 	private synchronized TypeReference<ListResultModel<TelemetryItemModel>> getResultTypeRef() {
 		return resultTypeRef != null ? resultTypeRef
-		        : (resultTypeRef = new TypeReference<ListResultModel<TelemetryItemModel>>() {
-		        });
+				: (resultTypeRef = new TypeReference<ListResultModel<TelemetryItemModel>>() {
+				});
 	}
 }

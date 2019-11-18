@@ -13,7 +13,6 @@ package com.arrow.acn.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.arrow.acn.AcnDeviceCategory;
 import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public class SoftwareReleaseScheduleModel extends AuditableDocumentModelAbstract<SoftwareReleaseScheduleModel> {

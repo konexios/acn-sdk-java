@@ -48,26 +48,23 @@ public class DeviceActionApi extends ApiAbstract {
 	}
 
 	/**
-	 * Sends GET request to obtain parameters of all available device action
-	 * types
+	 * Sends GET request to obtain parameters of all available device action types
 	 *
 	 * @return list of {@link DeviceActionTypeModel} containing action type
 	 *         parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ListResultModel<DeviceActionTypeModel> listAvailableActionTypes() {
 		String method = "listAvailableActionTypes";
 		try {
 			URI uri = buildUri(ACTION_TYPES_URL);
 			ListResultModel<DeviceActionTypeModel> result = execute(new HttpGet(uri),
-			        getDeviceActionTypeModelTypeRef());
+					getDeviceActionTypeModelTypeRef());
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -75,13 +72,11 @@ public class DeviceActionApi extends ApiAbstract {
 	 * Sends GET request to obtain parameters of all available device actions
 	 * associated with specific device
 	 *
-	 * @param hid
-	 *            String representing specific device
+	 * @param hid String representing specific device
 	 *
 	 * @return list of {@link DeviceActionModel} containing action parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public ListResultModel<DeviceActionModel> listDeviceActions(String hid) {
 		String method = "listDeviceActions";
@@ -91,23 +86,19 @@ public class DeviceActionApi extends ApiAbstract {
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends POST request to create new action for specific device
 	 *
-	 * @param hid
-	 *            {@link String} representing specific device
-	 * @param model
-	 *            {@link DeviceActionModel} representing action parameters
+	 * @param hid   {@link String} representing specific device
+	 * @param model {@link DeviceActionModel} representing action parameters
 	 *
 	 * @return {@link HidModel} containing {@code hid} of action created
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel createNewDeviceAction(String hid, DeviceActionModel model) {
 		String method = "createNewDeviceAction";
@@ -117,24 +108,20 @@ public class DeviceActionApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends DELETE request to remove action from specific device
 	 *
-	 * @param hid
-	 *            {@link String} representing specific device
-	 * @param index
-	 *            {@link Integer} representing index of action in actions list
+	 * @param hid   {@link String} representing specific device
+	 * @param index {@link Integer} representing index of action in actions list
 	 *
 	 * @return {@link HidModel} containing {@code hid} of action removed
 	 *
-	 * @throws AcnClientException
-	 *             if request failed or action with specified {@code index} does
-	 *             no exist
+	 * @throws AcnClientException if request failed or action with specified
+	 *                            {@code index} does no exist
 	 */
 	public HidModel deleteDeviceAction(String hid, int index) {
 		String method = "deleteDeviceAction";
@@ -144,24 +131,18 @@ public class DeviceActionApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	/**
 	 * Sends PUT request to update existing action for specific device
 	 *
-	 * @param hid
-	 *            {@link String} representing specific device
-	 * @param index
-	 *            {@link Integer} representing index of action in actions list
-	 * @param model
-	 *            {@link DeviceActionModel} representing updated action
-	 *            parameters
+	 * @param hid   {@link String} representing specific device
+	 * @param index {@link Integer} representing index of action in actions list
+	 * @param model {@link DeviceActionModel} representing updated action parameters
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public HidModel updateDeviceAction(String hid, int index, DeviceActionModel model) {
 		String method = "updateDeviceAction";
@@ -171,8 +152,7 @@ public class DeviceActionApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -184,8 +164,7 @@ public class DeviceActionApi extends ApiAbstract {
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -197,8 +176,7 @@ public class DeviceActionApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -206,13 +184,12 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "deleteDeviceTypeAction";
 		try {
 			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTION_URL.replace("{hid}", deviceTypeHid).replace("{index}",
-			        Integer.toString(index)));
+					Integer.toString(index)));
 			HidModel result = execute(new HttpDelete(uri), HidModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -220,13 +197,12 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "updateDeviceTypeAction";
 		try {
 			URI uri = buildUri(SPECIFIC_DEVICE_TYPE_ACTION_URL.replace("{hid}", deviceTypeHid).replace("{index}",
-			        Integer.toString(index)));
+					Integer.toString(index)));
 			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -238,8 +214,7 @@ public class DeviceActionApi extends ApiAbstract {
 			logDebug(method, "size: %s", result.getSize());
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -251,8 +226,7 @@ public class DeviceActionApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -260,13 +234,12 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "deleteNodeAction";
 		try {
 			URI uri = buildUri(
-			        SPECIFIC_NODE_ACTION_URL.replace("{hid}", nodeHid).replace("{index}", Integer.toString(index)));
+					SPECIFIC_NODE_ACTION_URL.replace("{hid}", nodeHid).replace("{index}", Integer.toString(index)));
 			HidModel result = execute(new HttpDelete(uri), HidModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -274,25 +247,24 @@ public class DeviceActionApi extends ApiAbstract {
 		String method = "updateNodeAction";
 		try {
 			URI uri = buildUri(
-			        SPECIFIC_NODE_ACTION_URL.replace("{hid}", nodeHid).replace("{index}", Integer.toString(index)));
+					SPECIFIC_NODE_ACTION_URL.replace("{hid}", nodeHid).replace("{index}", Integer.toString(index)));
 			HidModel result = execute(new HttpPut(uri), JsonUtils.toJson(model), HidModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
 	private synchronized TypeReference<ListResultModel<DeviceActionModel>> getDeviceActionModelTypeRef() {
 		return deviceActionModelTypeRef != null ? deviceActionModelTypeRef
-		        : (deviceActionModelTypeRef = new TypeReference<ListResultModel<DeviceActionModel>>() {
-		        });
+				: (deviceActionModelTypeRef = new TypeReference<ListResultModel<DeviceActionModel>>() {
+				});
 	}
 
 	private synchronized TypeReference<ListResultModel<DeviceActionTypeModel>> getDeviceActionTypeModelTypeRef() {
 		return deviceActionTypeModelTypeRef != null ? deviceActionTypeModelTypeRef
-		        : (deviceActionTypeModelTypeRef = new TypeReference<ListResultModel<DeviceActionTypeModel>>() {
-		        });
+				: (deviceActionTypeModelTypeRef = new TypeReference<ListResultModel<DeviceActionTypeModel>>() {
+				});
 	}
 }

@@ -16,7 +16,6 @@ import java.util.Map;
 
 import org.apache.http.client.methods.HttpPut;
 
-import com.arrow.acn.client.AcnClientException;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.model.StatusModel;
@@ -36,12 +35,11 @@ public class CoreEventApi extends ApiAbstract {
 		try {
 			URI uri = buildUri(PUT_FAILED_URL.replace("{hid}", hid));
 			StatusModel result = execute(new HttpPut(uri), JsonUtils.toJson(Collections.singletonMap("error", error)),
-			        StatusModel.class);
+					StatusModel.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 
@@ -52,10 +50,9 @@ public class CoreEventApi extends ApiAbstract {
 			StatusModel result = execute(new HttpPut(uri), StatusModel.class);
 			log(method, result);
 			return result;
-        } catch (Throwable e) {
-            logError(method, e);
-            throw new AcnClientException(method, e);
-        }
+		} catch (Throwable e) {
+			throw handleException(e);
+		}
 	}
 
 	public StatusModel putSucceeded(String hid) {
@@ -70,8 +67,7 @@ public class CoreEventApi extends ApiAbstract {
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
-			logError(method, e);
-			throw new AcnClientException(method, e);
+			throw handleException(e);
 		}
 	}
 }
