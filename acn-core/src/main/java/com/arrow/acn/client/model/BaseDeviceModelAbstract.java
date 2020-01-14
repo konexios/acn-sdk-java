@@ -28,6 +28,7 @@ public abstract class BaseDeviceModelAbstract<T extends BaseDeviceModelAbstract<
 	protected String softwareReleaseHid;
 	protected String softwareReleaseName;
 	protected String softwareReleaseVersion;
+	protected String nodeName;
 
 	protected Map<String, String> info = new HashMap<>();
 	protected Map<String, String> properties = new HashMap<>();
@@ -84,6 +85,11 @@ public abstract class BaseDeviceModelAbstract<T extends BaseDeviceModelAbstract<
 
 	public T withProperties(Map<String, String> properties) {
 		setProperties(properties);
+		return self();
+	}
+
+	public T withNodeName(String nodeName) {
+		setNodeName(nodeName);
 		return self();
 	}
 
@@ -173,5 +179,13 @@ public abstract class BaseDeviceModelAbstract<T extends BaseDeviceModelAbstract<
 
 	public void setProperties(Map<String, String> properties) {
 		this.properties = properties;
+	}
+
+	public String getNodeName() {
+		return nodeName;
+	}
+
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
 	}
 }
