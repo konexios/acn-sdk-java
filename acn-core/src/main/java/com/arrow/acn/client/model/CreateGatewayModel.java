@@ -31,6 +31,8 @@ public class CreateGatewayModel implements Serializable {
 	private String softwareVersion;
 	private String sdkVersion;
 	private String applicationHid;
+	private String nodeHid;
+	private String nodeName;
 
 	protected Map<String, String> info = new HashMap<>();
 	protected Map<String, String> properties = new HashMap<>();
@@ -92,6 +94,16 @@ public class CreateGatewayModel implements Serializable {
 
 	public CreateGatewayModel withProperties(Map<String, String> properties) {
 		setProperties(properties);
+		return this;
+	}
+
+	public CreateGatewayModel withNodeHid(String nodeHid) {
+		setNodeHid(nodeHid);
+		return this;
+	}
+
+	public CreateGatewayModel withNodeName(String nodeName) {
+		setNodeName(nodeName);
 		return this;
 	}
 
@@ -191,6 +203,22 @@ public class CreateGatewayModel implements Serializable {
 		this.properties = properties;
 	}
 
+	public String getNodeHid() {
+		return nodeHid;
+	}
+
+	public void setNodeHid(String nodeHid) {
+		this.nodeHid = nodeHid;
+	}
+
+	public String getNodeName() {
+		return nodeName;
+	}
+
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -199,6 +227,8 @@ public class CreateGatewayModel implements Serializable {
 		result = prime * result + ((deviceType == null) ? 0 : deviceType.hashCode());
 		result = prime * result + ((info == null) ? 0 : info.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((nodeHid == null) ? 0 : nodeHid.hashCode());
+		result = prime * result + ((nodeName == null) ? 0 : nodeName.hashCode());
 		result = prime * result + ((osName == null) ? 0 : osName.hashCode());
 		result = prime * result + ((properties == null) ? 0 : properties.hashCode());
 		result = prime * result + ((sdkVersion == null) ? 0 : sdkVersion.hashCode());
@@ -238,6 +268,16 @@ public class CreateGatewayModel implements Serializable {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (nodeHid == null) {
+			if (other.nodeHid != null)
+				return false;
+		} else if (!nodeHid.equals(other.nodeHid))
+			return false;
+		if (nodeName == null) {
+			if (other.nodeName != null)
+				return false;
+		} else if (!nodeName.equals(other.nodeName))
 			return false;
 		if (osName == null) {
 			if (other.osName != null)
