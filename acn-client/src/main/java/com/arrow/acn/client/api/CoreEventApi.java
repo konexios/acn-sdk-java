@@ -14,10 +14,12 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.model.EventModel;
 import com.arrow.acs.client.model.StatusModel;
 
 public class CoreEventApi extends ApiAbstract {
@@ -25,9 +27,22 @@ public class CoreEventApi extends ApiAbstract {
 	private static final String PUT_FAILED_URL = CORE_EVENT_BASE_URL + "/{hid}/failed";
 	private static final String PUT_RECEIVED_URL = CORE_EVENT_BASE_URL + "/{hid}/received";
 	private static final String PUT_SUCCEEDED_URL = CORE_EVENT_BASE_URL + "/{hid}/succeeded";
+	private static final String FIND_BY_HID = CORE_EVENT_BASE_URL + "/{hid}";
 
 	CoreEventApi(ApiConfig apiConfig) {
 		super(apiConfig);
+	}
+
+	public EventModel findByHid(String hid) {
+		String method = "findByHid";
+		try {
+			URI uri = buildUri(FIND_BY_HID.replace("{hid}", hid));
+			EventModel result = execute(new HttpGet(uri), EventModel.class);
+			log(method, result);
+			return result;
+		} catch (Throwable e) {
+			throw handleException(e);
+		}
 	}
 
 	public StatusModel putFailed(String hid, String error) {
