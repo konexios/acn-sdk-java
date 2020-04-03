@@ -35,7 +35,7 @@ public abstract class CloudConnectorAbstract extends Loggable {
 		this.acnClient = acnClient;
 	}
 
-	protected String getGatewayHid() {
+	public String getGatewayHid() {
 		return gatewayHid;
 	}
 
