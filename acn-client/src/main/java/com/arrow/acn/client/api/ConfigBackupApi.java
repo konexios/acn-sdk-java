@@ -16,14 +16,15 @@ import org.apache.http.client.methods.HttpGet;
 
 import com.arrow.acn.client.model.ConfigBackupModel;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 
 public class ConfigBackupApi extends ApiAbstract {
 
 	private static final String CONFIG_BACKUPS_BASE_URL = API_BASE + "/config-backups";
 	private static final String SPECIFIC_CONFIG_BACKUP_URL = CONFIG_BACKUPS_BASE_URL + "/{hid}";
 
-	ConfigBackupApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	ConfigBackupApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public ConfigBackupModel findByHid(String hid) {

@@ -21,6 +21,7 @@ import com.arrow.acn.client.model.RTUFirmwareModels.RTURequestedFirmwareModel;
 import com.arrow.acn.client.search.RTUAvailableSearchCriteria;
 import com.arrow.acn.client.search.RTURequestSearchCriteria;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -35,8 +36,8 @@ public class RTUFirmwareApi extends ApiAbstract {
 	private TypeReference<List<RTUFirmwareModel>> rtuFirmwareModelTypeRef;
 	private TypeReference<PagingResultModel<RTURequestedFirmwareModel>> rtuRequestFirmwareModelTypeRef;
 
-	RTUFirmwareApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	RTUFirmwareApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public StatusModel requestRTU(String softwareReleaseHid) {

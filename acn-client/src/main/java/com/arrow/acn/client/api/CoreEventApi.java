@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.EventModel;
 import com.arrow.acs.client.model.StatusModel;
 
@@ -29,8 +30,8 @@ public class CoreEventApi extends ApiAbstract {
 	private static final String PUT_SUCCEEDED_URL = CORE_EVENT_BASE_URL + "/{hid}/succeeded";
 	private static final String FIND_BY_HID = CORE_EVENT_BASE_URL + "/{hid}";
 
-	CoreEventApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	CoreEventApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public EventModel findByHid(String hid) {

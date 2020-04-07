@@ -23,6 +23,7 @@ import com.arrow.acn.client.model.SoftwareReleaseUpgradeModel;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.DownloadFileInfo;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.StatusModel;
@@ -40,8 +41,8 @@ public class SoftwareReleaseTransApi extends ApiAbstract {
 	private static final String FILE_URL = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s/%s/file";
 	private static final String FIND_BY_HID = SOFTWARE_RELEASE_TRANS_BASE_URL + "/%s";
 
-	public SoftwareReleaseTransApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	public SoftwareReleaseTransApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public SoftwareReleaseTransModel findByHid(String hid) {

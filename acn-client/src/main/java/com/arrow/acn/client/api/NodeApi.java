@@ -22,6 +22,7 @@ import com.arrow.acn.client.AcnClientException;
 import com.arrow.acn.client.model.NodeModel;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.ListResultModel;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -35,8 +36,8 @@ public final class NodeApi extends ApiAbstract {
 
 	private TypeReference<ListResultModel<NodeModel>> nodeModelTypeRef;
 
-	NodeApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	NodeApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	/**

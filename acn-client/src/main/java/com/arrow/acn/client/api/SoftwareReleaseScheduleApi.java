@@ -25,6 +25,7 @@ import com.arrow.acn.client.search.SoftwareReleaseScheduleSearchCriteria;
 import com.arrow.acn.client.search.SoftwareReleaseScheduleTransactionsListSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -43,8 +44,8 @@ public class SoftwareReleaseScheduleApi extends ApiAbstract {
 	private TypeReference<PagingResultModel<SoftwareReleaseScheduleModel>> softwareReleaseScheduleModelTypeRef;
 	private TypeReference<PagingResultModel<SoftwareReleaseTransModel>> softwareReleaseTransModelTypeRef;
 
-	SoftwareReleaseScheduleApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	SoftwareReleaseScheduleApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public HidModel create(CreateSoftwareReleaseScheduleModel model) {

@@ -25,6 +25,7 @@ import com.arrow.acn.client.search.DeviceStateDeleteSearchCriteria;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.StatusModel;
 
@@ -39,8 +40,8 @@ public class DeviceStateApi extends ApiAbstract {
 	private static final String TRANS_FAILED_URL = TRANS_BASE_URL + "failed";
 	private static final String DELETE_STATE_URL = API_BASE + "/devices/{deviceHid}/state/delete";
 
-	DeviceStateApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	DeviceStateApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public DeviceStateModel find(String deviceHid) {

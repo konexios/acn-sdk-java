@@ -19,7 +19,9 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -42,8 +44,11 @@ import com.arrow.acs.AcsRuntimeException;
 import com.arrow.acs.AcsSystemException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
+import com.arrow.acs.client.api.MqttHttpChannel;
+import com.arrow.acs.client.model.CloudRequestModel;
+import com.arrow.acs.client.model.CloudResponseModel;
 
-public class AwsConnector extends CloudConnectorAbstract {
+public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChannel {
 
 	static {
 		Security.addProvider(new BouncyCastleProvider());
@@ -51,6 +56,7 @@ public class AwsConnector extends CloudConnectorAbstract {
 
 	private final AwsConfigModel model;
 	private AWSIotMqttClient client;
+	private Map<String, CloudRequestWrapper> requestMap = new HashMap<>();
 
 	public AwsConnector(AwsConfigModel model, String gatewayHid, AcnClient acnClient) {
 		super(acnClient);
@@ -102,6 +108,9 @@ public class AwsConnector extends CloudConnectorAbstract {
 
 			// subscribe to api response topic
 			client.subscribe(new ApiResponseTopic());
+
+			// route API calls to MQTT
+			acnClient.setMqttHttpChannel(this);
 
 			logInfo(method, "AWSIotMqttClient is ready!");
 		} catch (AcsRuntimeException e) {
@@ -155,6 +164,35 @@ public class AwsConnector extends CloudConnectorAbstract {
 		}
 	}
 
+	@Override
+	public CloudResponseModel sendRequest(CloudRequestModel request, long timeoutSecs) {
+		String method = "sendRequest";
+		try {
+			byte[] data = JsonUtils.toJsonBytes(request);
+			String topic = AwsMqttConstants.API_REQUEST_TOPIC.replace("<gatewayHid>", getGatewayHid());
+
+			CloudRequestWrapper wrapper = new CloudRequestWrapper(request);
+			requestMap.put(request.getRequestId(), wrapper);
+
+			logInfo(method, "sending %d bytes to topic: %s", data.length, topic);
+			client.publish(topic, AWSIotQos.QOS1, data);
+
+			CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
+			if (response == null) {
+				throw new AcsLogicalException("Timeout waiting for response from MQTT channel");
+			}
+			return response;
+		} catch (AcsLogicalException e) {
+			logError(method, e);
+			throw e;
+		} catch (Exception e) {
+			logError(method, e);
+			throw new AcsLogicalException("sendRequest failed", e);
+		} finally {
+			requestMap.remove(request.getRequestId());
+		}
+	}
+
 	private class CommandTopic extends AWSIotTopic {
 		public CommandTopic() {
 			super(AwsMqttConstants.COMMAND_TOPIC.replace("<gatewayHid>", getGatewayHid()),
@@ -163,7 +201,7 @@ public class AwsConnector extends CloudConnectorAbstract {
 
 		@Override
 		public void onMessage(AWSIotMessage message) {
-			String method = "onMessage";
+			String method = "CommandTopic.onMessage";
 			logInfo(method, "topic: %s", message.getTopic());
 			validateAndProcessEvent(message.getTopic(), message.getPayload());
 		}
@@ -177,9 +215,40 @@ public class AwsConnector extends CloudConnectorAbstract {
 
 		@Override
 		public void onMessage(AWSIotMessage message) {
-			String method = "onMessage";
-			logInfo(method, "topic: %s", message.getTopic());
-			validateAndProcessEvent(message.getTopic(), message.getPayload());
+			String method = "ApiResponseTopic.onMessage";
+			byte[] data = message.getPayload();
+			logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
+
+			CloudResponseModel responseModel = JsonUtils.fromJsonBytes(data, CloudResponseModel.class);
+			logInfo(method, "responseModel: %s", JsonUtils.toJson(responseModel));
+
+			CloudRequestWrapper wrapper = requestMap.get(responseModel.getRequestId());
+			if (wrapper != null) {
+				logInfo(method, "marking request complete: %s", responseModel.getRequestId());
+				wrapper.complete(responseModel);
+			}
+		}
+	}
+
+	class CloudRequestWrapper {
+		final CloudRequestModel request;
+		CloudResponseModel response;
+
+		CloudRequestWrapper(CloudRequestModel request) {
+			this.request = request;
+		}
+
+		synchronized void complete(CloudResponseModel response) {
+			this.response = response;
+			this.notifyAll();
+		}
+
+		synchronized CloudResponseModel waitForResponse(long timeoutSecs) {
+			try {
+				this.wait(timeoutSecs * 1000);
+			} catch (Exception e) {
+			}
+			return response;
 		}
 	}
 }

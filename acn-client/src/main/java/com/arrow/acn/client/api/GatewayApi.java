@@ -32,6 +32,7 @@ import com.arrow.acn.client.search.LogsSearchCriteria;
 import com.arrow.acn.client.search.SortedSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.ErrorModel;
 import com.arrow.acs.client.model.ExternalHidModel;
 import com.arrow.acs.client.model.HidModel;
@@ -64,8 +65,8 @@ public final class GatewayApi extends ApiAbstract {
 	private TypeReference<ListResultModel<DeviceModel>> deviceModelTypeRef;
 	private TypeReference<PagingResultModel<ConfigBackupModel>> configBackupModelTypeRef;
 
-	GatewayApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	GatewayApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	/**

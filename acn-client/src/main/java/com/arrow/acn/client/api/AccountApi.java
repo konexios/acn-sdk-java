@@ -19,33 +19,32 @@ import com.arrow.acn.client.model.AccountRegistrationModel;
 import com.arrow.acn.client.model.AccountRegistrationOK;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 
 public class AccountApi extends ApiAbstract {
 	private static final String ACCOUNT_BASE_URL = API_BASE + "/accounts";
 	private static final String CREATE_OR_LOGIN_URL = ACCOUNT_BASE_URL;
 
-	AccountApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	AccountApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	/**
-	 * Sends POST request to create new account or login the existing one based
-	 * on {@code model} parameter
+	 * Sends POST request to create new account or login the existing one based on
+	 * {@code model} parameter
 	 *
-	 * @param model
-	 *            {@link AccountRegistrationModel}
+	 * @param model {@link AccountRegistrationModel}
 	 *
 	 * @return {@link AccountRegistrationOK}
 	 *
-	 * @throws AcnClientException
-	 *             if request failed
+	 * @throws AcnClientException if request failed
 	 */
 	public AccountRegistrationOK createOrLogin(AccountRegistrationModel model) {
 		String method = "createOrLogin";
 		try {
 			URI uri = buildUri(CREATE_OR_LOGIN_URL);
 			AccountRegistrationOK result = execute(new HttpPost(uri), JsonUtils.toJson(model),
-			        AccountRegistrationOK.class);
+					AccountRegistrationOK.class);
 			log(method, result);
 			return result;
 		} catch (Throwable e) {
