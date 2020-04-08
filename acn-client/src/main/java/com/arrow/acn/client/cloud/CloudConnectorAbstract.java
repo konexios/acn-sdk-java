@@ -11,14 +11,19 @@
 package com.arrow.acn.client.cloud;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.StringUtils;
 
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.api.CoreEventApi;
+import com.arrow.acn.client.model.DeviceStateRequestModel;
+import com.arrow.acn.client.model.DeviceStateUpdateModel;
+import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.GatewayPayloadSigner;
 import com.arrow.acs.JsonUtils;
@@ -30,6 +35,8 @@ public abstract class CloudConnectorAbstract extends Loggable {
 	private String gatewayHid;
 	protected MessageListener listener;
 	protected AcnClient acnClient;
+	protected DeviceStateRequestListener deviceStateRequestListener;
+	protected Set<String> deviceHids = new HashSet<>();
 
 	protected CloudConnectorAbstract(AcnClient acnClient) {
 		this.acnClient = acnClient;
@@ -43,8 +50,24 @@ public abstract class CloudConnectorAbstract extends Loggable {
 		this.gatewayHid = gatewayHid;
 	}
 
+	public Set<String> getDeviceHids() {
+		return deviceHids;
+	}
+
+	public void setDeviceHids(Set<String> deviceHids) {
+		this.deviceHids = deviceHids;
+	}
+
+	public boolean addDeviceHid(String deviceHid) {
+		return deviceHids.add(deviceHid);
+	}
+
 	public void setListener(MessageListener listener) {
 		this.listener = listener;
+	}
+
+	public void setDeviceStateRequestListener(DeviceStateRequestListener deviceStateRequestListener) {
+		this.deviceStateRequestListener = deviceStateRequestListener;
 	}
 
 	public abstract void start();
@@ -54,6 +77,16 @@ public abstract class CloudConnectorAbstract extends Loggable {
 	public abstract void send(IotParameters payload);
 
 	public abstract void sendBatch(List<IotParameters> batch, TransferMode transferMode);
+
+	protected void sendDeviceStateUpdate(String deviceHid, DeviceStateUpdateModel model) {
+		throw new AcsLogicalException("this feature is not yet implemented!");
+	}
+
+	protected void receiveDeviceStateRequest(String deviceHid, DeviceStateRequestModel model) {
+		if (deviceStateRequestListener != null) {
+			deviceStateRequestListener.receive(deviceHid, model);
+		}
+	}
 
 	protected void validateAndProcessEvent(String topic, byte[] payload) {
 		String method = "validateAndProcessEvent";
