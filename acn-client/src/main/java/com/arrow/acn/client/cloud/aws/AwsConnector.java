@@ -175,11 +175,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	@Override
 	public void stop() {
 		String method = "stop";
-		if (shadowRequestMonitorTimer != null) {
-			logInfo(method, "stopping shadowRequestMonitorTimer ...");
-			shadowRequestMonitorTimer.cancel();
-			shadowRequestMonitorTimer = null;
-		}
+		clearShadowRequestMonitorTimer();
 		if (client != null) {
 			try {
 				logInfo(method, "stopping client ...");
@@ -269,11 +265,20 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 
 	private void startShadowRequestMonitorTimer() {
 		String method = "startShadowRequestMonitorTimer";
-		if (shadowRequestMonitorTimer == null) {
-			shadowRequestMonitorTimer = new Timer(true);
-			shadowRequestMonitorTimer.scheduleAtFixedRate(new ShadowRequestTopicMonitor(), 0L,
-					DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS * 1000);
-			logInfo(method, "started!");
+
+		clearShadowRequestMonitorTimer();
+
+		shadowRequestMonitorTimer = new Timer(true);
+		shadowRequestMonitorTimer.scheduleAtFixedRate(new ShadowRequestTopicMonitor(), 0L,
+				DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS * 1000);
+		logInfo(method, "started!");
+	}
+
+	private void clearShadowRequestMonitorTimer() {
+		if (shadowRequestMonitorTimer != null) {
+			shadowRequestMonitorTimer.cancel();
+			shadowRequestMonitorTimer = null;
+			shadowRequestTopics.clear();
 		}
 	}
 
@@ -285,24 +290,28 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		@Override
 		public void onMessage(AWSIotMessage message) {
 			String method = "CommandTopic.onMessage";
-			logInfo(method, "topic: %s", message.getTopic());
-			service.submit(() -> {
-				validateAndProcessEvent(message.getTopic(), message.getPayload());
-			});
+			try {
+				logInfo(method, "topic: %s", message.getTopic());
+				service.submit(() -> {
+					validateAndProcessEvent(message.getTopic(), message.getPayload());
+				});
+			} catch (Exception e) {
+				logError(method, e);
+			}
 		}
 
 		@Override
 		public void onSuccess() {
 			super.onSuccess();
 			String method = "CommandTopic.onSuccess";
-			logInfo(method, "success");
+			logInfo(method, "success: %s", getTopic());
 		}
 
 		@Override
 		public void onFailure() {
 			String method = "CommandTopic.onFailure";
 			super.onFailure();
-			logInfo(method, "failure");
+			logInfo(method, "failure: %s", getTopic());
 		}
 	}
 
@@ -314,17 +323,21 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		@Override
 		public void onMessage(AWSIotMessage message) {
 			String method = "ApiResponseTopic.onMessage";
-			byte[] data = message.getPayload();
-			logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
-
 			service.submit(() -> {
-				CloudResponseModel responseModel = JsonUtils.fromJsonBytes(data, CloudResponseModel.class);
-				logInfo(method, "responseModel: %s", JsonUtils.toJson(responseModel));
+				try {
+					byte[] data = message.getPayload();
+					logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
 
-				CloudResponseWrapper wrapper = responseMap.get(responseModel.getRequestId());
-				if (wrapper != null) {
-					logInfo(method, "marking request complete: %s", responseModel.getRequestId());
-					wrapper.complete(responseModel);
+					CloudResponseModel responseModel = JsonUtils.fromJsonBytes(data, CloudResponseModel.class);
+					logInfo(method, "responseModel: %s", JsonUtils.toJson(responseModel));
+
+					CloudResponseWrapper wrapper = responseMap.get(responseModel.getRequestId());
+					if (wrapper != null) {
+						logInfo(method, "marking request complete: %s", responseModel.getRequestId());
+						wrapper.complete(responseModel);
+					}
+				} catch (Exception e) {
+					logError(method, e);
 				}
 			});
 		}
@@ -333,14 +346,14 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		public void onSuccess() {
 			super.onSuccess();
 			String method = "ApiResponseTopic.onSuccess";
-			logInfo(method, "success");
+			logInfo(method, "success: %s", getTopic());
 		}
 
 		@Override
 		public void onFailure() {
 			String method = "ApiResponseTopic.onFailure";
 			super.onFailure();
-			logInfo(method, "failure");
+			logInfo(method, "failure: %s", getTopic());
 		}
 	}
 
@@ -355,26 +368,30 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		@Override
 		public void onMessage(AWSIotMessage message) {
 			String method = "ShadowRequestTopic.onMessage";
-			DeviceStateRequestModel request = JsonUtils.fromJsonBytes(message.getPayload(), ShadowDelta.class)
-					.toRequestModel();
-			logInfo(method, "topic: %s, request: %s", message.getTopic(), JsonUtils.toJson(request));
-			service.submit(() -> {
-				receiveDeviceStateRequest(deviceHid, request);
-			});
+			try {
+				DeviceStateRequestModel request = JsonUtils.fromJsonBytes(message.getPayload(), ShadowDelta.class)
+						.toRequestModel();
+				logInfo(method, "topic: %s, request: %s", message.getTopic(), JsonUtils.toJson(request));
+				service.submit(() -> {
+					receiveDeviceStateRequest(deviceHid, request);
+				});
+			} catch (Exception e) {
+				logError(method, e);
+			}
 		}
 
 		@Override
 		public void onSuccess() {
 			super.onSuccess();
 			String method = "ShadowRequestTopic.onSuccess";
-			logInfo(method, "success");
+			logInfo(method, "success: %s", getTopic());
 		}
 
 		@Override
 		public void onFailure() {
 			String method = "ShadowRequestTopic.onFailure";
 			super.onFailure();
-			logInfo(method, "failure");
+			logInfo(method, "failure: %s", getTopic());
 		}
 	}
 

@@ -17,7 +17,8 @@ public class ShadowDelta implements Serializable {
 	public DeviceStateRequestModel toRequestModel() {
 		DeviceStateRequestModel result = new DeviceStateRequestModel().withStates(state);
 		if (metadata != null && metadata.size() > 0) {
-			result.setTimestamp(Instant.ofEpochMilli(metadata.get(0).getTimestamp()).toString());
+			result.setTimestamp(
+					Instant.ofEpochSecond(metadata.values().stream().findFirst().get().getTimestamp()).toString());
 		} else {
 			result.setTimestamp(Instant.ofEpochSecond(timestamp).toString());
 		}
