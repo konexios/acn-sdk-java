@@ -73,6 +73,7 @@ public class IbmConnector extends CloudConnectorAbstract {
 	@Override
 	public void stop() {
 		gatewayClient.disconnect();
+		super.stop();
 	}
 
 	@Override
@@ -87,9 +88,9 @@ public class IbmConnector extends CloudConnectorAbstract {
 
 		if (!AcsUtils.isEmpty(payload.getExternalId()) && !AcsUtils.isEmpty(payload.getDeviceType())) {
 			logDebug(method, "sending message to cloud via type: %s, device: %s", payload.getDeviceType(),
-			        payload.getExternalId());
+					payload.getExternalId());
 			gatewayClient.publishDeviceEvent(payload.getDeviceType(), payload.getExternalId(), DEFAULT_EVENT, payload,
-			        getQos());
+					getQos());
 
 			// workaround due to some change in IBM cloud that the above method
 			// no longer works
@@ -106,7 +107,7 @@ public class IbmConnector extends CloudConnectorAbstract {
 	public void sendBatch(List<IotParameters> batch, TransferMode transferMode) {
 		if (transferMode == TransferMode.GZIP_BATCH) {
 			throw new AcsLogicalException(
-			        "TransferMode not supported for IBM integration: " + TransferMode.GZIP_BATCH.name());
+					"TransferMode not supported for IBM integration: " + TransferMode.GZIP_BATCH.name());
 		}
 		if (batch != null) {
 			batch.forEach(this::send);

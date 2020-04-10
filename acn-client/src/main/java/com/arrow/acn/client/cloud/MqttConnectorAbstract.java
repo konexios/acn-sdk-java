@@ -52,6 +52,7 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 	@Override
 	public void stop() {
 		client.disconnect();
+		super.stop();
 	}
 
 	@Override

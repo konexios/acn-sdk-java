@@ -31,10 +31,40 @@ public class ShadowRequest implements Serializable {
 		return result;
 	}
 
+	public static ShadowRequest fromRequestModel(DeviceStateRequestModel model) {
+		ShadowRequest result = new ShadowRequest();
+
+		result.setState(new ShadowState().withDesired(model.getStates()));
+
+		ShadowMetadata metadata = new ShadowMetadata().withDesired(new HashMap<>());
+		long timestamp = Instant.parse(model.getTimestamp()).toEpochMilli();
+		model.getStates().forEach((name, value) -> {
+			metadata.getDesired().put(name, new ShadowTimestamp().withTimestamp(timestamp));
+		});
+
+		result.setMetadata(metadata);
+
+		return result;
+	}
+
 	public DeviceStateRequestModel toRequestModel() {
 		DeviceStateRequestModel result = new DeviceStateRequestModel();
 		if (state.getDelta() != null) {
 			result.setStates(state.getDelta());
+		}
+
+		if (timestamp != null) {
+			result.setTimestamp(Instant.ofEpochSecond(timestamp).toString());
+		} else {
+			result.setTimestamp(Instant.now().toString());
+		}
+		return result;
+	}
+
+	public DeviceStateUpdateModel toUpdateModel() {
+		DeviceStateUpdateModel result = new DeviceStateUpdateModel();
+		if (state.getReported() != null) {
+			result.setStates(state.getReported());
 		}
 
 		if (timestamp != null) {

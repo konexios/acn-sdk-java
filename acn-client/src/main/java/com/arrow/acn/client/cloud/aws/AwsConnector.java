@@ -244,9 +244,11 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 
 		@Override
 		public void onMessage(AWSIotMessage message) {
-			String method = "CommandTopic.onMessage";
-			logInfo(method, "topic: %s", message.getTopic());
-			validateAndProcessEvent(message.getTopic(), message.getPayload());
+			service.submit(() -> {
+				String method = "CommandTopic.onMessage";
+				logInfo(method, "topic: %s", message.getTopic());
+				validateAndProcessEvent(message.getTopic(), message.getPayload());
+			});
 		}
 	}
 
@@ -258,18 +260,20 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 
 		@Override
 		public void onMessage(AWSIotMessage message) {
-			String method = "ApiResponseTopic.onMessage";
-			byte[] data = message.getPayload();
-			logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
+			service.submit(() -> {
+				String method = "ApiResponseTopic.onMessage";
+				byte[] data = message.getPayload();
+				logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
 
-			CloudResponseModel responseModel = JsonUtils.fromJsonBytes(data, CloudResponseModel.class);
-			logInfo(method, "responseModel: %s", JsonUtils.toJson(responseModel));
+				CloudResponseModel responseModel = JsonUtils.fromJsonBytes(data, CloudResponseModel.class);
+				logInfo(method, "responseModel: %s", JsonUtils.toJson(responseModel));
 
-			CloudResponseWrapper wrapper = responseMap.get(responseModel.getRequestId());
-			if (wrapper != null) {
-				logInfo(method, "marking request complete: %s", responseModel.getRequestId());
-				wrapper.complete(responseModel);
-			}
+				CloudResponseWrapper wrapper = responseMap.get(responseModel.getRequestId());
+				if (wrapper != null) {
+					logInfo(method, "marking request complete: %s", responseModel.getRequestId());
+					wrapper.complete(responseModel);
+				}
+			});
 		}
 	}
 
@@ -284,12 +288,14 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 
 		@Override
 		public void onMessage(AWSIotMessage message) {
-			String method = "ShadowRequestTopic.onMessage";
-			byte[] data = message.getPayload();
-			logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
+			service.submit(() -> {
+				String method = "ShadowRequestTopic.onMessage";
+				byte[] data = message.getPayload();
+				logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
 
-			receiveDeviceStateRequest(deviceHid,
-					JsonUtils.fromJsonBytes(data, ShadowDocument.class).getPayload().toRequestModel());
+				receiveDeviceStateRequest(deviceHid,
+						JsonUtils.fromJsonBytes(data, ShadowDocument.class).getPayload().toRequestModel());
+			});
 		}
 	}
 

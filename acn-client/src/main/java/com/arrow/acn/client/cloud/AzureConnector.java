@@ -55,7 +55,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 		try {
 			if (client == null) {
 				String connectionString = String.format(CONNECTION_STRING_FORMAT, model.getHost(), gatewayUid,
-				        model.getAccessKey());
+						model.getAccessKey());
 				logInfo(method, "creating azure client ...");
 				client = new DeviceClient(connectionString, IotHubClientProtocol.MQTT);
 				client.setMessageCallback(messageCallback, null);
@@ -82,6 +82,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 			}
 			client = null;
 		}
+		super.stop();
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public class AzureConnector extends CloudConnectorAbstract {
 	public void sendBatch(List<IotParameters> batch, TransferMode transferMode) {
 		if (transferMode == TransferMode.GZIP_BATCH) {
 			throw new AcsLogicalException(
-			        "TransferMode not supported for Azure integration: " + TransferMode.GZIP_BATCH.name());
+					"TransferMode not supported for Azure integration: " + TransferMode.GZIP_BATCH.name());
 		}
 		if (batch != null) {
 			batch.forEach(this::send);

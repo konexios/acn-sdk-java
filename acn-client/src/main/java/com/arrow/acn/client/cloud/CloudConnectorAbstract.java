@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.codec.binary.StringUtils;
 
@@ -37,9 +39,11 @@ public abstract class CloudConnectorAbstract extends Loggable {
 	protected AcnClient acnClient;
 	protected DeviceStateRequestListener deviceStateRequestListener;
 	protected Set<String> deviceHids = new HashSet<>();
+	protected ExecutorService service;
 
 	protected CloudConnectorAbstract(AcnClient acnClient) {
 		this.acnClient = acnClient;
+		this.service = Executors.newCachedThreadPool();
 	}
 
 	public String getGatewayHid() {
@@ -70,9 +74,18 @@ public abstract class CloudConnectorAbstract extends Loggable {
 		this.deviceStateRequestListener = deviceStateRequestListener;
 	}
 
-	public abstract void start();
+	public void start() {
+	}
 
-	public abstract void stop();
+	public void stop() {
+		if (service != null) {
+			try {
+				service.shutdownNow();
+			} catch (Exception e) {
+			}
+			service = null;
+		}
+	}
 
 	public abstract void send(IotParameters payload);
 
