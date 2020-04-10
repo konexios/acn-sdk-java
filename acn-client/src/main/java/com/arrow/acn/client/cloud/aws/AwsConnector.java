@@ -43,6 +43,7 @@ import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.cloud.CloudConnectorAbstract;
 import com.arrow.acn.client.cloud.TransferMode;
 import com.arrow.acn.client.model.AwsConfigModel;
+import com.arrow.acn.client.model.DeviceStateRequestModel;
 import com.arrow.acn.client.model.DeviceStateUpdateModel;
 import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsRuntimeException;
@@ -290,11 +291,10 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		public void onMessage(AWSIotMessage message) {
 			service.submit(() -> {
 				String method = "ShadowRequestTopic.onMessage";
-				byte[] data = message.getPayload();
-				logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
-
-				receiveDeviceStateRequest(deviceHid,
-						JsonUtils.fromJsonBytes(data, ShadowDocument.class).getPayload().toRequestModel());
+				DeviceStateRequestModel request = JsonUtils.fromJsonBytes(message.getPayload(), ShadowDelta.class)
+						.toRequestModel();
+				logInfo(method, "topic: %s, request: %s", message.getTopic(), JsonUtils.toJson(request));
+				receiveDeviceStateRequest(deviceHid, request);
 			});
 		}
 	}
