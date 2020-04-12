@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -47,7 +48,6 @@ import com.arrow.acn.client.model.DeviceStateUpdateModel;
 import com.arrow.acn.client.utils.Utils;
 import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsRuntimeException;
-import com.arrow.acs.AcsSystemException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.MqttHttpChannel;
@@ -55,8 +55,13 @@ import com.arrow.acs.client.model.CloudRequestModel;
 import com.arrow.acs.client.model.CloudResponseModel;
 
 public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChannel {
-	private static final long DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS = 10L;
+
+	private static final int DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS = 10;
 	private static final int DEFAULT_NUMBER_OF_CLIENT_THREADS = 20;
+	private static final int DEFAULT_CONNECTION_RETRY_INTERVAL_SECS = 10;
+	private static final int DEFAULT_MESSAGE_RETRY_INTERVAL_SECS = 5;
+	private static final AWSIotQos DEFAULT_PUBLISH_QOS = AWSIotQos.QOS1;
+	private static final AWSIotQos DEFAULT_SUBSCRIBE_QOS = AWSIotQos.QOS1;
 
 	static {
 		Security.addProvider(new BouncyCastleProvider());
@@ -67,7 +72,21 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	private Map<String, CloudResponseWrapper> responseMap = new HashMap<>();
 	private Map<String, ShadowRequestTopic> shadowRequestTopics = new HashMap<>();
 
+	private KeyStore keystore;
+	private String keystorePassword;
+
 	private Timer shadowRequestMonitorTimer;
+
+	private int numberOfClientThreads = DEFAULT_NUMBER_OF_CLIENT_THREADS;
+	private int shadowRequestMonitorIntervalSecs = DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS;
+	private int connectionRetryIntervalSecs = DEFAULT_CONNECTION_RETRY_INTERVAL_SECS;
+	private int messageRetryIntervalSecs = DEFAULT_MESSAGE_RETRY_INTERVAL_SECS;
+
+	private AtomicBoolean connected = new AtomicBoolean(false);
+	private AtomicBoolean connecting = new AtomicBoolean(false);
+
+	private AWSIotQos publishQos = DEFAULT_PUBLISH_QOS;
+	private AWSIotQos subscribeQos = DEFAULT_SUBSCRIBE_QOS;
 
 	public AwsConnector(AwsConfigModel model, String gatewayHid, AcnClient acnClient) {
 		super(acnClient);
@@ -79,25 +98,189 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	public void start() {
 		AcsUtils.notNull(model, "model is NULL");
 		AcsUtils.notEmpty(getGatewayHid(), "gatewayHid is NULL");
+
+		prepareKeystore();
 		connectClient();
 	}
 
 	private void connectClient() {
 		String method = "connectClient";
 
-		// force close
-		if (client != null) {
-			try {
-				client.disconnect();
-			} catch (Exception e) {
-			}
+		if (!connecting.compareAndSet(false, true)) {
+			logInfo(method, "connecting is already in progress ...");
 		}
 
+		while (true) {
+			try {
+				connected.set(false);
+				closeClient();
+
+				logInfo(method, "instantiating AWS client, host: %s, clientId: %s", model.getHost(), getGatewayHid());
+				client = new AWSIotMqttClient(model.getHost(), getGatewayHid(), keystore, keystorePassword) {
+					@Override
+					public void onConnectionClosed() {
+						super.onConnectionClosed();
+						String method = "onConnectionClosed";
+						logError(method, "host: %s", model.getHost());
+						Utils.sleep(DEFAULT_CONNECTION_RETRY_INTERVAL_SECS * 1000);
+						new Thread(() -> connectClient()).start();
+					}
+
+					@Override
+					public void onConnectionFailure() {
+						super.onConnectionFailure();
+						String method = "onConnectionFailure";
+						logError(method, "host: %s", model.getHost());
+					}
+
+					@Override
+					public void onConnectionSuccess() {
+						super.onConnectionSuccess();
+						String method = "onConnectionSuccess";
+						logDebug(method, "host: %s", model.getHost());
+					}
+				};
+				client.setCleanSession(false);
+				client.setNumOfClientThreads(numberOfClientThreads);
+
+				// connect to AWS
+				client.connect();
+				logDebug(method, "connected!");
+
+				// subscribe to commmand topic
+				client.subscribe(new CommandTopic());
+
+				// subscribe to api response topic
+				client.subscribe(new ApiResponseTopic());
+
+				// route API calls to MQTT
+				acnClient.setMqttHttpChannel(this);
+
+				// subscribe once
+				subscribeShadowRequestTopics();
+
+				// then continue to monitor for new devices
+				startShadowRequestMonitorTimer();
+
+				logInfo(method, "AWS client is ready!");
+				connected.set(true);
+				break;
+			} catch (Exception e) {
+				logError(method, "Error connecting to AWS, retrying in " + connectionRetryIntervalSecs, e);
+				Utils.sleep(connectionRetryIntervalSecs * 1000);
+			}
+		}
+		connecting.set(false);
+	}
+
+	@Override
+	public void stop() {
+		super.stop();
+		clearShadowRequestMonitorTimer();
+		closeClient();
+	}
+
+	@Override
+	public void send(IotParameters payload) {
+		String method = "send";
+		if (!terminating && checkConnection()) {
+			try {
+				byte[] data = JsonUtils.toJsonBytes(payload);
+				String topic = AwsMqttConstants.TELEMETRY_TOPIC.replace("<gatewayHid>", getGatewayHid())
+						.replace("<deviceHid>", payload.getDeviceHid());
+				logDebug(method, "sending %d bytes to topic: %s", data.length, topic);
+				client.publish(topic, publishQos, data);
+			} catch (AcsRuntimeException e) {
+				throw e;
+			} catch (Throwable t) {
+				throw new AcsRuntimeException("unable to send data to AWS", t);
+			}
+		}
+	}
+
+	@Override
+	public void sendBatch(List<IotParameters> batch, TransferMode transferMode) {
+		if (!terminating && checkConnection()) {
+			if (transferMode == TransferMode.GZIP_BATCH) {
+				throw new AcsLogicalException(
+						"TransferMode not supported for AWS integration: " + TransferMode.GZIP_BATCH.name());
+			}
+			if (batch != null && batch.size() > 0) {
+				batch.forEach(this::send);
+			}
+		}
+	}
+
+	@Override
+	public CloudResponseModel sendRequest(CloudRequestModel request, long timeoutSecs) {
+		String method = "sendRequest";
+		if (!terminating && checkConnection()) {
+			try {
+				byte[] data = JsonUtils.toJsonBytes(request);
+				String topic = AwsMqttConstants.API_REQUEST_TOPIC.replace("<gatewayHid>", getGatewayHid());
+
+				CloudResponseWrapper wrapper = new CloudResponseWrapper();
+				responseMap.put(request.getRequestId(), wrapper);
+
+				logDebug(method, "sending %d bytes to topic: %s", data.length, topic);
+				client.publish(topic, publishQos, data);
+
+				CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
+				if (response == null) {
+					throw new AcsLogicalException("Timeout waiting for response from MQTT channel");
+				}
+				return response;
+			} catch (AcsRuntimeException e) {
+				logError(method, e);
+				throw e;
+			} catch (Exception e) {
+				logError(method, e);
+				throw new AcsLogicalException("sendRequest failed", e);
+			} finally {
+				responseMap.remove(request.getRequestId());
+			}
+		} else {
+			throw new AcsLogicalException("connector is terminating!");
+		}
+	}
+
+	@Override
+	protected void sendDeviceStateUpdate(String deviceHid, DeviceStateUpdateModel model) {
+		String method = "sendDeviceStateUpdate";
+		if (!terminating) {
+			checkConnection();
+			try {
+				String topic = AwsMqttConstants.SHADOW_UPDATE_TOPIC.replace("<deviceHid>", deviceHid);
+				ShadowRequest update = ShadowRequest.fromUpdateModel(model);
+				logDebug(method, "sending shadow update to topic: %s, data: %s", topic, JsonUtils.toJson(update));
+				client.publish(topic, AWSIotQos.QOS1, JsonUtils.toJsonBytes(update));
+			} catch (AcsRuntimeException e) {
+				logError(method, e);
+				throw e;
+			} catch (Exception e) {
+				logError(method, e);
+				throw new AcsLogicalException("sendDeviceStateUpdate failed", e);
+			}
+		}
+	}
+
+	private boolean checkConnection() {
+		String method = "checkConnection";
+		while (!connected.get() && !terminating) {
+			logWarn(method, "not connected, will check back later ...");
+			Utils.sleep(messageRetryIntervalSecs * 1000);
+		}
+		return connected.get();
+	}
+
+	private void prepareKeystore() {
+		if (keystore != null)
+			return;
 		try {
-			String password = new BigInteger(128,
+			keystorePassword = new BigInteger(128,
 					new SecureRandom(String.valueOf(System.currentTimeMillis()).getBytes())).toString(32);
 
-			KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keystore = KeyStore.getInstance(KeyStore.getDefaultType());
 			keystore.load(null, null);
 
 			// load CA cert
@@ -118,148 +301,10 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 							.getPrivateKeyInfo());
 
 			// load private key
-			keystore.setKeyEntry("private-key", privateKey, password.toCharArray(), new Certificate[] { clientCert });
-
-			logInfo(method, "instantiating client, host: %s", model.getHost());
-			client = new AWSIotMqttClient(model.getHost(), getGatewayHid(), keystore, password) {
-				@Override
-				public void onConnectionClosed() {
-					super.onConnectionClosed();
-					String method = "onConnectionClosed";
-					logError(method, "...");
-					Utils.sleep(2000);
-					new Thread(() -> connectClient()).start();
-				}
-
-				@Override
-				public void onConnectionFailure() {
-					super.onConnectionFailure();
-					String method = "onConnectionFailure";
-					logError(method, "...");
-					Utils.sleep(2000);
-					new Thread(() -> connectClient()).start();
-				}
-
-				@Override
-				public void onConnectionSuccess() {
-					super.onConnectionSuccess();
-					String method = "onConnectionSuccess";
-					logInfo(method, "...");
-				}
-			};
-			client.setCleanSession(false);
-			client.setNumOfClientThreads(DEFAULT_NUMBER_OF_CLIENT_THREADS);
-
-			// connect to AWS
-			client.connect();
-
-			// subscribe to commmand topic
-			client.subscribe(new CommandTopic());
-
-			// subscribe to api response topic
-			client.subscribe(new ApiResponseTopic());
-
-			// route API calls to MQTT
-			acnClient.setMqttHttpChannel(this);
-
-			startShadowRequestMonitorTimer();
-
-			logInfo(method, "AWSIotMqttClient is ready!");
-		} catch (AcsRuntimeException e) {
-			throw e;
-		} catch (Throwable t) {
-			throw new AcsSystemException("Unable to start aws connector", t);
-		}
-	}
-
-	@Override
-	public void stop() {
-		String method = "stop";
-		clearShadowRequestMonitorTimer();
-		if (client != null) {
-			try {
-				logInfo(method, "stopping client ...");
-				client.disconnect();
-			} catch (Throwable e) {
-			}
-			client = null;
-		}
-	}
-
-	@Override
-	public void send(IotParameters payload) {
-		String method = "send";
-		if (client != null) {
-			try {
-				byte[] data = JsonUtils.toJsonBytes(payload);
-				String topic = AwsMqttConstants.TELEMETRY_TOPIC.replace("<gatewayHid>", getGatewayHid())
-						.replace("<deviceHid>", payload.getDeviceHid());
-				logInfo(method, "sending %d bytes to topic: %s", data.length, topic);
-				client.publish(topic, AWSIotQos.QOS1, data);
-			} catch (AcsRuntimeException e) {
-				throw e;
-			} catch (Throwable t) {
-				throw new AcsRuntimeException("unable to send data to AWS", t);
-			}
-		}
-	}
-
-	@Override
-	public void sendBatch(List<IotParameters> batch, TransferMode transferMode) {
-		if (client != null) {
-			if (transferMode == TransferMode.GZIP_BATCH) {
-				throw new AcsLogicalException(
-						"TransferMode not supported for AWS integration: " + TransferMode.GZIP_BATCH.name());
-			}
-			if (batch != null && batch.size() > 0) {
-				batch.forEach(this::send);
-			}
-		}
-	}
-
-	@Override
-	public CloudResponseModel sendRequest(CloudRequestModel request, long timeoutSecs) {
-		String method = "sendRequest";
-		try {
-			byte[] data = JsonUtils.toJsonBytes(request);
-			String topic = AwsMqttConstants.API_REQUEST_TOPIC.replace("<gatewayHid>", getGatewayHid());
-
-			CloudResponseWrapper wrapper = new CloudResponseWrapper();
-			responseMap.put(request.getRequestId(), wrapper);
-
-			logInfo(method, "sending %d bytes to topic: %s", data.length, topic);
-			client.publish(topic, AWSIotQos.QOS1, data);
-
-			CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
-			if (response == null) {
-				throw new AcsLogicalException("Timeout waiting for response from MQTT channel");
-			}
-			return response;
-		} catch (AcsRuntimeException e) {
-			logError(method, e);
-			throw e;
+			keystore.setKeyEntry("private-key", privateKey, keystorePassword.toCharArray(),
+					new Certificate[] { clientCert });
 		} catch (Exception e) {
-			logError(method, e);
-			throw new AcsLogicalException("sendRequest failed", e);
-		} finally {
-			responseMap.remove(request.getRequestId());
-		}
-	}
-
-	@Override
-	protected void sendDeviceStateUpdate(String deviceHid, DeviceStateUpdateModel model) {
-		String method = "sendDeviceStateUpdate";
-		try {
-			String topic = AwsMqttConstants.SHADOW_UPDATE_TOPIC.replace("<deviceHid>", deviceHid);
-			ShadowRequest update = ShadowRequest.fromUpdateModel(model);
-			logInfo(method, "sending shadow update to topic: %s, data: %s", topic, JsonUtils.toJson(update));
-			client.publish(topic, AWSIotQos.QOS1, JsonUtils.toJsonBytes(update));
-		} catch (AcsRuntimeException e) {
-			logError(method, e);
-			throw e;
-		} catch (Exception e) {
-			logError(method, e);
-			throw new AcsLogicalException("sendDeviceStateUpdate failed", e);
+			throw new AcsLogicalException("unable to prepare keystore", e);
 		}
 	}
 
@@ -269,9 +314,13 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		clearShadowRequestMonitorTimer();
 
 		shadowRequestMonitorTimer = new Timer(true);
-		shadowRequestMonitorTimer.scheduleAtFixedRate(new ShadowRequestTopicMonitor(), 0L,
-				DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS * 1000);
-		logInfo(method, "started!");
+		shadowRequestMonitorTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				subscribeShadowRequestTopics();
+			}
+		}, 0L, shadowRequestMonitorIntervalSecs * 1000);
+		logDebug(method, "started!");
 	}
 
 	private void clearShadowRequestMonitorTimer() {
@@ -282,17 +331,92 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		}
 	}
 
+	private void closeClient() {
+		if (client != null) {
+			try {
+				client.disconnect();
+			} catch (Exception e) {
+			} finally {
+				client = null;
+			}
+		}
+	}
+
+	private void subscribeShadowRequestTopics() {
+		String method = "subscribeShadowRequestTopics";
+		getDeviceHids().forEach(deviceHid -> {
+			try {
+				if (!shadowRequestTopics.containsKey(deviceHid)) {
+					ShadowRequestTopic topic = new ShadowRequestTopic(deviceHid);
+					logInfo(method, "subscribing to topic: %s", topic.getTopic());
+					client.subscribe(topic);
+					shadowRequestTopics.put(deviceHid, topic);
+				}
+			} catch (Exception e) {
+				logError(method, e);
+			}
+		});
+	}
+
+	public int getNumberOfClientThreads() {
+		return numberOfClientThreads;
+	}
+
+	public void setNumberOfClientThreads(int numberOfClientThreads) {
+		this.numberOfClientThreads = numberOfClientThreads;
+	}
+
+	public int getShadowRequestMonitorIntervalSecs() {
+		return shadowRequestMonitorIntervalSecs;
+	}
+
+	public void setShadowRequestMonitorIntervalSecs(int shadowRequestMonitorIntervalSecs) {
+		this.shadowRequestMonitorIntervalSecs = shadowRequestMonitorIntervalSecs;
+	}
+
+	public int getConnectionRetryIntervalSecs() {
+		return connectionRetryIntervalSecs;
+	}
+
+	public void setConnectionRetryIntervalSecs(int connectionRetryIntervalSecs) {
+		this.connectionRetryIntervalSecs = connectionRetryIntervalSecs;
+	}
+
+	public int getMessageRetryIntervalSecs() {
+		return messageRetryIntervalSecs;
+	}
+
+	public void setMessageRetryIntervalSecs(int messageRetryIntervalSecs) {
+		this.messageRetryIntervalSecs = messageRetryIntervalSecs;
+	}
+
+	public AWSIotQos getPublishQos() {
+		return publishQos;
+	}
+
+	public void setPublishQos(AWSIotQos publishQos) {
+		this.publishQos = publishQos;
+	}
+
+	public AWSIotQos getSubscribeQos() {
+		return subscribeQos;
+	}
+
+	public void setSubscribeQos(AWSIotQos subscribeQos) {
+		this.subscribeQos = subscribeQos;
+	}
+
 	private class CommandTopic extends AWSIotTopic {
 		public CommandTopic() {
-			super(AwsMqttConstants.COMMAND_TOPIC.replace("<gatewayHid>", getGatewayHid()), AWSIotQos.QOS0);
+			super(AwsMqttConstants.COMMAND_TOPIC.replace("<gatewayHid>", getGatewayHid()), subscribeQos);
 		}
 
 		@Override
 		public void onMessage(AWSIotMessage message) {
 			String method = "CommandTopic.onMessage";
 			try {
-				logInfo(method, "topic: %s", message.getTopic());
 				service.submit(() -> {
+					logInfo(method, "topic: %s", message.getTopic());
 					validateAndProcessEvent(message.getTopic(), message.getPayload());
 				});
 			} catch (Exception e) {
@@ -304,20 +428,20 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		public void onSuccess() {
 			super.onSuccess();
 			String method = "CommandTopic.onSuccess";
-			logInfo(method, "success: %s", getTopic());
+			logDebug(method, "success: %s", getTopic());
 		}
 
 		@Override
 		public void onFailure() {
 			String method = "CommandTopic.onFailure";
 			super.onFailure();
-			logInfo(method, "failure: %s", getTopic());
+			logError(method, "failure: %s", getTopic());
 		}
 	}
 
 	private class ApiResponseTopic extends AWSIotTopic {
 		public ApiResponseTopic() {
-			super(AwsMqttConstants.API_RESPONSE_TOPIC.replace("<gatewayHid>", getGatewayHid()), AWSIotQos.QOS0);
+			super(AwsMqttConstants.API_RESPONSE_TOPIC.replace("<gatewayHid>", getGatewayHid()), subscribeQos);
 		}
 
 		@Override
@@ -329,11 +453,11 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 					logInfo(method, "topic: %s, data size: %d", message.getTopic(), data.length);
 
 					CloudResponseModel responseModel = JsonUtils.fromJsonBytes(data, CloudResponseModel.class);
-					logInfo(method, "responseModel: %s", JsonUtils.toJson(responseModel));
+					logDebug(method, "responseModel: %s", JsonUtils.toJson(responseModel));
 
 					CloudResponseWrapper wrapper = responseMap.get(responseModel.getRequestId());
 					if (wrapper != null) {
-						logInfo(method, "marking request complete: %s", responseModel.getRequestId());
+						logDebug(method, "marking request complete: %s", responseModel.getRequestId());
 						wrapper.complete(responseModel);
 					}
 				} catch (Exception e) {
@@ -346,14 +470,14 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		public void onSuccess() {
 			super.onSuccess();
 			String method = "ApiResponseTopic.onSuccess";
-			logInfo(method, "success: %s", getTopic());
+			logDebug(method, "success: %s", getTopic());
 		}
 
 		@Override
 		public void onFailure() {
 			String method = "ApiResponseTopic.onFailure";
 			super.onFailure();
-			logInfo(method, "failure: %s", getTopic());
+			logError(method, "failure: %s", getTopic());
 		}
 	}
 
@@ -361,7 +485,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		private String deviceHid;
 
 		public ShadowRequestTopic(String deviceHid) {
-			super(AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC.replace("<deviceHid>", deviceHid), AWSIotQos.QOS0);
+			super(AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC.replace("<deviceHid>", deviceHid), subscribeQos);
 			this.deviceHid = deviceHid;
 		}
 
@@ -384,14 +508,14 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		public void onSuccess() {
 			super.onSuccess();
 			String method = "ShadowRequestTopic.onSuccess";
-			logInfo(method, "success: %s", getTopic());
+			logDebug(method, "success: %s", getTopic());
 		}
 
 		@Override
 		public void onFailure() {
 			String method = "ShadowRequestTopic.onFailure";
 			super.onFailure();
-			logInfo(method, "failure: %s", getTopic());
+			logError(method, "failure: %s", getTopic());
 		}
 	}
 
@@ -416,25 +540,6 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				}
 			}
 			return response;
-		}
-	}
-
-	private class ShadowRequestTopicMonitor extends TimerTask {
-		@Override
-		public void run() {
-			String method = "ShadowRequestTopicMonitor.run";
-			getDeviceHids().forEach(deviceHid -> {
-				try {
-					if (!shadowRequestTopics.containsKey(deviceHid)) {
-						ShadowRequestTopic topic = new ShadowRequestTopic(deviceHid);
-						logInfo(method, "subscribing to topic: %s", topic.getTopic());
-						client.subscribe(topic);
-						shadowRequestTopics.put(deviceHid, topic);
-					}
-				} catch (Exception e) {
-					logError(method, e);
-				}
-			});
 		}
 	}
 }

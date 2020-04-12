@@ -40,6 +40,7 @@ public abstract class CloudConnectorAbstract extends Loggable {
 	protected DeviceStateRequestListener deviceStateRequestListener;
 	protected Set<String> deviceHids = new HashSet<>();
 	protected ExecutorService service;
+	protected boolean terminating = false;
 
 	protected CloudConnectorAbstract(AcnClient acnClient) {
 		this.acnClient = acnClient;
@@ -78,6 +79,7 @@ public abstract class CloudConnectorAbstract extends Loggable {
 	}
 
 	public void stop() {
+		terminating = true;
 		if (service != null) {
 			try {
 				service.shutdownNow();
