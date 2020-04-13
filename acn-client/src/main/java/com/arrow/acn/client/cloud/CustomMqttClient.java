@@ -69,7 +69,11 @@ public class CustomMqttClient extends Loggable {
 		subscriberCallback.setListener(listener);
 	}
 
-	public synchronized void connect(boolean reconnect, boolean blocking) {
+	public void connect(boolean blocking) {
+		connect(false, blocking);
+	}
+
+	private synchronized void connect(boolean reconnect, boolean blocking) {
 		String method = "connect";
 		if (reconnect && client != null && client.isConnected()) {
 			logInfo(method, "connectionLost is FALSE, possible already recovered!!!!!!");
@@ -131,9 +135,9 @@ public class CustomMqttClient extends Loggable {
 		checkConnection();
 		while (true) {
 			try {
-				if (topics != null && topics.length > 0) {
+				if (topics != null) {
 					for (String topic : topics) {
-						if (subscribed.add(topic)) {
+						if (!AcsUtils.isEmpty(topic) && subscribed.add(topic)) {
 							client.subscribe(topic);
 							logInfo(method, "subscribed to topic: %s", topic);
 						}

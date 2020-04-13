@@ -121,12 +121,12 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				client.setListener(this::processMessage);
 
 				logInfo(method, "connecting to endpoint: %s", model.getHost());
-				client.connect(false, true);
+				client.connect(true);
 				logInfo(method, "connected successfully!");
 
 				String commandTopic = AwsMqttConstants.COMMAND_TOPIC.replace("<gatewayHid>", getGatewayHid());
 				String apiResponseTopic = AwsMqttConstants.API_RESPONSE_TOPIC.replace("<gatewayHid>", getGatewayHid());
-				client.subscribe(new String[] { commandTopic, apiResponseTopic });
+				client.subscribe(commandTopic, apiResponseTopic);
 
 				// subscribe once
 				subscribeShadowRequestTopics();

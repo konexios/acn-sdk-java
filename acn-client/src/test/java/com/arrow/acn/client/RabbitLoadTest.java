@@ -322,7 +322,7 @@ public class RabbitLoadTest extends Loggable {
 						doProcessMessage(topic, payload);
 					}
 				});
-				mqtt.connect(false, true);
+				mqtt.connect(true);
 				mqtt.subscribe(MqttConstants.serverToGatewayCommandRouting(gatewayHid));
 				mqtt.checkConnection();
 				runLoop();

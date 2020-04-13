@@ -40,7 +40,7 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 		String method = "MqttConnectorAbstract.start";
 		client.setOptions(mqttConnectOptions());
 		client.setListener(this);
-		client.connect(false, true);
+		client.connect(true);
 		String topic = subscriberTopic();
 		if (!AcsUtils.isEmpty(topic)) {
 			client.subscribe(topic);
