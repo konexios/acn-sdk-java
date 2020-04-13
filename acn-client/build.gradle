@@ -21,9 +21,6 @@ dependencies {
 
     compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
 
-	// aws
-	compile("com.amazonaws:aws-iot-device-sdk-java:${awsIotVersion}")
-
     // ibm
     compile("com.ibm.messaging:watson-iot:${watsonIotVersion}")
     
