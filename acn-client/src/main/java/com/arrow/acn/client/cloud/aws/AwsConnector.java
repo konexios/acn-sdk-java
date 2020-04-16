@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -90,6 +91,10 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 
 	private int publishQos = DEFAULT_PUBLISH_QOS;
 
+	private Pattern commandTopicRegex = Pattern.compile(AwsMqttConstants.COMMAND_TOPIC_REGEX);
+	private Pattern apiResponseTopicRegex = Pattern.compile(AwsMqttConstants.API_RESPONSE_TOPIC_REGEX);
+	private Pattern shadowUpdateDeltaTopicRegex = Pattern.compile(AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC_REGEX);
+
 	public AwsConnector(AwsConfigModel model, String gatewayHid, AcnClient acnClient) {
 		super(acnClient);
 		this.model = model;
@@ -124,8 +129,8 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				client.connect(true);
 				logInfo(method, "connected successfully!");
 
-				String commandTopic = AwsMqttConstants.COMMAND_TOPIC.replace("<gatewayHid>", getGatewayHid());
-				String apiResponseTopic = AwsMqttConstants.API_RESPONSE_TOPIC.replace("<gatewayHid>", getGatewayHid());
+				String commandTopic = AwsMqttConstants.commandTopic(getGatewayHid());
+				String apiResponseTopic = AwsMqttConstants.apiRequestTopic(getGatewayHid());
 				client.subscribe(commandTopic, apiResponseTopic);
 
 				// subscribe once
@@ -160,7 +165,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		String method = "processMessage";
 		logInfo(method, "topic: %s, payload size: %d", topic, payload.length);
 
-		if (topic.startsWith(AwsMqttConstants.COMMAND_TOPIC_PREFIX_MATCH)) {
+		if (commandTopicRegex.matcher(topic).matches()) {
 			try {
 				service.submit(() -> {
 					logInfo(method, "topic: %s", topic);
@@ -169,7 +174,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 			} catch (Exception e) {
 				logError(method, e);
 			}
-		} else if (topic.startsWith(AwsMqttConstants.API_RESPONSE_TOPIC_PREFIX_MATCH)) {
+		} else if (apiResponseTopicRegex.matcher(topic).matches()) {
 			service.submit(() -> {
 				try {
 					logInfo(method, "topic: %s, data size: %d", topic, payload.length);
@@ -186,7 +191,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 					logError(method, e);
 				}
 			});
-		} else if (topic.endsWith(AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC_SUFFIX_MATCH)) {
+		} else if (shadowUpdateDeltaTopicRegex.matcher(topic).matches()) {
 			try {
 				DeviceStateRequestModel request = JsonUtils.fromJsonBytes(payload, ShadowDelta.class).toRequestModel();
 				logInfo(method, "topic: %s, request: %s", topic, JsonUtils.toJson(request));
@@ -400,7 +405,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		String method = "subscribeShadowRequestTopics";
 		getDeviceHids().forEach(deviceHid -> {
 			try {
-				String topic = AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC.replace("<deviceHid>", deviceHid);
+				String topic = AwsMqttConstants.shadowUpdateDeltaTopic(deviceHid);
 				if (shadowRequestTopics.add(topic)) {
 					logInfo(method, "subscribing to topic: %s", topic);
 					client.subscribe(topic);

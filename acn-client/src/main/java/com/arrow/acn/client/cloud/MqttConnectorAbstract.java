@@ -10,13 +10,23 @@
  *******************************************************************************/
 package com.arrow.acn.client.cloud;
 
+import java.math.BigInteger;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.List;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 import com.arrow.acn.client.ClientConstants.Mqtt;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
+import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
 
@@ -86,7 +96,42 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 		MqttConnectOptions options = new MqttConnectOptions();
 		options.setConnectionTimeout(Mqtt.DEFAULT_CONNECTION_TIMEOUT_SECS);
 		options.setKeepAliveInterval(Mqtt.DEFAULT_KEEP_ALIVE_INTERVAL_SECS);
+		options.setSocketFactory(sslContext().getSocketFactory());
 		return options;
+	}
+
+	protected SSLContext sslContext() {
+		SSLContext sslContext = null;
+		try {
+			String keystorePassword = new BigInteger(128,
+					new SecureRandom(String.valueOf(System.currentTimeMillis()).getBytes())).toString(32);
+
+			// empty keystore
+			KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keystore.load(null, null);
+
+			// dummy trust manager
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
+
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			} };
+
+			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			kmf.init(keystore, keystorePassword.toCharArray());
+
+			sslContext = SSLContext.getInstance("TLSv1.2");
+			sslContext.init(kmf.getKeyManagers(), trustAllCerts, new SecureRandom());
+		} catch (Exception e) {
+			throw new AcsLogicalException("unable to prepare keystore", e);
+		}
+		return sslContext;
 	}
 
 	@Override
