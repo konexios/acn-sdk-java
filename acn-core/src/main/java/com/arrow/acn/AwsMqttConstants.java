@@ -5,6 +5,10 @@ public interface AwsMqttConstants {
 	final static String TELEMETRY_TOPIC_WILDCARD = "konexios/telemetries/+/+";
 	final static String TELEMETRY_TOPIC_REGEX = "konexios/telemetries/.+/\\w+";
 
+	static String telemetryTopic(String gatewayHid, String deviceHid) {
+		return TELEMETRY_TOPIC.replace("<gatewayHid>", gatewayHid).replace("<deviceHid>", deviceHid);
+	}
+
 	final static String COMMAND_TOPIC = "konexios/commands/<gatewayHid>";
 	final static String COMMAND_TOPIC_WILDCARD = "konexios/commands/+";
 	final static String COMMAND_TOPIC_REGEX = "konexios/commands/\\w+";

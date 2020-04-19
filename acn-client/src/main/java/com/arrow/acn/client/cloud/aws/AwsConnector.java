@@ -130,8 +130,12 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				logInfo(method, "connected successfully!");
 
 				String commandTopic = AwsMqttConstants.commandTopic(getGatewayHid());
+				logInfo(method, "subscribing to commandTopic: %s", commandTopic);
+				client.subscribe(commandTopic);
+
 				String apiResponseTopic = AwsMqttConstants.apiResponseTopic(getGatewayHid());
-				client.subscribe(commandTopic, apiResponseTopic);
+				logInfo(method, "subscribing to apiResponseTopic: %s", apiResponseTopic);
+				client.subscribe(apiResponseTopic);
 
 				// subscribe once
 				subscribeShadowRequestTopics();
@@ -213,8 +217,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		if (!terminating && checkConnection()) {
 			try {
 				byte[] data = JsonUtils.toJsonBytes(payload);
-				String topic = AwsMqttConstants.TELEMETRY_TOPIC.replace("<gatewayHid>", getGatewayHid())
-						.replace("<deviceHid>", payload.getDeviceHid());
+				String topic = AwsMqttConstants.telemetryTopic(getGatewayHid(), payload.getDeviceHid());
 				logDebug(method, "sending %d bytes to topic: %s", data.length, topic);
 				client.publish(topic, data, publishQos);
 			} catch (AcsRuntimeException e) {
@@ -244,7 +247,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		if (!terminating && checkConnection()) {
 			try {
 				byte[] data = JsonUtils.toJsonBytes(request);
-				String topic = AwsMqttConstants.API_REQUEST_TOPIC.replace("<gatewayHid>", getGatewayHid());
+				String topic = AwsMqttConstants.apiRequestTopic(getGatewayHid());
 
 				CloudResponseWrapper wrapper = new CloudResponseWrapper();
 				responseMap.put(request.getRequestId(), wrapper);
@@ -277,7 +280,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		if (!terminating) {
 			checkConnection();
 			try {
-				String topic = AwsMqttConstants.SHADOW_UPDATE_TOPIC.replace("<deviceHid>", deviceHid);
+				String topic = AwsMqttConstants.shadowUpdateTopic(deviceHid);
 				ShadowRequest update = ShadowRequest.fromUpdateModel(model);
 				logDebug(method, "sending shadow update to topic: %s, data: %s", topic, JsonUtils.toJson(update));
 				client.publish(topic, JsonUtils.toJsonBytes(update), publishQos);
