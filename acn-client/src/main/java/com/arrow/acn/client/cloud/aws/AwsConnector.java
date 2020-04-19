@@ -49,9 +49,9 @@ import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.cloud.CloudConnectorAbstract;
 import com.arrow.acn.client.cloud.CustomMqttClient;
 import com.arrow.acn.client.cloud.TransferMode;
-import com.arrow.acn.client.model.AwsConfigModel;
 import com.arrow.acn.client.model.DeviceStateRequestModel;
 import com.arrow.acn.client.model.DeviceStateUpdateModel;
+import com.arrow.acn.client.model.aws.ConfigModel;
 import com.arrow.acn.client.utils.Utils;
 import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsRuntimeException;
@@ -72,7 +72,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		Security.addProvider(new BouncyCastleProvider());
 	}
 
-	private final AwsConfigModel model;
+	private final ConfigModel model;
 	private CustomMqttClient client;
 	private Map<String, CloudResponseWrapper> responseMap = new HashMap<>();
 	private Set<String> shadowRequestTopics = new HashSet<>();
@@ -95,7 +95,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	private Pattern apiResponseTopicRegex = Pattern.compile(AwsMqttConstants.API_RESPONSE_TOPIC_REGEX);
 	private Pattern shadowUpdateDeltaTopicRegex = Pattern.compile(AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC_REGEX);
 
-	public AwsConnector(AwsConfigModel model, String gatewayHid, AcnClient acnClient) {
+	public AwsConnector(ConfigModel model, String gatewayHid, AcnClient acnClient) {
 		super(acnClient);
 		this.model = model;
 		setGatewayHid(gatewayHid);
