@@ -6,36 +6,36 @@ import java.util.List;
 import com.arrow.acs.client.model.AddressModel;
 import com.arrow.acs.client.model.ContactModel;
 
-public class AuthResponseModel implements Serializable {
-    private static final long serialVersionUID = -119973382684862979L;
+public class CreateUserRequestModel implements Serializable {
+    private static final long serialVersionUID = 7295843313022587061L;
 
     private String login;
+    private String password;
     private ContactModel contact;
     private AddressModel address;
-    private String userHid;
     private List<String> roleNames;
 
-    public AuthResponseModel withLogin(String login) {
+    public CreateUserRequestModel withLogin(String login) {
         setLogin(login);
         return this;
     }
 
-    public AuthResponseModel withContact(ContactModel contact) {
+    public CreateUserRequestModel withPassword(String password) {
+        setPassword(password);
+        return this;
+    }
+
+    public CreateUserRequestModel withContact(ContactModel contact) {
         setContact(contact);
         return this;
     }
 
-    public AuthResponseModel withAddress(AddressModel address) {
+    public CreateUserRequestModel withAddress(AddressModel address) {
         setAddress(address);
         return this;
     }
 
-    public AuthResponseModel withUserHid(String userHid) {
-        setUserHid(userHid);
-        return this;
-    }
-
-    public AuthResponseModel withRoleNames(List<String> roleNames) {
+    public CreateUserRequestModel withRoleNames(List<String> roleNames) {
         setRoleNames(roleNames);
         return this;
     }
@@ -46,6 +46,14 @@ public class AuthResponseModel implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public ContactModel getContact() {
@@ -64,14 +72,6 @@ public class AuthResponseModel implements Serializable {
         this.address = address;
     }
 
-    public String getUserHid() {
-        return userHid;
-    }
-
-    public void setUserHid(String userHid) {
-        this.userHid = userHid;
-    }
-
     public List<String> getRoleNames() {
         return roleNames;
     }
@@ -87,8 +87,8 @@ public class AuthResponseModel implements Serializable {
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((contact == null) ? 0 : contact.hashCode());
         result = prime * result + ((login == null) ? 0 : login.hashCode());
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((roleNames == null) ? 0 : roleNames.hashCode());
-        result = prime * result + ((userHid == null) ? 0 : userHid.hashCode());
         return result;
     }
 
@@ -100,7 +100,7 @@ public class AuthResponseModel implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        AuthResponseModel other = (AuthResponseModel) obj;
+        CreateUserRequestModel other = (CreateUserRequestModel) obj;
         if (address == null) {
             if (other.address != null)
                 return false;
@@ -116,15 +116,15 @@ public class AuthResponseModel implements Serializable {
                 return false;
         } else if (!login.equals(other.login))
             return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
         if (roleNames == null) {
             if (other.roleNames != null)
                 return false;
         } else if (!roleNames.equals(other.roleNames))
-            return false;
-        if (userHid == null) {
-            if (other.userHid != null)
-                return false;
-        } else if (!userHid.equals(other.userHid))
             return false;
         return true;
     }

@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class AuthRequestModel implements Serializable {
     private static final long serialVersionUID = 1779438203845224231L;
 
-    private String username;
+    private String login;
     private String password;
 
-    public AuthRequestModel withUsername(String username) {
-        setUsername(username);
+    public AuthRequestModel withLogin(String login) {
+        setLogin(login);
         return this;
     }
 
@@ -18,12 +18,12 @@ public class AuthRequestModel implements Serializable {
         return this;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -38,8 +38,8 @@ public class AuthRequestModel implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((login == null) ? 0 : login.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((username == null) ? 0 : username.hashCode());
         return result;
     }
 
@@ -52,15 +52,15 @@ public class AuthRequestModel implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         AuthRequestModel other = (AuthRequestModel) obj;
+        if (login == null) {
+            if (other.login != null)
+                return false;
+        } else if (!login.equals(other.login))
+            return false;
         if (password == null) {
             if (other.password != null)
                 return false;
         } else if (!password.equals(other.password))
-            return false;
-        if (username == null) {
-            if (other.username != null)
-                return false;
-        } else if (!username.equals(other.username))
             return false;
         return true;
     }
