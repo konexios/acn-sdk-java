@@ -9,6 +9,8 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.arrow.acn.client.model.AuthRequestModel;
 import com.arrow.acn.client.model.AuthResponseModel;
+import com.arrow.acn.client.model.ChangePasswordRequestModel;
+import com.arrow.acn.client.model.ChangePasswordResponseModel;
 import com.arrow.acn.client.model.CreateUserRequestModel;
 import com.arrow.acn.client.model.CreateUserResponseModel;
 import com.arrow.acn.client.model.FindUserRequestModel;
@@ -26,6 +28,7 @@ public class UserApi extends ApiAbstract {
     private static final String CREATE_URL = USER_BASE_URL;
     private static final String UPDATE_URL = USER_BASE_URL + "/{hid}";
     private static final String RESET_PASSWORD_URL = USER_BASE_URL + "/{hid}/reset-password";
+    private static final String CHANGE_PASSWORD_URL = USER_BASE_URL + "/{hid}/change-password";
     private static final String AUTH_URL = USER_BASE_URL + "/auth";
     private static final String FIND_URL = USER_BASE_URL + "/find";
 
@@ -79,6 +82,19 @@ public class UserApi extends ApiAbstract {
             URI uri = buildUri(PATTERN.matcher(RESET_PASSWORD_URL).replaceAll(Matcher.quoteReplacement(hid)));
             ResetPasswordResponseModel result = execute(new HttpPost(uri), JsonUtils.toJson(model),
                     ResetPasswordResponseModel.class);
+            log(method, result);
+            return result;
+        } catch (Throwable e) {
+            throw handleException(e);
+        }
+    }
+
+    public ChangePasswordResponseModel changePassword(String hid, ChangePasswordRequestModel model) {
+        String method = "changePassword";
+        try {
+            URI uri = buildUri(PATTERN.matcher(CHANGE_PASSWORD_URL).replaceAll(Matcher.quoteReplacement(hid)));
+            ChangePasswordResponseModel result = execute(new HttpPost(uri), JsonUtils.toJson(model),
+                    ChangePasswordResponseModel.class);
             log(method, result);
             return result;
         } catch (Throwable e) {
