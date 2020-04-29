@@ -2,14 +2,28 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
-public class SetNewPasswordRequestModel implements Serializable {
+public class ChangePasswordRequestModel implements Serializable {
     private static final long serialVersionUID = 4082386589102353036L;
 
+    private String currentPassword;
     private String newPassword;
 
-    public SetNewPasswordRequestModel withNewPassword(String newPassword) {
+    public ChangePasswordRequestModel withCurrentPassword(String currentPassword) {
+        setCurrentPassword(currentPassword);
+        return this;
+    }
+
+    public ChangePasswordRequestModel withNewPassword(String newPassword) {
         setNewPassword(newPassword);
         return this;
+    }
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
     }
 
     public String getNewPassword() {
@@ -24,6 +38,7 @@ public class SetNewPasswordRequestModel implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((currentPassword == null) ? 0 : currentPassword.hashCode());
         result = prime * result + ((newPassword == null) ? 0 : newPassword.hashCode());
         return result;
     }
@@ -36,7 +51,12 @@ public class SetNewPasswordRequestModel implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SetNewPasswordRequestModel other = (SetNewPasswordRequestModel) obj;
+        ChangePasswordRequestModel other = (ChangePasswordRequestModel) obj;
+        if (currentPassword == null) {
+            if (other.currentPassword != null)
+                return false;
+        } else if (!currentPassword.equals(other.currentPassword))
+            return false;
         if (newPassword == null) {
             if (other.newPassword != null)
                 return false;

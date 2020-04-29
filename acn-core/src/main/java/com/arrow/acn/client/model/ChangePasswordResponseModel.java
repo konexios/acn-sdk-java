@@ -4,17 +4,17 @@ import java.util.List;
 
 import com.arrow.acs.client.model.StatusModelAbstract;
 
-public class SetNewPasswordResponseModel extends StatusModelAbstract<SetNewPasswordResponseModel> {
+public class ChangePasswordResponseModel extends StatusModelAbstract<ChangePasswordResponseModel> {
     private static final long serialVersionUID = 3763025496512207366L;
 
     private List<String> errorMessages;
 
     @Override
-    protected SetNewPasswordResponseModel self() {
+    protected ChangePasswordResponseModel self() {
         return this;
     }
 
-    public SetNewPasswordResponseModel withErrorMessages(List<String> errorMessages) {
+    public ChangePasswordResponseModel withErrorMessages(List<String> errorMessages) {
         setErrorMessages(errorMessages);
         return this;
     }
@@ -43,7 +43,7 @@ public class SetNewPasswordResponseModel extends StatusModelAbstract<SetNewPassw
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SetNewPasswordResponseModel other = (SetNewPasswordResponseModel) obj;
+        ChangePasswordResponseModel other = (ChangePasswordResponseModel) obj;
         if (errorMessages == null) {
             if (other.errorMessages != null)
                 return false;
