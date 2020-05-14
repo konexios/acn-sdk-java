@@ -16,20 +16,19 @@ jar.doFirst {
 dependencies {      
     compile("org.apache.httpcomponents:httpclient:${httpclientVersion}")
     
-    compile("org.bouncycastle:bcprov-jdk16:1.46")    
+    // compile("org.bouncycastle:bcprov-jdk16:1.46")    
     // compile("commons-codec:commons-codec:1.11")
 
-    compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0")
+    compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
 
     // ibm
-    compile("com.ibm.messaging:watson-iot:0.2.6")
+    compile("com.ibm.messaging:watson-iot:${watsonIotVersion}")
     
     // azure
-    compile("com.microsoft.azure.sdk.iot:iot-device-client:1.14.0")
+    compile("com.microsoft.azure.sdk.iot:iot-device-client:${azureIotVersion}")
         
-    //fix for libraries incompatibility
-    compile("org.bouncycastle:bcprov-jdk15on:1.55")
-    compile("org.bouncycastle:bcpkix-jdk15on:1.55")
+    // security provider
+    compile("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
         
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
     

@@ -12,6 +12,7 @@ package com.arrow.acn.client.model;
 
 import java.io.Serializable;
 
+import com.arrow.acn.client.model.aws.ConfigModel;
 import com.arrow.acs.client.model.KeyModel;
 
 public class GatewayConfigModel implements Serializable {
@@ -19,7 +20,7 @@ public class GatewayConfigModel implements Serializable {
 
 	private CloudPlatform cloudPlatform = CloudPlatform.IotConnect;
 	private KeyModel key;
-	private AwsConfigModel aws;
+	private ConfigModel aws;
 	private IbmConfigModel ibm;
 	private AzureConfigModel azure;
 
@@ -33,7 +34,7 @@ public class GatewayConfigModel implements Serializable {
 		return this;
 	}
 
-	public GatewayConfigModel withAws(AwsConfigModel aws) {
+	public GatewayConfigModel withAws(ConfigModel aws) {
 		setAws(aws);
 		return this;
 	}
@@ -64,11 +65,11 @@ public class GatewayConfigModel implements Serializable {
 		this.key = key;
 	}
 
-	public AwsConfigModel getAws() {
+	public ConfigModel getAws() {
 		return aws;
 	}
 
-	public void setAws(AwsConfigModel aws) {
+	public void setAws(ConfigModel aws) {
 		this.aws = aws;
 	}
 

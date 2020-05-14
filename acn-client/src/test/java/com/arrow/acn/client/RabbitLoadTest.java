@@ -316,14 +316,14 @@ public class RabbitLoadTest extends Loggable {
 				MqttConnectOptions options = createMqttOptions();
 				options.setAutomaticReconnect(false);
 				mqtt.setOptions(options);
-				mqtt.setTopics(MqttConstants.serverToGatewayCommandRouting(gatewayHid));
 				mqtt.setListener(new MessageListener() {
 					@Override
 					public void processMessage(String topic, byte[] payload) {
 						doProcessMessage(topic, payload);
 					}
 				});
-				mqtt.connect(false);
+				mqtt.connect(true);
+				mqtt.subscribe(MqttConstants.serverToGatewayCommandRouting(gatewayHid));
 				mqtt.checkConnection();
 				runLoop();
 			} catch (Throwable t) {

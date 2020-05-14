@@ -22,6 +22,7 @@ import com.arrow.acn.client.model.DeviceActionModel;
 import com.arrow.acn.client.model.DeviceActionTypeModel;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.HidModel;
 import com.arrow.acs.client.model.ListResultModel;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -43,8 +44,8 @@ public class DeviceActionApi extends ApiAbstract {
 	private TypeReference<ListResultModel<DeviceActionTypeModel>> deviceActionTypeModelTypeRef;
 	private TypeReference<ListResultModel<DeviceActionModel>> deviceActionModelTypeRef;
 
-	DeviceActionApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	DeviceActionApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	/**

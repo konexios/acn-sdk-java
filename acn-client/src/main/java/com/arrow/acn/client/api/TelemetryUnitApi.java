@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import com.arrow.acn.client.model.TelemetryUnitModel;
 import com.arrow.acn.client.search.TelemetryUnitSearchCriteria;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.ListResultModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -26,8 +27,8 @@ public class TelemetryUnitApi extends ApiAbstract {
 
 	private TypeReference<ListResultModel<TelemetryUnitModel>> telemetryUnitModelTypeRef;
 
-	TelemetryUnitApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	TelemetryUnitApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public ListResultModel<TelemetryUnitModel> findAllBy(TelemetryUnitSearchCriteria criteria) {

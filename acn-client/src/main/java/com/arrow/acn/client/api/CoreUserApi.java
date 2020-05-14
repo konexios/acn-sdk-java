@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpPost;
 
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.SamlAccountModel;
 import com.arrow.acs.client.model.StatusModel;
 
@@ -24,8 +25,8 @@ public class CoreUserApi extends ApiAbstract {
 	private static final String CORE_USERS_BASE_URL = API_BASE + "/core/users";
 	private static final String SYNC_SAML_ACCOUNTS_URL = CORE_USERS_BASE_URL + "/sync-saml-accounts";
 
-	CoreUserApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	CoreUserApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	public StatusModel syncSamlAccounts(List<SamlAccountModel> samlAccounts) {

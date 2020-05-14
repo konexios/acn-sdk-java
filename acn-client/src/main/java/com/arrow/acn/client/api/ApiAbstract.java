@@ -11,12 +11,14 @@
 package com.arrow.acn.client.api;
 
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 
 public abstract class ApiAbstract extends com.arrow.acs.client.api.ApiAbstract {
 	protected static final String API_BASE = "/api/v1/kronos";
 
-	ApiAbstract(ApiConfig apiConfig) {
+	ApiAbstract(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
 		super();
 		setApiConfig(apiConfig);
+		setMqttHttpChannel(mqttHttpChannel);
 	}
 }

@@ -34,6 +34,7 @@ import com.arrow.acn.client.search.LogsSearchCriteria;
 import com.arrow.acn.client.search.SortedSearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.ErrorModel;
 import com.arrow.acs.client.model.ExternalHidModel;
 import com.arrow.acs.client.model.HidModel;
@@ -65,8 +66,8 @@ public class DeviceApi extends ApiAbstract {
 	private TypeReference<PagingResultModel<ConfigBackupModel>> configBackupModelTypeRef;
 	private TypeReference<List<AvailableFirmwareModel>> rtuAvailableFirmwareModelTypeRef;
 
-	DeviceApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	DeviceApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	/**

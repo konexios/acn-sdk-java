@@ -26,6 +26,7 @@ import com.arrow.acn.client.search.TelemetryDeleteSearchCriteria;
 import com.arrow.acn.client.search.TelemetrySearchCriteria;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.ApiConfig;
+import com.arrow.acs.client.api.MqttHttpChannel;
 import com.arrow.acs.client.model.ListResultModel;
 import com.arrow.acs.client.model.PagingResultModel;
 import com.arrow.acs.client.model.StatusModel;
@@ -46,8 +47,8 @@ public final class TelemetryApi extends ApiAbstract {
 	private TypeReference<PagingResultModel<TelemetryItemModel>> pagingResultTypeRef;
 	private TypeReference<ListResultModel<TelemetryItemModel>> resultTypeRef;
 
-	TelemetryApi(ApiConfig apiConfig) {
-		super(apiConfig);
+	TelemetryApi(ApiConfig apiConfig, MqttHttpChannel mqttHttpChannel) {
+		super(apiConfig, mqttHttpChannel);
 	}
 
 	/**
