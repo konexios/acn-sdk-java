@@ -11,6 +11,7 @@
 package com.arrow.acn.client;
 
 public interface ClientConstants {
+    long DEFAULT_CLOUD_CONNECTION_RETRY_TIMEOUT_SECS = 180L;
     long DEFAULT_CLOUD_CONNECTION_RETRY_INTERVAL_MS = 10000L;
     long DEFAULT_CLOUD_SENDING_RETRY_MS = 5000L;
 
