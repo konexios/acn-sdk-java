@@ -314,6 +314,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	}
 
 	private synchronized SSLContext getSslContext() {
+		String method = "getSslContext";
 		if (sslContext == null) {
 			try {
 				String keystorePassword = new BigInteger(128,
@@ -323,6 +324,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				keystore.load(null, null);
 
 				// load CA cert
+				logInfo(method, "loading CA cert ...");
 				X509Certificate caCert = new JcaX509CertificateConverter()
 						.setProvider(BouncyCastleProvider.PROVIDER_NAME)
 						.getCertificate((X509CertificateHolder) new PEMParser(new StringReader(model.getCaCert()))
@@ -330,18 +332,18 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				keystore.setCertificateEntry("ca-cert", caCert);
 
 				// load client cert
+				logInfo(method, "loading client cert ...");
 				X509Certificate clientCert = new JcaX509CertificateConverter()
 						.setProvider(BouncyCastleProvider.PROVIDER_NAME)
 						.getCertificate((X509CertificateHolder) new PEMParser(new StringReader(model.getClientCert()))
 								.readObject());
 				keystore.setCertificateEntry("client-cert", clientCert);
 
+				logInfo(method, "loading private key ...");
 				PrivateKey privateKey = new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME)
 						.getPrivateKey(
 								((PEMKeyPair) new PEMParser(new StringReader(model.getPrivateKey())).readObject())
 										.getPrivateKeyInfo());
-
-				// load private key
 				keystore.setKeyEntry("private-key", privateKey, keystorePassword.toCharArray(),
 						new Certificate[] { clientCert });
 
@@ -363,7 +365,8 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 
 				sslContext = SSLContext.getInstance("TLSv1.2");
 				sslContext.init(kmf.getKeyManagers(), trustAllCerts, new SecureRandom());
-			} catch (Exception e) {
+			} catch (Throwable e) {
+				logError(method, e);
 				throw new AcsLogicalException("unable to prepare keystore", e);
 			}
 		}
