@@ -14,31 +14,7 @@ jar.doFirst {
 }
 
 dependencies {
+    compile("com.konexios:acs-core:${version}")
+    
     compile fileTree(dir: '../lib', include: '*.jar')
-}
-
-
-def jarToCopy = copySpec {
-    from "build/libs/${jar.archiveName}"
-}
-
-task copyJar(dependsOn: jar) {
-    doLast {
-        copy {
-            with jarToCopy
-            into "../../kronos/lib"
-        }
-        copy {
-            with jarToCopy
-            into "../../rhea/lib"
-        }
-        copy {
-            with jarToCopy
-            into "../../selene/lib"
-        }
-        copy {
-            with jarToCopy
-            into "../../apollo/lib"
-        }
-    }
 }
