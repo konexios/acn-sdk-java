@@ -94,6 +94,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	private Pattern commandTopicRegex = Pattern.compile(AwsMqttConstants.COMMAND_TOPIC_REGEX);
 	private Pattern apiResponseTopicRegex = Pattern.compile(AwsMqttConstants.API_RESPONSE_TOPIC_REGEX);
 	private Pattern shadowUpdateDeltaTopicRegex = Pattern.compile(AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC_REGEX);
+	private Pattern deviceDefenderTopicRegex = Pattern.compile(AwsMqttConstants.DEVICE_DEFENDER_JSON_TOPIC_REGEX);
 
 	public AwsConnector(ConfigModel model, String gatewayHid, AcnClient acnClient) {
 		super(acnClient);
@@ -136,6 +137,10 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				String apiResponseTopic = AwsMqttConstants.apiResponseTopic(getGatewayHid());
 				logInfo(method, "subscribing to apiResponseTopic: %s", apiResponseTopic);
 				client.subscribe(apiResponseTopic);
+
+				String deviceDefenderTopicResponse = AwsMqttConstants.deviceDefenderJsonTopicWildcard(getGatewayHid());
+				logInfo(method, "subscribing to deviceDefenderTopicResponse: %s", deviceDefenderTopicResponse);
+				client.subscribe(deviceDefenderTopicResponse);
 
 				// subscribe once
 				subscribeShadowRequestTopics();
@@ -206,6 +211,16 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 			} catch (Exception e) {
 				logError(method, e);
 			}
+		} else if (deviceDefenderTopicRegex.matcher(topic).matches()) {
+			DeviceDefenderReportResponse response = JsonUtils.fromJsonBytes(payload,
+					DeviceDefenderReportResponse.class);
+			if (response.getStatus().equalsIgnoreCase("REJECTED")) {
+				String reason = response.getStatusDetails() == null ? "UNKNOWN"
+						: JsonUtils.toJson(response.getStatusDetails());
+				logError(method, "device defender report rejected, reason: %s", reason);
+			} else {
+				logInfo(method, "device defender report accepted, id: %s", response.getReportId());
+			}
 		} else {
 			logError(method, "unsupported topic: %s", topic);
 		}
@@ -271,6 +286,22 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 			}
 		} else {
 			throw new AcsLogicalException("connector is terminating!");
+		}
+	}
+
+	public void sendDeviceDefenderReport(DeviceDefenderReport report) {
+		String method = "sendDeviceDefenderReport";
+		if (!terminating && checkConnection()) {
+			try {
+				byte[] data = JsonUtils.toJsonBytes(report);
+				String topic = AwsMqttConstants.deviceDefenderJsonTopic(getGatewayHid());
+				logDebug(method, "sending %d bytes to topic: %s", data.length, topic);
+				client.publish(topic, data, publishQos);
+			} catch (AcsRuntimeException e) {
+				throw e;
+			} catch (Throwable t) {
+				throw new AcsRuntimeException("unable to send data to AWS", t);
+			}
 		}
 	}
 
