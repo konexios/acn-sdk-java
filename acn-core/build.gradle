@@ -14,7 +14,7 @@ jar.doFirst {
 }
 
 dependencies {
-    compile("com.konexios:acs-core:${version}")
+    api("com.konexios:acs-core:${version}")
     
     compile fileTree(dir: '../lib', include: '*.jar')
 }

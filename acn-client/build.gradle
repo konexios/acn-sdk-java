@@ -14,27 +14,19 @@ jar.doFirst {
 }
 
 dependencies {      
-    compile("com.konexios:acs-client:${version}")
-
-    compile("org.apache.httpcomponents:httpclient:${httpclientVersion}")
-    
-    compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
+    api("com.konexios:acs-client:${version}")
+   
+    api("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
 
     // ibm
-    compile("com.ibm.messaging:watson-iot:${watsonIotVersion}")
+    api("com.ibm.messaging:watson-iot:${watsonIotVersion}")
     
     // azure
-    compile("com.microsoft.azure.sdk.iot:iot-device-client:${azureIotVersion}")
+    api("com.microsoft.azure.sdk.iot:iot-device-client:${azureIotVersion}")
         
     // security provider
-    compile("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")    
-    compile("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
-        
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
-    
-    compile("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
-    compile("org.apache.logging.log4j:log4j-core:${log4jVersion}")       
-    compile("org.apache.logging.log4j:log4j-jul:${log4jVersion}")    
-    
+    api("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")    
+    api("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
+            
     compile fileTree(dir: '../lib', include: '*.jar')    
 }
