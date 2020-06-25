@@ -13,6 +13,7 @@ package com.arrow.acn.client.cloud.aws;
 
 import java.io.StringReader;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
@@ -49,6 +50,12 @@ import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.cloud.CloudConnectorAbstract;
 import com.arrow.acn.client.cloud.CustomMqttClient;
 import com.arrow.acn.client.cloud.TransferMode;
+import com.arrow.acn.client.cloud.aws.defender.DeviceDefenderReport;
+import com.arrow.acn.client.cloud.aws.defender.DeviceDefenderReportResponse;
+import com.arrow.acn.client.cloud.aws.job.JobExecutionPayload;
+import com.arrow.acn.client.cloud.aws.job.JobExecutionUpdate;
+import com.arrow.acn.client.cloud.aws.shadow.ShadowDelta;
+import com.arrow.acn.client.cloud.aws.shadow.ShadowRequest;
 import com.arrow.acn.client.model.DeviceStateRequestModel;
 import com.arrow.acn.client.model.DeviceStateUpdateModel;
 import com.arrow.acn.client.model.aws.ConfigModel;
@@ -63,7 +70,7 @@ import com.arrow.acs.client.model.CloudResponseModel;
 
 public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChannel {
 
-	private static final int DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS = 10;
+	private static final int DEFAULT_DEVICE_TOPICS_MONITOR_INTERVAL_SECS = 10;
 	private static final int DEFAULT_CONNECTION_RETRY_INTERVAL_SECS = 10;
 	private static final int DEFAULT_MESSAGE_RETRY_INTERVAL_SECS = 5;
 	private static final int DEFAULT_PUBLISH_QOS = 1;
@@ -75,14 +82,14 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	private final ConfigModel model;
 	private CustomMqttClient client;
 	private Map<String, CloudResponseWrapper> responseMap = new HashMap<>();
-	private Set<String> shadowRequestTopics = new HashSet<>();
+	private Set<String> deviceTopics = new HashSet<>();
 
 	private SSLContext sslContext;
 	private MqttConnectOptions mqttConnectOptions;
 
-	private Timer shadowRequestMonitorTimer;
+	private Timer deviceTopicsMonitorTimer;
 
-	private int shadowRequestMonitorIntervalSecs = DEFAULT_SHADOW_REQUEST_MONITOR_INTERVAL_SECS;
+	private int deviceTopicsMonitorIntervalSecs = DEFAULT_DEVICE_TOPICS_MONITOR_INTERVAL_SECS;
 	private int connectionRetryIntervalSecs = DEFAULT_CONNECTION_RETRY_INTERVAL_SECS;
 	private int messageRetryIntervalSecs = DEFAULT_MESSAGE_RETRY_INTERVAL_SECS;
 
@@ -94,7 +101,10 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	private Pattern commandTopicRegex = Pattern.compile(AwsMqttConstants.COMMAND_TOPIC_REGEX);
 	private Pattern apiResponseTopicRegex = Pattern.compile(AwsMqttConstants.API_RESPONSE_TOPIC_REGEX);
 	private Pattern shadowUpdateDeltaTopicRegex = Pattern.compile(AwsMqttConstants.SHADOW_UPDATE_DELTA_TOPIC_REGEX);
-	private Pattern deviceDefenderTopicRegex = Pattern.compile(AwsMqttConstants.DEVICE_DEFENDER_JSON_TOPIC_REGEX);
+	private Pattern defenderResponseTopicRegex = Pattern
+			.compile(AwsMqttConstants.DEVICE_DEFENDER_JSON_RESPONSE_TOPIC_REGEX);
+	private Pattern jobNotifyNextTopicRegex = Pattern.compile(AwsMqttConstants.JOB_NOTIFY_NEXT_TOPIC_REGEX);
+	private Pattern jobUpdateResponseTopicRegex = Pattern.compile(AwsMqttConstants.JOB_UPDATE_RESPONSE_TOPIC_REGEX);
 
 	public AwsConnector(ConfigModel model, String gatewayHid, AcnClient acnClient) {
 		super(acnClient);
@@ -138,15 +148,15 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				logInfo(method, "subscribing to apiResponseTopic: %s", apiResponseTopic);
 				client.subscribe(apiResponseTopic);
 
-				String deviceDefenderTopicResponse = AwsMqttConstants.deviceDefenderJsonTopicWildcard(getGatewayHid());
+				String deviceDefenderTopicResponse = AwsMqttConstants.deviceDefenderJsonResponseTopic(getGatewayHid());
 				logInfo(method, "subscribing to deviceDefenderTopicResponse: %s", deviceDefenderTopicResponse);
 				client.subscribe(deviceDefenderTopicResponse);
 
 				// subscribe once
-				subscribeShadowRequestTopics();
+				subscribeDeviceTopics();
 
 				// start timer to monitor new device
-				startShadowRequestMonitorTimer();
+				startDeviceTopicsMonitorTimer();
 
 				// route API calls to MQTT
 				acnClient.setMqttHttpChannel(this);
@@ -166,7 +176,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 	@Override
 	public void stop() {
 		super.stop();
-		clearShadowRequestMonitorTimer();
+		clearDeviceTopicsMonitorTimer();
 		closeClient();
 	}
 
@@ -211,7 +221,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 			} catch (Exception e) {
 				logError(method, e);
 			}
-		} else if (deviceDefenderTopicRegex.matcher(topic).matches()) {
+		} else if (defenderResponseTopicRegex.matcher(topic).matches()) {
 			DeviceDefenderReportResponse response = JsonUtils.fromJsonBytes(payload,
 					DeviceDefenderReportResponse.class);
 			if (response.getStatus().equalsIgnoreCase("REJECTED")) {
@@ -221,8 +231,21 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 			} else {
 				logInfo(method, "device defender report accepted, id: %s", response.getReportId());
 			}
+		} else if (jobNotifyNextTopicRegex.matcher(topic).matches()) {
+			try {
+				JobExecutionPayload job = JsonUtils.fromJsonBytes(payload, JobExecutionPayload.class);
+				logInfo(method, "received new job: %s", JsonUtils.toJson(job));
+				service.submit(() -> {
+					String deviceHid = StringUtils.split(topic, "/")[2];
+					awsJobNotifyNext(deviceHid, job);
+				});
+			} catch (Exception e) {
+				logError(method, e);
+			}
+		} else if (jobUpdateResponseTopicRegex.matcher(topic).matches()) {
+			logInfo(method, "jobUpdateResponse: %s", new String(payload, StandardCharsets.UTF_8));
 		} else {
-			logError(method, "unsupported topic: %s", topic);
+			logError(method, "UNSUPPORTED topic: %s", topic);
 		}
 	}
 
@@ -325,6 +348,25 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		}
 	}
 
+	@Override
+	protected void sendAwsJobUpdate(String deviceHid, String jobId, JobExecutionUpdate update) {
+		String method = "sendAwsJobUpdate";
+		if (!terminating) {
+			checkConnection();
+			try {
+				String topic = AwsMqttConstants.jobUpdateTopic(deviceHid, jobId);
+				logDebug(method, "sending job update to topic: %s, data: %s", topic, JsonUtils.toJson(update));
+				client.publish(topic, JsonUtils.toJsonBytes(update), publishQos);
+			} catch (AcsRuntimeException e) {
+				logError(method, e);
+				throw e;
+			} catch (Exception e) {
+				logError(method, e);
+				throw new AcsLogicalException("sendDeviceStateUpdate failed", e);
+			}
+		}
+	}
+
 	private boolean checkConnection() {
 		String method = "checkConnection";
 		while (!connected.get() && !terminating) {
@@ -404,27 +446,27 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		return sslContext;
 	}
 
-	private void startShadowRequestMonitorTimer() {
-		String method = "startShadowRequestMonitorTimer";
+	private void startDeviceTopicsMonitorTimer() {
+		String method = "startDeviceTopicsMonitorTimer";
 
-		clearShadowRequestMonitorTimer();
+		clearDeviceTopicsMonitorTimer();
 
-		shadowRequestMonitorTimer = new Timer(true);
-		shadowRequestMonitorTimer.scheduleAtFixedRate(new TimerTask() {
+		deviceTopicsMonitorTimer = new Timer(true);
+		deviceTopicsMonitorTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				subscribeShadowRequestTopics();
+				subscribeDeviceTopics();
 			}
-		}, 0L, shadowRequestMonitorIntervalSecs * 1000);
+		}, 0L, deviceTopicsMonitorIntervalSecs * 1000);
 		logDebug(method, "started!");
 	}
 
-	private void clearShadowRequestMonitorTimer() {
-		if (shadowRequestMonitorTimer != null) {
-			shadowRequestMonitorTimer.cancel();
-			shadowRequestMonitorTimer = null;
-			shadowRequestTopics.clear();
+	private void clearDeviceTopicsMonitorTimer() {
+		if (deviceTopicsMonitorTimer != null) {
+			deviceTopicsMonitorTimer.cancel();
+			deviceTopicsMonitorTimer = null;
 		}
+		deviceTopics.clear();
 	}
 
 	private void closeClient() {
@@ -438,27 +480,33 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		}
 	}
 
-	private void subscribeShadowRequestTopics() {
-		String method = "subscribeShadowRequestTopics";
+	private void subscribeDeviceTopics() {
+		String method = "subscribeDeviceTopics";
 		getDeviceHids().forEach(deviceHid -> {
 			try {
-				String topic = AwsMqttConstants.shadowUpdateDeltaTopic(deviceHid);
-				if (shadowRequestTopics.add(topic)) {
-					logInfo(method, "subscribing to topic: %s", topic);
-					client.subscribe(topic);
-				}
+				subscribeDeviceTopic(AwsMqttConstants.shadowUpdateDeltaTopic(deviceHid));
+				subscribeDeviceTopic(AwsMqttConstants.jobNotifyNextTopic(deviceHid));
+				subscribeDeviceTopic(AwsMqttConstants.jobUpdateResponseTopic(deviceHid));
 			} catch (Exception e) {
 				logError(method, e);
 			}
 		});
 	}
 
+	private void subscribeDeviceTopic(String topic) {
+		String method = "subscribeDeviceTopic";
+		if (deviceTopics.add(topic)) {
+			logInfo(method, "subscribing to device topic: %s", topic);
+			client.subscribe(topic);
+		}
+	}
+
 	public int getShadowRequestMonitorIntervalSecs() {
-		return shadowRequestMonitorIntervalSecs;
+		return deviceTopicsMonitorIntervalSecs;
 	}
 
 	public void setShadowRequestMonitorIntervalSecs(int shadowRequestMonitorIntervalSecs) {
-		this.shadowRequestMonitorIntervalSecs = shadowRequestMonitorIntervalSecs;
+		this.deviceTopicsMonitorIntervalSecs = shadowRequestMonitorIntervalSecs;
 	}
 
 	public int getConnectionRetryIntervalSecs() {
