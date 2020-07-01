@@ -14,165 +14,137 @@ import com.arrow.acs.client.model.AuditableDocumentModelAbstract;
 
 public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccountModel> {
 
-	private static final long serialVersionUID = -8205580201727669257L;
+    private static final long serialVersionUID = -8205580201727669257L;
 
-	private String applicationHid;
-	private String userHid;
-	private String hostName;
-	private String accessKeyName;
-	private String accessKey;
-	private String eventHubName;
-	private String eventHubEndpoint;
-	private int numPartitions;
-	private String telemetrySync;
-	private boolean enabled;
-	private String consumerGroupName;
+    private String applicationHid;
+    private String dpsEndpoint;
+    private String dpsConnectionString;
+    private String eventHubEndpoint;
+    private String eventHubConnectionString;
+    private int numPartitions;
+    private String telemetrySync;
+    private boolean enabled;
+    private String consumerGroupName;
 
-	@Override
-	protected AzureAccountModel self() {
-		return this;
-	}
+    @Override
+    protected AzureAccountModel self() {
+        return this;
+    }
 
-	public AzureAccountModel withApplicationHid(String applicationHid) {
-		setApplicationHid(applicationHid);
-		return this;
-	}
+    public AzureAccountModel withApplicationHid(String applicationHid) {
+        setApplicationHid(applicationHid);
+        return this;
+    }
 
-	public AzureAccountModel withUserHid(String userHid) {
-		setUserHid(userHid);
-		return this;
-	}
+    public AzureAccountModel withDpsConnectionString(String dpsConnectionString) {
+        setDpsConnectionString(dpsConnectionString);
+        return this;
+    }
 
-	public AzureAccountModel withHostName(String hostName) {
-		setHostName(hostName);
-		return this;
-	}
+    public AzureAccountModel withEventHubConnectionString(String eventHubConnectionString) {
+        setEventHubConnectionString(eventHubConnectionString);
+        return this;
+    }
 
-	public AzureAccountModel withAccessKeyName(String accesskeyName) {
-		setAccessKeyName(accesskeyName);
-		return this;
-	}
+    public AzureAccountModel withNumPartitions(int numPartitions) {
+        setNumPartitions(numPartitions);
+        return this;
+    }
 
-	public AzureAccountModel withAccessKey(String accessKey) {
-		setAccessKey(accessKey);
-		return this;
-	}
+    public AzureAccountModel withTelemetrySync(String telemetrySync) {
+        setTelemetrySync(telemetrySync);
+        return this;
+    }
 
-	public AzureAccountModel withEventHubName(String eventHubName) {
-		setEventHubName(eventHubName);
-		return this;
-	}
+    public AzureAccountModel withEnabled(boolean enabled) {
+        setEnabled(enabled);
+        return this;
+    }
 
-	public AzureAccountModel withEventHubEndpoint(String eventHubEndpoint) {
-		setEventHubEndpoint(eventHubEndpoint);
-		return this;
-	}
+    public AzureAccountModel withConsumerGroupName(String consumerGroupName) {
+        setConsumerGroupName(consumerGroupName);
+        return this;
+    }
 
-	public AzureAccountModel withNumPartitions(int numPartitions) {
-		setNumPartitions(numPartitions);
-		return this;
-	}
+    public AzureAccountModel withDpsEndpoint(String dpsEndpoint) {
+        setDpsEndpoint(dpsEndpoint);
+        return this;
+    }
 
-	public AzureAccountModel withTelemetrySync(String telemetrySync) {
-		setTelemetrySync(telemetrySync);
-		return this;
-	}
+    public AzureAccountModel withEventHubEndpoint(String eventHubEndpoint) {
+        setEventHubEndpoint(eventHubEndpoint);
+        return this;
+    }
 
-	public AzureAccountModel withEnabled(boolean enabled) {
-		setEnabled(enabled);
-		return this;
-	}
+    public String getApplicationHid() {
+        return applicationHid;
+    }
 
-	public AzureAccountModel withConsumerGroupName(String consumerGroupName) {
-		setConsumerGroupName(consumerGroupName);
-		return this;
-	}
+    public void setApplicationHid(String applicationHid) {
+        this.applicationHid = applicationHid;
+    }
 
-	public String getApplicationHid() {
-		return applicationHid;
-	}
+    public String getDpsConnectionString() {
+        return dpsConnectionString;
+    }
 
-	public void setApplicationHid(String applicationHid) {
-		this.applicationHid = applicationHid;
-	}
+    public void setDpsConnectionString(String dpsConnectionString) {
+        this.dpsConnectionString = dpsConnectionString;
+    }
 
-	public String getHostName() {
-		return hostName;
-	}
+    public String getEventHubConnectionString() {
+        return eventHubConnectionString;
+    }
 
-	public void setHostName(String hostName) {
-		this.hostName = hostName;
-	}
+    public void setEventHubConnectionString(String eventHubConnectionString) {
+        this.eventHubConnectionString = eventHubConnectionString;
+    }
 
-	public String getAccessKeyName() {
-		return accessKeyName;
-	}
+    public int getNumPartitions() {
+        return numPartitions;
+    }
 
-	public void setAccessKeyName(String accessKeyName) {
-		this.accessKeyName = accessKeyName;
-	}
+    public void setNumPartitions(int numPartitions) {
+        this.numPartitions = numPartitions;
+    }
 
-	public String getAccessKey() {
-		return accessKey;
-	}
+    public String getTelemetrySync() {
+        return telemetrySync;
+    }
 
-	public void setAccessKey(String accessKey) {
-		this.accessKey = accessKey;
-	}
+    public void setTelemetrySync(String telemetrySync) {
+        this.telemetrySync = telemetrySync;
+    }
 
-	public String getEventHubName() {
-		return eventHubName;
-	}
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	public void setEventHubName(String eventHubName) {
-		this.eventHubName = eventHubName;
-	}
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public String getEventHubEndpoint() {
-		return eventHubEndpoint;
-	}
+    public String getConsumerGroupName() {
+        return consumerGroupName;
+    }
 
-	public void setEventHubEndpoint(String eventHubEndpoint) {
-		this.eventHubEndpoint = eventHubEndpoint;
-	}
+    public void setConsumerGroupName(String consumerGroupName) {
+        this.consumerGroupName = consumerGroupName;
+    }
 
-	public int getNumPartitions() {
-		return numPartitions;
-	}
+    public String getDpsEndpoint() {
+        return dpsEndpoint;
+    }
 
-	public void setNumPartitions(int numPartitions) {
-		this.numPartitions = numPartitions;
-	}
+    public void setDpsEndpoint(String dpsEndpoint) {
+        this.dpsEndpoint = dpsEndpoint;
+    }
 
-	public String getTelemetrySync() {
-		return telemetrySync;
-	}
+    public String getEventHubEndpoint() {
+        return eventHubEndpoint;
+    }
 
-	public void setTelemetrySync(String telemetrySync) {
-		this.telemetrySync = telemetrySync;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public String getConsumerGroupName() {
-		return consumerGroupName;
-	}
-
-	public void setConsumerGroupName(String consumerGroupName) {
-		this.consumerGroupName = consumerGroupName;
-	}
-
-	public String getUserHid() {
-		return userHid;
-	}
-
-	public void setUserHid(String userHid) {
-		this.userHid = userHid;
-	}
+    public void setEventHubEndpoint(String eventHubEndpoint) {
+        this.eventHubEndpoint = eventHubEndpoint;
+    }
 }
