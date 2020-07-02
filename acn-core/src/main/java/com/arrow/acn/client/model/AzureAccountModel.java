@@ -19,6 +19,7 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
     private String applicationHid;
     private String dpsEndpoint;
     private String dpsConnectionString;
+    private String iotHubHostname;
     private String eventHubEndpoint;
     private String eventHubConnectionString;
     private int numPartitions;
@@ -38,6 +39,11 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
 
     public AzureAccountModel withDpsConnectionString(String dpsConnectionString) {
         setDpsConnectionString(dpsConnectionString);
+        return this;
+    }
+
+    public AzureAccountModel withIotHubHostname(String iotHubHostname) {
+        setIotHubHostname(iotHubHostname);
         return this;
     }
 
@@ -90,6 +96,14 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
 
     public void setDpsConnectionString(String dpsConnectionString) {
         this.dpsConnectionString = dpsConnectionString;
+    }
+
+    public String getIotHubHostname() {
+        return iotHubHostname;
+    }
+
+    public void setIotHubHostname(String iotHubHostname) {
+        this.iotHubHostname = iotHubHostname;
     }
 
     public String getEventHubConnectionString() {
