@@ -34,28 +34,28 @@ public class AzureConnector extends CloudConnectorAbstract {
     private final static String CONNECTION_STRING_FORMAT = "%s;DeviceId=%s";
 
     private final AzureConfigModel model;
-    private final String gatewayUid;
+    private final String gatewayHid;
     private DeviceClient client;
 
     private AtomicLong eventCounter = new AtomicLong();
     private LocalEventCallback eventCallback = new LocalEventCallback();
     private LocalMessageCallback messageCallback = new LocalMessageCallback();
 
-    public AzureConnector(AzureConfigModel model, String gatewayUid, AcnClient acnClient) {
+    public AzureConnector(AzureConfigModel model, String gatewayHid, AcnClient acnClient) {
         super(acnClient);
         this.model = model;
-        this.gatewayUid = gatewayUid;
+        this.gatewayHid = gatewayHid;
     }
 
     @Override
     public void start() {
         String method = "start";
         AcsUtils.notNull(model, "model is NULL");
-        AcsUtils.notNull(gatewayUid, "gatewayUid is NULL");
+        AcsUtils.notNull(gatewayHid, "gatewayHid is NULL");
         try {
             if (client == null) {
                 String connectionString = String.format(CONNECTION_STRING_FORMAT, model.getConnectionString(),
-                        gatewayUid);
+                        gatewayHid);
                 logInfo(method, "creating azure client ...");
                 client = new DeviceClient(connectionString, IotHubClientProtocol.MQTT);
                 client.setMessageCallback(messageCallback, null);
@@ -115,7 +115,7 @@ public class AzureConnector extends CloudConnectorAbstract {
             String method = "messageCallback";
             byte[] bytes = msg.getBytes();
             logInfo(method, "payload: %s", new String(bytes, Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
-            validateAndProcessEvent(gatewayUid, bytes);
+            validateAndProcessEvent(gatewayHid, bytes);
             return IotHubMessageResult.COMPLETE;
         }
     }

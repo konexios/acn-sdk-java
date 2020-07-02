@@ -3,7 +3,7 @@ buildscript {
         pahoMqttVersion = '1.2.4'
         
         watsonIotVersion = '0.2.6'
-        azureIotVersion = '1.20.3'
+        azureIotVersion = '1.23.0'
         
         bouncyCastleVersion = '1.65'
     }
