@@ -17,11 +17,12 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
     private static final long serialVersionUID = -8205580201727669257L;
 
     private String applicationHid;
-    private String dpsEndpoint;
+    private String dpsHostname;
     private String dpsConnectionString;
     private String dpsIdScope;
     private String iotHubHostname;
-    private String eventHubEndpoint;
+    private String iotHubConnectionString;
+    private String eventHubHostname;
     private String eventHubConnectionString;
     private int numPartitions;
     private String telemetrySync;
@@ -53,6 +54,11 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
         return this;
     }
 
+    public AzureAccountModel withIotHubConnectionString(String iotHubConnectionString) {
+        setIotHubConnectionString(iotHubConnectionString);
+        return this;
+    }
+
     public AzureAccountModel withEventHubConnectionString(String eventHubConnectionString) {
         setEventHubConnectionString(eventHubConnectionString);
         return this;
@@ -78,13 +84,13 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
         return this;
     }
 
-    public AzureAccountModel withDpsEndpoint(String dpsEndpoint) {
-        setDpsEndpoint(dpsEndpoint);
+    public AzureAccountModel withDpsHostname(String dpsHostname) {
+        setDpsHostname(dpsHostname);
         return this;
     }
 
-    public AzureAccountModel withEventHubEndpoint(String eventHubEndpoint) {
-        setEventHubEndpoint(eventHubEndpoint);
+    public AzureAccountModel withEventHubHostname(String eventHubHostname) {
+        setEventHubHostname(eventHubHostname);
         return this;
     }
 
@@ -96,6 +102,14 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
         this.applicationHid = applicationHid;
     }
 
+    public String getDpsHostname() {
+        return dpsHostname;
+    }
+
+    public void setDpsHostname(String dpsHostname) {
+        this.dpsHostname = dpsHostname;
+    }
+
     public String getDpsConnectionString() {
         return dpsConnectionString;
     }
@@ -104,12 +118,36 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
         this.dpsConnectionString = dpsConnectionString;
     }
 
+    public String getDpsIdScope() {
+        return dpsIdScope;
+    }
+
+    public void setDpsIdScope(String dpsIdScope) {
+        this.dpsIdScope = dpsIdScope;
+    }
+
     public String getIotHubHostname() {
         return iotHubHostname;
     }
 
     public void setIotHubHostname(String iotHubHostname) {
         this.iotHubHostname = iotHubHostname;
+    }
+
+    public String getIotHubConnectionString() {
+        return iotHubConnectionString;
+    }
+
+    public void setIotHubConnectionString(String iotHubConnectionString) {
+        this.iotHubConnectionString = iotHubConnectionString;
+    }
+
+    public String getEventHubHostname() {
+        return eventHubHostname;
+    }
+
+    public void setEventHubHostname(String eventHubHostname) {
+        this.eventHubHostname = eventHubHostname;
     }
 
     public String getEventHubConnectionString() {
@@ -150,29 +188,5 @@ public class AzureAccountModel extends AuditableDocumentModelAbstract<AzureAccou
 
     public void setConsumerGroupName(String consumerGroupName) {
         this.consumerGroupName = consumerGroupName;
-    }
-
-    public String getDpsEndpoint() {
-        return dpsEndpoint;
-    }
-
-    public void setDpsEndpoint(String dpsEndpoint) {
-        this.dpsEndpoint = dpsEndpoint;
-    }
-
-    public String getEventHubEndpoint() {
-        return eventHubEndpoint;
-    }
-
-    public void setEventHubEndpoint(String eventHubEndpoint) {
-        this.eventHubEndpoint = eventHubEndpoint;
-    }
-
-    public String getDpsIdScope() {
-        return dpsIdScope;
-    }
-
-    public void setDpsIdScope(String dpsIdScope) {
-        this.dpsIdScope = dpsIdScope;
     }
 }
