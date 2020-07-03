@@ -31,8 +31,6 @@ import com.microsoft.azure.sdk.iot.device.MessageCallback;
 
 public class AzureConnector extends CloudConnectorAbstract {
 
-    private final static String CONNECTION_STRING_FORMAT = "%s;DeviceId=%s";
-
     private final AzureConfigModel model;
     private final String gatewayHid;
     private DeviceClient client;
@@ -54,10 +52,8 @@ public class AzureConnector extends CloudConnectorAbstract {
         AcsUtils.notNull(gatewayHid, "gatewayHid is NULL");
         try {
             if (client == null) {
-                String connectionString = String.format(CONNECTION_STRING_FORMAT, model.getConnectionString(),
-                        gatewayHid);
                 logInfo(method, "creating azure client ...");
-                client = new DeviceClient(connectionString, IotHubClientProtocol.MQTT);
+                client = new DeviceClient(model.getConnectionString(), IotHubClientProtocol.MQTT);
                 client.setMessageCallback(messageCallback, null);
                 logInfo(method, "connecting azure client ...");
                 client.open();
