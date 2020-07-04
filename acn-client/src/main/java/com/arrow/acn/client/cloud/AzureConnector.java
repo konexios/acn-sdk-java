@@ -31,6 +31,10 @@ import com.microsoft.azure.sdk.iot.device.MessageCallback;
 
 public class AzureConnector extends CloudConnectorAbstract {
 
+    public enum MessageType {
+        TELEMETRY, API_REQUEST
+    }
+
     private final AzureConfigModel model;
     private final String gatewayHid;
     private DeviceClient client;
@@ -87,6 +91,8 @@ public class AzureConnector extends CloudConnectorAbstract {
         if (client != null) {
             String json = JsonUtils.toJson(payload);
             Message message = new Message(json);
+            message.setProperty("message_type", MessageType.TELEMETRY.name());
+            message.setProperty("hid", payload.getDeviceHid());
             long counter = eventCounter.getAndIncrement();
             logDebug(method, "counter: %d, json size: %d", counter, json.length());
             client.sendEventAsync(message, eventCallback, counter);
