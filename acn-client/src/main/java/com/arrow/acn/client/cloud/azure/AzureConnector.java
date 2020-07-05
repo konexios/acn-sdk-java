@@ -8,19 +8,24 @@
  * Contributors:
  *     Arrow Electronics, Inc.
  *******************************************************************************/
-package com.arrow.acn.client.cloud;
+package com.arrow.acn.client.cloud.azure;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
+import com.arrow.acn.client.cloud.CloudConnectorAbstract;
+import com.arrow.acn.client.cloud.TransferMode;
 import com.arrow.acn.client.model.AzureConfigModel;
 import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsRuntimeException;
 import com.arrow.acs.AcsSystemException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
+import com.arrow.acs.client.api.MqttHttpChannel;
+import com.arrow.acs.client.model.CloudRequestModel;
+import com.arrow.acs.client.model.CloudResponseModel;
 import com.microsoft.azure.sdk.iot.device.DeviceClient;
 import com.microsoft.azure.sdk.iot.device.IotHubClientProtocol;
 import com.microsoft.azure.sdk.iot.device.IotHubEventCallback;
@@ -29,7 +34,7 @@ import com.microsoft.azure.sdk.iot.device.IotHubStatusCode;
 import com.microsoft.azure.sdk.iot.device.Message;
 import com.microsoft.azure.sdk.iot.device.MessageCallback;
 
-public class AzureConnector extends CloudConnectorAbstract {
+public class AzureConnector extends CloudConnectorAbstract implements MqttHttpChannel {
 
     public enum MessageType {
         TELEMETRY, API_REQUEST
@@ -61,6 +66,10 @@ public class AzureConnector extends CloudConnectorAbstract {
                 client.setMessageCallback(messageCallback, null);
                 logInfo(method, "connecting azure client ...");
                 client.open();
+
+                // route API calls to MQTT
+                logInfo(method, "routing REST calls to MQTT ...");
+                acnClient.setMqttHttpChannel(this);
             } else {
                 logWarn(method, "client is already initialized");
             }
@@ -109,6 +118,43 @@ public class AzureConnector extends CloudConnectorAbstract {
         }
         if (batch != null) {
             batch.forEach(this::send);
+        }
+    }
+
+    @Override
+    public CloudResponseModel sendRequest(CloudRequestModel request, long timeoutSecs) {
+        String method = "sendRequest";
+        if (!terminating && client != null) {
+            try {
+                String json = JsonUtils.toJson(request);
+                Message message = new Message(json);
+                message.setProperty("message_type", MessageType.API_REQUEST.name());
+                message.setProperty("hid", getGatewayHid());
+                long counter = eventCounter.getAndIncrement();
+                logDebug(method, "counter: %d, json size: %d", counter, json.length());
+
+                CloudResponseWrapper wrapper = new CloudResponseWrapper();
+                responseMap.put(request.getRequestId(), wrapper);
+                client.sendEventAsync(message, eventCallback, counter);
+
+                // CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
+                // if (response == null) {
+                // throw new AcsLogicalException("Timeout waiting for response from MQTT
+                // channel");
+                // }
+                // return response;
+                return new CloudResponseModel();
+            } catch (AcsRuntimeException e) {
+                logError(method, e);
+                throw e;
+            } catch (Exception e) {
+                logError(method, e);
+                throw new AcsLogicalException("sendRequest failed", e);
+            } finally {
+                responseMap.remove(request.getRequestId());
+            }
+        } else {
+            throw new AcsLogicalException("connector is terminating!");
         }
     }
 
