@@ -13,6 +13,8 @@ package com.arrow.acn.client.cloud.azure;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.cloud.CloudConnectorAbstract;
@@ -134,17 +136,11 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
                 responseMap.put(request.getRequestId(), wrapper);
                 client.sendEventAsync(message, eventCallback, counter);
 
-                // CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
-                // if (response == null) {
-                // throw new AcsLogicalException("Timeout waiting for response from MQTT
-                // channel");
-                // }
-                // return response;
-
-                // TODO remove test code
-                CloudResponseModel result = new CloudResponseModel();
-                result.getParameters().put("status", CloudResponseModel.Status.OK.name());
-                return result;
+                CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
+                if (response == null) {
+                    throw new AcsLogicalException("Timeout waiting for response from MQTT channel");
+                }
+                return response;
             } catch (AcsRuntimeException e) {
                 logError(method, e);
                 throw e;
@@ -163,10 +159,35 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
         public IotHubMessageResult execute(Message msg, Object context) {
             String method = "messageCallback";
             String messageType = msg.getProperty("message_type");
-            byte[] bytes = msg.getBytes();
-            logInfo(method, "messageType: %s, payload: %s", messageType,
-                    new String(bytes, Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
-            // validateAndProcessEvent(getGatewayHid(), bytes);
+            byte[] payload = msg.getBytes();
+            logInfo(method, "messageType: %s, payload size: %d", messageType, payload.length);
+            if (StringUtils.equalsIgnoreCase(messageType, AzureConnector.MessageType.COMMAND.name())) {
+                try {
+                    service.submit(() -> {
+                        logDebug(method, "submitting command payload ...");
+                        validateAndProcessEvent(getGatewayHid(), payload);
+                    });
+                } catch (Exception e) {
+                    logError(method, e);
+                }
+            } else if (StringUtils.equalsIgnoreCase(messageType, AzureConnector.MessageType.API_RESPONSE.name())) {
+                service.submit(() -> {
+                    try {
+                        CloudResponseModel responseModel = JsonUtils.fromJsonBytes(payload, CloudResponseModel.class);
+                        logDebug(method, "responseModel: %s", JsonUtils.toJson(responseModel));
+
+                        CloudResponseWrapper wrapper = responseMap.get(responseModel.getRequestId());
+                        if (wrapper != null) {
+                            logDebug(method, "marking request complete: %s", responseModel.getRequestId());
+                            wrapper.complete(responseModel);
+                        }
+                    } catch (Exception e) {
+                        logError(method, e);
+                    }
+                });
+            } else {
+                logError(method, "unsupported message type: %s", messageType);
+            }
             return IotHubMessageResult.COMPLETE;
         }
     }
