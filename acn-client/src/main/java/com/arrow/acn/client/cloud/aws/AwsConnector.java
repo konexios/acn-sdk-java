@@ -103,10 +103,9 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
     private Pattern jobNotifyNextTopicRegex = Pattern.compile(AwsMqttConstants.JOB_NOTIFY_NEXT_TOPIC_REGEX);
     private Pattern jobUpdateResponseTopicRegex = Pattern.compile(AwsMqttConstants.JOB_UPDATE_RESPONSE_TOPIC_REGEX);
 
-    public AwsConnector(ConfigModel model, String gatewayHid, AcnClient acnClient) {
-        super(acnClient);
+    public AwsConnector(AcnClient acnClient, String gatewayHid, ConfigModel model) {
+        super(acnClient, gatewayHid);
         this.model = model;
-        setGatewayHid(gatewayHid);
     }
 
     @Override

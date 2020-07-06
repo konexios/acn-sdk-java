@@ -37,28 +37,25 @@ import com.microsoft.azure.sdk.iot.device.MessageCallback;
 public class AzureConnector extends CloudConnectorAbstract implements MqttHttpChannel {
 
     public enum MessageType {
-        TELEMETRY, API_REQUEST
+        TELEMETRY, COMMAND, API_REQUEST, API_RESPONSE
     }
 
     private final AzureConfigModel model;
-    private final String gatewayHid;
     private DeviceClient client;
 
     private AtomicLong eventCounter = new AtomicLong();
     private LocalEventCallback eventCallback = new LocalEventCallback();
     private LocalMessageCallback messageCallback = new LocalMessageCallback();
 
-    public AzureConnector(AzureConfigModel model, String gatewayHid, AcnClient acnClient) {
-        super(acnClient);
+    public AzureConnector(AcnClient acnClient, String gatewayHid, AzureConfigModel model) {
+        super(acnClient, gatewayHid);
         this.model = model;
-        this.gatewayHid = gatewayHid;
     }
 
     @Override
     public void start() {
         String method = "start";
         AcsUtils.notNull(model, "model is NULL");
-        AcsUtils.notNull(gatewayHid, "gatewayHid is NULL");
         try {
             if (client == null) {
                 logInfo(method, "creating azure client ...");
@@ -143,7 +140,11 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
                 // channel");
                 // }
                 // return response;
-                return new CloudResponseModel();
+
+                // TODO remove test code
+                CloudResponseModel result = new CloudResponseModel();
+                result.getParameters().put("status", CloudResponseModel.Status.OK.name());
+                return result;
             } catch (AcsRuntimeException e) {
                 logError(method, e);
                 throw e;
@@ -161,9 +162,11 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
     class LocalMessageCallback implements MessageCallback {
         public IotHubMessageResult execute(Message msg, Object context) {
             String method = "messageCallback";
+            String messageType = msg.getProperty("message_type");
             byte[] bytes = msg.getBytes();
-            logInfo(method, "payload: %s", new String(bytes, Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
-            validateAndProcessEvent(gatewayHid, bytes);
+            logInfo(method, "messageType: %s, payload: %s", messageType,
+                    new String(bytes, Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
+            // validateAndProcessEvent(getGatewayHid(), bytes);
             return IotHubMessageResult.COMPLETE;
         }
     }

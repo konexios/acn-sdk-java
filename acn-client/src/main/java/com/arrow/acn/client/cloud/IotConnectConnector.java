@@ -21,8 +21,8 @@ import com.arrow.acn.client.api.AcnClient;
 public class IotConnectConnector extends MqttConnectorAbstract {
     private String iotConnectMqttVHost;
 
-    public IotConnectConnector(String url, String iotConnectMqttVHost, String gatewayHid, AcnClient acnClient) {
-        super(url, gatewayHid, acnClient);
+    public IotConnectConnector(AcnClient acnClient, String gatewayHid, String url, String iotConnectMqttVHost) {
+        super(acnClient, gatewayHid, url);
         this.iotConnectMqttVHost = iotConnectMqttVHost;
     }
 

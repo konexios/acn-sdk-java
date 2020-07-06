@@ -50,8 +50,9 @@ public abstract class CloudConnectorAbstract extends Loggable {
     protected boolean terminating = false;
     protected Map<String, CloudResponseWrapper> responseMap = new HashMap<>();
 
-    protected CloudConnectorAbstract(AcnClient acnClient) {
+    protected CloudConnectorAbstract(AcnClient acnClient, String gatewayHid) {
         this.acnClient = acnClient;
+        this.gatewayHid = gatewayHid;
         this.service = Executors.newCachedThreadPool();
     }
 
