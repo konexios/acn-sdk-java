@@ -188,7 +188,8 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
                     }
                 });
             } else {
-                logError(method, "unsupported message type: %s", messageType);
+                String content = new String(payload, Message.DEFAULT_IOTHUB_MESSAGE_CHARSET);
+                logError(method, "unsupported message type: %s, content: %s", messageType, content);
             }
             return IotHubMessageResult.COMPLETE;
         }
