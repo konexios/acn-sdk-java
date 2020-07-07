@@ -23,6 +23,7 @@ import com.arrow.acn.client.model.AzureConfigModel;
 import com.arrow.acs.AcsLogicalException;
 import com.arrow.acs.AcsRuntimeException;
 import com.arrow.acs.AcsSystemException;
+import com.arrow.acs.AcsTerminatingException;
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.JsonUtils;
 import com.arrow.acs.client.api.MqttHttpChannel;
@@ -98,6 +99,8 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
     @Override
     public void send(IotParameters payload) {
         String method = "send";
+        if (terminating)
+            throw new AcsTerminatingException();
         if (client != null) {
             String json = JsonUtils.toJson(payload);
             Message message = new Message(json);
@@ -125,35 +128,35 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
     @Override
     public CloudResponseModel sendRequest(CloudRequestModel request, long timeoutSecs) {
         String method = "sendRequest";
-        if (!terminating && client != null) {
-            try {
-                String json = JsonUtils.toJson(request);
-                Message message = new Message(json);
-                message.setProperty(PROPERTY_MESSAGE_TYPE, MessageType.API_REQUEST.name());
-                message.setProperty(PROPERTY_HID, getGatewayHid());
-                long counter = eventCounter.getAndIncrement();
-                logDebug(method, "counter: %d, json size: %d", counter, json.length());
+        if (terminating)
+            throw new AcsTerminatingException();
+        if (client == null)
+            throw new AcsSystemException("client is null");
+        try {
+            String json = JsonUtils.toJson(request);
+            Message message = new Message(json);
+            message.setProperty(PROPERTY_MESSAGE_TYPE, MessageType.API_REQUEST.name());
+            message.setProperty(PROPERTY_HID, getGatewayHid());
+            long counter = eventCounter.getAndIncrement();
+            logDebug(method, "counter: %d, json size: %d", counter, json.length());
 
-                CloudResponseWrapper wrapper = new CloudResponseWrapper();
-                responseMap.put(request.getRequestId(), wrapper);
-                client.sendEventAsync(message, eventCallback, counter);
+            CloudResponseWrapper wrapper = new CloudResponseWrapper();
+            responseMap.put(request.getRequestId(), wrapper);
+            client.sendEventAsync(message, eventCallback, counter);
 
-                CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
-                if (response == null) {
-                    throw new AcsLogicalException("Timeout waiting for response from MQTT channel");
-                }
-                return response;
-            } catch (AcsRuntimeException e) {
-                logError(method, e);
-                throw e;
-            } catch (Exception e) {
-                logError(method, e);
-                throw new AcsLogicalException("sendRequest failed", e);
-            } finally {
-                responseMap.remove(request.getRequestId());
+            CloudResponseModel response = wrapper.waitForResponse(timeoutSecs);
+            if (response == null) {
+                throw new AcsLogicalException("Timeout waiting for response from MQTT channel");
             }
-        } else {
-            throw new AcsLogicalException("connector is terminating!");
+            return response;
+        } catch (AcsRuntimeException e) {
+            logError(method, e);
+            throw e;
+        } catch (Exception e) {
+            logError(method, e);
+            throw new AcsLogicalException("sendRequest failed", e);
+        } finally {
+            responseMap.remove(request.getRequestId());
         }
     }
 
