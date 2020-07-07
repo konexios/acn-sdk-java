@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -150,23 +151,23 @@ public abstract class CloudConnectorAbstract extends Loggable {
         }
 
         CoreEventApi eventApi = acnClient.getCoreEventApi();
-        eventApi.putReceived(model.getHid());
+        CompletableFuture.supplyAsync(() -> eventApi.putReceived(model.getHid()));
         if (isSignatureValid(model)) {
             logInfo(method, "signature is valid");
             if (listener == null) {
                 logError(method, "listener is not defined");
-                eventApi.putFailed(model.getHid(), "Listener is not defined");
+                CompletableFuture.supplyAsync(() -> eventApi.putFailed(model.getHid(), "Listener is not defined"));
             } else {
                 try {
                     listener.processMessage(topic, payload);
-                    eventApi.putSucceeded(model.getHid());
+                    CompletableFuture.supplyAsync(() -> eventApi.putSucceeded(model.getHid()));
                 } catch (Exception e) {
-                    eventApi.putFailed(model.getHid(), e.getMessage());
+                    CompletableFuture.supplyAsync(() -> eventApi.putFailed(model.getHid(), e.getMessage()));
                 }
             }
         } else {
             logWarn(method, "signature is invalid, even with UTF-8 charset");
-            eventApi.putFailed(model.getHid(), "Signature is invalid");
+            CompletableFuture.supplyAsync(() -> eventApi.putFailed(model.getHid(), "Signature is invalid"));
         }
     }
 
@@ -222,5 +223,4 @@ public abstract class CloudConnectorAbstract extends Loggable {
             return response;
         }
     }
-
 }

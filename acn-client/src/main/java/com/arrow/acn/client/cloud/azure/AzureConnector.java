@@ -37,6 +37,8 @@ import com.microsoft.azure.sdk.iot.device.Message;
 import com.microsoft.azure.sdk.iot.device.MessageCallback;
 
 public class AzureConnector extends CloudConnectorAbstract implements MqttHttpChannel {
+    public static final String PROPERTY_MESSAGE_TYPE = "message_type";
+    public static final String PROPERTY_HID = "hid";
 
     public enum MessageType {
         TELEMETRY, COMMAND, API_REQUEST, API_RESPONSE
@@ -99,8 +101,8 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
         if (client != null) {
             String json = JsonUtils.toJson(payload);
             Message message = new Message(json);
-            message.setProperty("message_type", MessageType.TELEMETRY.name());
-            message.setProperty("hid", payload.getDeviceHid());
+            message.setProperty(PROPERTY_MESSAGE_TYPE, MessageType.TELEMETRY.name());
+            message.setProperty(PROPERTY_HID, payload.getDeviceHid());
             long counter = eventCounter.getAndIncrement();
             logDebug(method, "counter: %d, json size: %d", counter, json.length());
             client.sendEventAsync(message, eventCallback, counter);
@@ -127,8 +129,8 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
             try {
                 String json = JsonUtils.toJson(request);
                 Message message = new Message(json);
-                message.setProperty("message_type", MessageType.API_REQUEST.name());
-                message.setProperty("hid", getGatewayHid());
+                message.setProperty(PROPERTY_MESSAGE_TYPE, MessageType.API_REQUEST.name());
+                message.setProperty(PROPERTY_HID, getGatewayHid());
                 long counter = eventCounter.getAndIncrement();
                 logDebug(method, "counter: %d, json size: %d", counter, json.length());
 
@@ -158,7 +160,7 @@ public class AzureConnector extends CloudConnectorAbstract implements MqttHttpCh
     class LocalMessageCallback implements MessageCallback {
         public IotHubMessageResult execute(Message msg, Object context) {
             String method = "messageCallback";
-            String messageType = msg.getProperty("message_type");
+            String messageType = msg.getProperty(PROPERTY_MESSAGE_TYPE);
             byte[] payload = msg.getBytes();
             logInfo(method, "messageType: %s, payload size: %d", messageType, payload.length);
             if (StringUtils.equalsIgnoreCase(messageType, AzureConnector.MessageType.COMMAND.name())) {
