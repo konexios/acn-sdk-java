@@ -1,4 +1,4 @@
-package com.arrow.acn.client.cloud.aws;
+package com.arrow.acn.client.cloud.aws.shadow;
 
 import java.io.Serializable;
 import java.util.Map;

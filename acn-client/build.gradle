@@ -14,53 +14,19 @@ jar.doFirst {
 }
 
 dependencies {      
-    compile("org.apache.httpcomponents:httpclient:${httpclientVersion}")
-    
-    // compile("org.bouncycastle:bcprov-jdk16:1.46")    
-    // compile("commons-codec:commons-codec:1.11")
-
-    compile("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
+    api("com.konexios:acs-client:${version}")
+   
+    api("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
 
     // ibm
-    compile("com.ibm.messaging:watson-iot:${watsonIotVersion}")
+    api("com.ibm.messaging:watson-iot:${watsonIotVersion}")
     
     // azure
-    compile("com.microsoft.azure.sdk.iot:iot-device-client:${azureIotVersion}")
+    api("com.microsoft.azure.sdk.iot:iot-device-client:${azureIotVersion}")
         
     // security provider
-    compile("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
-        
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
-    
-    compile("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
-    compile("org.apache.logging.log4j:log4j-core:${log4jVersion}")    
-   
-    testCompile("junit:junit:4.+")
-    testCompile("org.apache.commons:commons-lang3:3.8.1")    
-
-    compile group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.11.1'    
-    
+    api("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")    
+    api("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
+            
     compile fileTree(dir: '../lib', include: '*.jar')    
-}
-
-
-def jarToCopy = copySpec {
-    from "build/libs/${jar.archiveName}"
-}
-
-task copyJar(dependsOn: jar) {
-    doLast {
-        copy {
-            with jarToCopy
-            into "../../kronos/lib"
-        }
-        copy {
-            with jarToCopy
-            into "../../selene/lib"
-        }
-        copy {
-            with jarToCopy
-            into "../../apollo/lib"
-        }
-    }
 }
