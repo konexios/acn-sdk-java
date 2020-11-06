@@ -34,6 +34,7 @@ public final class AcnClient {
 	private SoftwareReleaseTransApi softwareReleaseTransApi;
 	private TelemetryApi telemetryApi;
 	private TelemetryUnitApi telemetryUnitApi;
+	private UserApi userApi;
 
 	private MqttHttpChannel mqttHttpChannel;
 
@@ -77,6 +78,8 @@ public final class AcnClient {
 			getTelemetryApi().setApiConfig(apiConfig);
 		if (telemetryUnitApi != null)
 			getTelemetryUnitApi().setApiConfig(apiConfig);
+		if (userApi != null)
+			getUserApi().setApiConfig(apiConfig);
 	}
 
 	public void setMqttHttpChannel(MqttHttpChannel mqttHttpChannel) {
@@ -114,6 +117,8 @@ public final class AcnClient {
 			getTelemetryApi().setMqttHttpChannel(mqttHttpChannel);
 		if (telemetryUnitApi != null)
 			getTelemetryUnitApi().setMqttHttpChannel(mqttHttpChannel);
+		if (userApi != null)
+			getUserApi().setMqttHttpChannel(mqttHttpChannel);
 	}
 
 	public MqttHttpChannel getMqttHttpChannel() {
@@ -193,5 +198,9 @@ public final class AcnClient {
 
 	public synchronized DeviceTypeApi getDeviceTypeApi() {
 		return deviceTypeApi != null ? deviceTypeApi : (deviceTypeApi = new DeviceTypeApi(apiConfig, mqttHttpChannel));
+	}
+
+	public synchronized UserApi getUserApi() {
+		return userApi != null ? userApi : (userApi = new UserApi(apiConfig, mqttHttpChannel));
 	}
 }

@@ -58,7 +58,7 @@ subprojects {
     }
 
     group = 'com.konexios'
-    version = '2020.06.0'
+    version = '2020.09.0'
     
     compileJava.dependsOn(processResources)
 
