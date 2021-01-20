@@ -33,9 +33,11 @@ import com.arrow.acs.JsonUtils;
 public abstract class MqttConnectorAbstract extends CloudConnectorAbstract implements MessageListener {
 	private int qos;
 	private CustomMqttClient client;
+	private final String url;
 
 	protected MqttConnectorAbstract(AcnClient acnClient, String gatewayHid, String url) {
 		super(acnClient, gatewayHid);
+		this.url = url;
 		client = new CustomMqttClient(url, gatewayHid);
 		setGatewayHid(gatewayHid);
 	}
@@ -88,10 +90,15 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 	}
 
 	protected MqttConnectOptions mqttConnectOptions() {
+		String method = "mqttConnectOptions";
 		MqttConnectOptions options = new MqttConnectOptions();
 		options.setConnectionTimeout(Mqtt.DEFAULT_CONNECTION_TIMEOUT_SECS);
 		options.setKeepAliveInterval(Mqtt.DEFAULT_KEEP_ALIVE_INTERVAL_SECS);
-		options.setSocketFactory(sslContext().getSocketFactory());
+
+		if (url.toLowerCase().startsWith("ssl://")) {
+			logInfo(method, "SSL detected in URL, setting SSL context ...");
+			options.setSocketFactory(sslContext().getSocketFactory());
+		}
 		return options;
 	}
 
@@ -127,6 +134,10 @@ public abstract class MqttConnectorAbstract extends CloudConnectorAbstract imple
 			throw new AcsLogicalException("unable to prepare keystore", e);
 		}
 		return sslContext;
+	}
+
+	protected String getUrl() {
+		return url;
 	}
 
 	@Override
