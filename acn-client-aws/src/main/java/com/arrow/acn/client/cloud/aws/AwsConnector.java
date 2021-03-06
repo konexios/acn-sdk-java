@@ -33,7 +33,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -51,6 +50,7 @@ import com.arrow.acn.client.cloud.TransferMode;
 import com.arrow.acn.client.cloud.aws.defender.DeviceDefenderReport;
 import com.arrow.acn.client.cloud.aws.defender.DeviceDefenderReportResponse;
 import com.arrow.acn.client.cloud.aws.job.JobExecutionPayload;
+import com.arrow.acn.client.cloud.aws.job.JobExecutionStatus;
 import com.arrow.acn.client.cloud.aws.job.JobExecutionUpdate;
 import com.arrow.acn.client.cloud.aws.shadow.ShadowDelta;
 import com.arrow.acn.client.cloud.aws.shadow.ShadowRequest;
@@ -102,6 +102,8 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 			.compile(AwsMqttConstants.DEVICE_DEFENDER_JSON_RESPONSE_TOPIC_REGEX);
 	private Pattern jobNotifyNextTopicRegex = Pattern.compile(AwsMqttConstants.JOB_NOTIFY_NEXT_TOPIC_REGEX);
 	private Pattern jobUpdateResponseTopicRegex = Pattern.compile(AwsMqttConstants.JOB_UPDATE_RESPONSE_TOPIC_REGEX);
+
+	protected AwsJobListener jobListener;
 
 	public AwsConnector(AcnClient acnClient, String gatewayHid, ConfigModel model) {
 		super(acnClient, gatewayHid);
@@ -183,6 +185,28 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		logInfo(method, "done!");
 	}
 
+	public void setAwsJobListener(AwsJobListener awsJobListener) {
+		this.jobListener = awsJobListener;
+	}
+
+	protected void awsJobNotifyNext(String deviceHid, JobExecutionPayload payload) {
+		String method = "awsJobNotifyNext";
+		if (payload.getExecution() != null) {
+			if (jobListener != null) {
+				jobListener.notifyNext(deviceHid, payload);
+			} else {
+				logError(method, "ERROR; no listener defined to process aws jobs!");
+				JobExecutionUpdate update = new JobExecutionUpdate();
+				update.setExpectedVersion(payload.getExecution().getVersionNumber());
+				update.setClientToken(AcsUtils.randomString(16));
+				update.setStatus(JobExecutionStatus.REJECTED.name());
+				sendAwsJobUpdate(deviceHid, payload.getExecution().getJobId(), update);
+			}
+		} else {
+			logWarn(method, "ignored payload with empty execution!");
+		}
+	}
+
 	public void processMessage(String topic, byte[] payload) {
 		String method = "processMessage";
 		logInfo(method, "topic: %s, payload size: %d", topic, payload.length);
@@ -218,7 +242,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				DeviceStateRequestModel request = JsonUtils.fromJsonBytes(payload, ShadowDelta.class).toRequestModel();
 				logInfo(method, "topic: %s, request: %s", topic, JsonUtils.toJson(request));
 				service.submit(() -> {
-					String deviceHid = StringUtils.split(topic, "/")[2];
+					String deviceHid = topic.split("/")[2];
 					receiveDeviceStateRequest(deviceHid, request);
 				});
 			} catch (Exception e) {
@@ -239,7 +263,7 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 				JobExecutionPayload job = JsonUtils.fromJsonBytes(payload, JobExecutionPayload.class);
 				logInfo(method, "received new job: %s", JsonUtils.toJson(job));
 				service.submit(() -> {
-					String deviceHid = StringUtils.split(topic, "/")[2];
+					String deviceHid = topic.split("/")[2];
 					awsJobNotifyNext(deviceHid, job);
 				});
 			} catch (Exception e) {
@@ -351,7 +375,6 @@ public class AwsConnector extends CloudConnectorAbstract implements MqttHttpChan
 		}
 	}
 
-	@Override
 	protected void sendAwsJobUpdate(String deviceHid, String jobId, JobExecutionUpdate update) {
 		String method = "sendAwsJobUpdate";
 		if (!terminating) {

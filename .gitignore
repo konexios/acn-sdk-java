@@ -13,3 +13,5 @@ acn-client/build/
 acn-client/src/test/resources/RabbitLoadTest\.json
 
 \.DS_Store
+bin
+build

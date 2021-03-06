@@ -2,7 +2,7 @@ jar.doFirst {
     from sourceSets.main.allSource
     manifest {
         attributes(
-            "Implementation-Title": "Kronos SDK Client",
+            "Implementation-Title": "Kronos SDK Client (AWS)",
             "Implementation-Version": version,
             "Implementation-Vendor": "Konexios, Inc.",
             "Built-By": System.getProperty('user.name'),
@@ -14,9 +14,6 @@ jar.doFirst {
 }
 
 dependencies {      
-    api("com.konexios:acs-client:${version}")   
-    api("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
-    
-	testImplementation("org.apache.commons:commons-lang3:3.12.0")
-    
+    api("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")    
+    api("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")    
 }

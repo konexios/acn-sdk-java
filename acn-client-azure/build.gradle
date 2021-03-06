@@ -2,7 +2,7 @@ jar.doFirst {
     from sourceSets.main.allSource
     manifest {
         attributes(
-            "Implementation-Title": "Kronos SDK Client",
+            "Implementation-Title": "Kronos SDK Client (Azure)",
             "Implementation-Version": version,
             "Implementation-Vendor": "Konexios, Inc.",
             "Built-By": System.getProperty('user.name'),
@@ -14,9 +14,5 @@ jar.doFirst {
 }
 
 dependencies {      
-    api("com.konexios:acs-client:${version}")   
-    api("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
-    
-	testImplementation("org.apache.commons:commons-lang3:3.12.0")
-    
+    api("com.microsoft.azure.sdk.iot:iot-device-client:${azureIotVersion}")
 }

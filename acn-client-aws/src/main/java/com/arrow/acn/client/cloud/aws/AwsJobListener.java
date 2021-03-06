@@ -1,4 +1,4 @@
-package com.arrow.acn.client.cloud;
+package com.arrow.acn.client.cloud.aws;
 
 import com.arrow.acn.client.cloud.aws.job.JobExecutionPayload;
 

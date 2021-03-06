@@ -8,7 +8,7 @@
  * Contributors:
  *     Arrow Electronics, Inc.
  *******************************************************************************/
-package com.arrow.acn.client.cloud;
+package com.arrow.acn.client.cloud.ibm;
 
 import java.util.List;
 import java.util.Properties;
@@ -16,6 +16,8 @@ import java.util.Properties;
 import com.arrow.acn.client.ClientConstants;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
+import com.arrow.acn.client.cloud.CloudConnectorAbstract;
+import com.arrow.acn.client.cloud.TransferMode;
 import com.arrow.acn.client.model.IbmConfigModel;
 import com.arrow.acn.client.utils.Utils;
 import com.arrow.acs.AcsLogicalException;
