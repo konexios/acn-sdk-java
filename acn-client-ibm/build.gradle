@@ -2,7 +2,7 @@ jar.doFirst {
     from sourceSets.main.allSource
     manifest {
         attributes(
-            "Implementation-Title": "Kronos SDK Core",
+            "Implementation-Title": "Kronos SDK Client (IBM)",
             "Implementation-Version": version,
             "Implementation-Vendor": "Konexios, Inc.",
             "Built-By": System.getProperty('user.name'),
@@ -13,8 +13,6 @@ jar.doFirst {
     }
 }
 
-dependencies {
-    api("com.konexios:acs-core:${version}")    
-    
-    compile fileTree(dir: '../lib', include: '*.jar')
+dependencies {      
+    api("com.ibm.messaging:watson-iot:${watsonIotVersion}")
 }

@@ -14,19 +14,9 @@ jar.doFirst {
 }
 
 dependencies {      
-    api("com.konexios:acs-client:${version}")
-   
+    api("com.konexios:acs-client:${version}")   
     api("org.eclipse.paho:org.eclipse.paho.client.mqttv3:${pahoMqttVersion}")
-
-    // ibm
-    api("com.ibm.messaging:watson-iot:${watsonIotVersion}")
     
-    // azure
-    api("com.microsoft.azure.sdk.iot:iot-device-client:${azureIotVersion}")
-        
-    // security provider
-    api("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")    
-    api("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
-            
-    compile fileTree(dir: '../lib', include: '*.jar')    
+	testImplementation("org.apache.commons:commons-lang3:3.12.0")
+    
 }

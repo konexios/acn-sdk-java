@@ -10,8 +10,6 @@
  *******************************************************************************/
 package com.arrow.acn.client.api;
 
-import org.apache.commons.lang3.Validate;
-
 import com.arrow.acs.AcsUtils;
 import com.arrow.acs.client.api.ApiConfig;
 import com.arrow.acs.client.api.MqttHttpChannel;
@@ -44,7 +42,7 @@ public final class AcnClient {
 	}
 
 	public void setApiConfig(ApiConfig apiConfig) {
-		Validate.notNull(apiConfig, "apiConfig is not set");
+		AcsUtils.notNull(apiConfig, "apiConfig is not set");
 		this.apiConfig = apiConfig;
 		if (accountApi != null)
 			getAccountApi().setApiConfig(apiConfig);
@@ -83,7 +81,7 @@ public final class AcnClient {
 	}
 
 	public void setMqttHttpChannel(MqttHttpChannel mqttHttpChannel) {
-		Validate.notNull(mqttHttpChannel, "mqttHttpChannel is not set");
+		AcsUtils.notNull(mqttHttpChannel, "mqttHttpChannel is not set");
 		this.mqttHttpChannel = mqttHttpChannel;
 		if (accountApi != null)
 			getAccountApi().setMqttHttpChannel(mqttHttpChannel);

@@ -113,6 +113,7 @@ public class DeviceApi extends ApiAbstract {
 		String method = "createOrUpdate";
 		try {
 			URI uri = buildUri(CREATE_OR_UPDATE_URL);
+			logInfo(method, "uri: %s", uri);
 			ExternalHidModel result = execute(new HttpPost(uri), JsonUtils.toJson(model), ExternalHidModel.class);
 			log(method, result);
 			return result;

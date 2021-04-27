@@ -1,7 +1,8 @@
 buildscript {
     ext {
-        pahoMqttVersion = '1.2.4'
-        
+        pahoMqttVersion = '1.2.5'
+        httpclientVersion = '4.5.6'
+                
         watsonIotVersion = '0.2.6'
         azureIotVersion = '1.23.0'
         
@@ -58,7 +59,7 @@ subprojects {
     }
 
     group = 'com.konexios'
-    version = '2021.01.0'
+    version = '2021.4.0'
     
     compileJava.dependsOn(processResources)
 
@@ -89,5 +90,23 @@ project(':acn-core') {
 project(':acn-client') {
     dependencies {
         compile project(':acn-core')
+    }
+}
+
+project(':acn-client-azure') {
+    dependencies {
+        compile project(':acn-client')
+    }
+}
+
+project(':acn-client-aws') {
+    dependencies {
+        compile project(':acn-client')
+    }
+}
+
+project(':acn-client-ibm') {
+    dependencies {
+        compile project(':acn-client')
     }
 }

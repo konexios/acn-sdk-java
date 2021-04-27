@@ -26,9 +26,6 @@ import org.apache.commons.codec.binary.StringUtils;
 import com.arrow.acn.client.IotParameters;
 import com.arrow.acn.client.api.AcnClient;
 import com.arrow.acn.client.api.CoreEventApi;
-import com.arrow.acn.client.cloud.aws.job.JobExecutionPayload;
-import com.arrow.acn.client.cloud.aws.job.JobExecutionStatus;
-import com.arrow.acn.client.cloud.aws.job.JobExecutionUpdate;
 import com.arrow.acn.client.model.DeviceStateRequestModel;
 import com.arrow.acn.client.model.DeviceStateUpdateModel;
 import com.arrow.acs.AcsLogicalException;
@@ -45,7 +42,6 @@ public abstract class CloudConnectorAbstract extends Loggable {
 	protected MessageListener listener;
 	protected AcnClient acnClient;
 	protected DeviceStateRequestListener deviceStateRequestListener;
-	protected AwsJobListener awsJobListener;
 	protected Set<String> deviceHids = new HashSet<>();
 	protected ExecutorService service;
 	protected boolean terminating = false;
@@ -85,10 +81,6 @@ public abstract class CloudConnectorAbstract extends Loggable {
 		this.deviceStateRequestListener = deviceStateRequestListener;
 	}
 
-	public void setAwsJobListener(AwsJobListener awsJobListener) {
-		this.awsJobListener = awsJobListener;
-	}
-
 	public void start() {
 	}
 
@@ -111,31 +103,9 @@ public abstract class CloudConnectorAbstract extends Loggable {
 		throw new AcsLogicalException("this feature is not yet implemented!");
 	}
 
-	protected void sendAwsJobUpdate(String deviceHid, String jobId, JobExecutionUpdate update) {
-		throw new AcsLogicalException("this feature is not applicable for this cloud connector!");
-	}
-
 	protected void receiveDeviceStateRequest(String deviceHid, DeviceStateRequestModel model) {
 		if (deviceStateRequestListener != null) {
 			deviceStateRequestListener.receive(deviceHid, model);
-		}
-	}
-
-	protected void awsJobNotifyNext(String deviceHid, JobExecutionPayload payload) {
-		String method = "awsJobNotifyNext";
-		if (payload.getExecution() != null) {
-			if (awsJobListener != null) {
-				awsJobListener.notifyNext(deviceHid, payload);
-			} else {
-				logError(method, "ERROR; no listener defined to process aws jobs!");
-				JobExecutionUpdate update = new JobExecutionUpdate();
-				update.setExpectedVersion(payload.getExecution().getVersionNumber());
-				update.setClientToken(AcsUtils.randomString(16));
-				update.setStatus(JobExecutionStatus.REJECTED.name());
-				sendAwsJobUpdate(deviceHid, payload.getExecution().getJobId(), update);
-			}
-		} else {
-			logWarn(method, "ignored payload with empty execution!");
 		}
 	}
 
