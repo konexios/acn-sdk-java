@@ -1,2 +1,1 @@
-Copyright 2017 Arrow Electronics, Inc. or its affiliates. All Rights Reserved.
-Product:	Arrow Connect
+Copyright 2021 Konexios, Inc. All Rights Reserved.

@@ -1,3 +1,0 @@
-Copyright 2017 Arrow Electronics, Inc. or its affiliates. All Rights Reserved.
-Product:	Arrow Connect
-Component:	Arrow Connect Client

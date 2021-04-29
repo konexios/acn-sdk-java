@@ -9,13 +9,13 @@
     </Appenders>
     <Loggers>
         <Logger 
-                name="com.arrow.acn.client.RabbitLoadTest" 
+                name="com.konexios.acn.client.RabbitLoadTest" 
                 level="INFO"
                 additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
         <Logger 
-                name="com.arrow.acn.client.cloud.CustomMqttClient" 
+                name="com.konexios.acn.client.cloud.CustomMqttClient" 
                 level="INFO"
                 additivity="false">
             <AppenderRef ref="Console" />
