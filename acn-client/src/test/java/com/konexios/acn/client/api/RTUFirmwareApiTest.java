@@ -18,7 +18,6 @@ package com.konexios.acn.client.api;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.konexios.acn.client.api.AcnClient;
 import com.konexios.acn.client.search.RTUAvailableSearchCriteria;
 import com.konexios.acn.client.search.RTURequestSearchCriteria;
 import com.konexios.acs.client.api.ApiConfig;

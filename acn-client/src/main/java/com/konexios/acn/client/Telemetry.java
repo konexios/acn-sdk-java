@@ -16,9 +16,9 @@
 package com.konexios.acn.client;
 
 public interface Telemetry {
-    String DEVICE_ID = "deviceId";
-    String DEVICE_HID = "deviceHid";
-    String TIMESTAMP = "timestamp";
-    String UID = "uid";
-    String TYPE = "type";
+	String DEVICE_ID = "deviceId";
+	String DEVICE_HID = "deviceHid";
+	String TIMESTAMP = "timestamp";
+	String UID = "uid";
+	String TYPE = "type";
 }

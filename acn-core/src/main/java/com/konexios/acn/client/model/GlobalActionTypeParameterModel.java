@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class GlobalActionTypeParameterModel implements Serializable {
 	private static final long serialVersionUID = -5367487228725610879L;
-	
+
 	private String name;
 	private String description;
 	private Set<ParameterValidationModel> validationTypes = new HashSet<>();

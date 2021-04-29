@@ -28,8 +28,8 @@ import javax.net.ssl.X509TrustManager;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
-import com.konexios.acn.client.IotParameters;
 import com.konexios.acn.client.ClientConstants.Mqtt;
+import com.konexios.acn.client.IotParameters;
 import com.konexios.acn.client.api.AcnClient;
 import com.konexios.acs.AcsLogicalException;
 import com.konexios.acs.AcsUtils;

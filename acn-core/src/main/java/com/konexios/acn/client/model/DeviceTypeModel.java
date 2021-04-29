@@ -66,7 +66,7 @@ public class DeviceTypeModel extends DefinitionModelAbstract<DeviceTypeModel> {
 	public void setStateMetadata(Map<String, DeviceStateValueMetadataModel> stateMetadata) {
 		this.stateMetadata = stateMetadata;
 	}
-	
+
 	public AcnDeviceCategory getDeviceCategory() {
 		return deviceCategory;
 	}

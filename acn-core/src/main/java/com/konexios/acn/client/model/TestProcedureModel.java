@@ -22,7 +22,7 @@ import com.konexios.acs.client.model.DefinitionModelAbstract;
 
 public class TestProcedureModel extends DefinitionModelAbstract<TestProcedureModel> {
 	private static final long serialVersionUID = 2938213963854262466L;
-	
+
 	private String deviceTypeHid;
 	private List<TestProcedureStepModel> steps = new ArrayList<>();
 

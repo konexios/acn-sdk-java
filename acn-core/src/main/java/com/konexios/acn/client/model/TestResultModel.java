@@ -23,7 +23,7 @@ import com.konexios.acs.client.model.AuditableDocumentModelAbstract;
 public class TestResultModel extends AuditableDocumentModelAbstract<TestResultModel> {
 	private static final long serialVersionUID = -8647007345276915564L;
 
-	//private DeviceCategory category; 
+	// private DeviceCategory category;
 	private String objectHid;
 	private String status;
 	private String testProcedureHid;
@@ -63,18 +63,15 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 		return this;
 	}
 
-	/*public DeviceCategory getCategory() {
-            return category;
-        }
-
-        public void setCategory(DeviceCategory category) {
-            this.category = category;
-        }
-
-        public TestResultCommonModel withCategory(DeviceCategory category) {
-            this.category = category;
-            return this;
-        }*/
+	/*
+	 * public DeviceCategory getCategory() { return category; }
+	 * 
+	 * public void setCategory(DeviceCategory category) { this.category = category;
+	 * }
+	 * 
+	 * public TestResultCommonModel withCategory(DeviceCategory category) {
+	 * this.category = category; return this; }
+	 */
 
 	public String getStatus() {
 		return status;
@@ -96,11 +93,11 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 	public void setSteps(List<TestResultStepModel> steps) {
 		this.steps = steps;
 	}
-	
+
 	public String getHid() {
 		return hid;
 	}
-	
+
 	public void setHid(String hid) {
 		this.hid = hid;
 	}
@@ -109,7 +106,7 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 		setHid(hid);
 		return this;
 	}
-	
+
 	public String getStarted() {
 		return started;
 	}
@@ -117,12 +114,12 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 	public void setStarted(String started) {
 		this.started = started;
 	}
-	
+
 	public TestResultModel withStarted(String started) {
 		setStarted(started);
 		return this;
 	}
-	
+
 	public String getEnded() {
 		return ended;
 	}
@@ -130,7 +127,7 @@ public class TestResultModel extends AuditableDocumentModelAbstract<TestResultMo
 	public void setEnded(String ended) {
 		this.ended = ended;
 	}
-	
+
 	public TestResultModel withEnded(String ended) {
 		setEnded(ended);
 		return this;

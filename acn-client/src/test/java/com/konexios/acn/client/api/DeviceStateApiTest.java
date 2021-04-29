@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.konexios.acn.client.api.AcnClient;
 import com.konexios.acs.client.api.ApiConfig;
 
 public class DeviceStateApiTest {

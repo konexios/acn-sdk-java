@@ -19,10 +19,10 @@ import java.io.Serializable;
 
 public class ParameterValidationModel implements Serializable {
 	private static final long serialVersionUID = -5853957566950403385L;
-	
+
 	public enum ValidationType {
-		STRING("String"), MULTILINE_STRING("Multiline string"), SELECT("Select"), JSON("JSON"), XML("XML"), HTML(
-		        "HTML"), KEY_VALUE_PAIRS("Key-value pairs"), EMAIL("E-mail");
+		STRING("String"), MULTILINE_STRING("Multiline string"), SELECT("Select"), JSON("JSON"), XML("XML"),
+		HTML("HTML"), KEY_VALUE_PAIRS("Key-value pairs"), EMAIL("E-mail");
 
 		private String value;
 
@@ -53,8 +53,9 @@ public class ParameterValidationModel implements Serializable {
 	private ValidationType type = ValidationType.STRING;
 	private String defaultValue;
 	private String data;
-	
-	public ParameterValidationModel() {}
+
+	public ParameterValidationModel() {
+	}
 
 	public String getDefaultValue() {
 		return defaultValue;

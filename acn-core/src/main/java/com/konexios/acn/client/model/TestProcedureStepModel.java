@@ -19,12 +19,12 @@ import java.io.Serializable;
 
 public class TestProcedureStepModel implements Serializable {
 	private static final long serialVersionUID = -4687103186654019538L;
-	
+
 	private String id;
 	private String name;
 	private String description;
 	private int sortOrder;
-	
+
 	public String getId() {
 		return id;
 	}

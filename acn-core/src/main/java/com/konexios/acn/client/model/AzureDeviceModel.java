@@ -19,76 +19,76 @@ import com.konexios.acs.client.model.AuditableDocumentModelAbstract;
 
 public class AzureDeviceModel extends AuditableDocumentModelAbstract<AzureDeviceModel> {
 
-    private static final long serialVersionUID = 8960101654526157966L;
+	private static final long serialVersionUID = 8960101654526157966L;
 
-    private String azureAccountHid;
-    private String gatewayHid;
-    private String deviceHid;
-    private String iotHubConnectionString;
-    private boolean enabled;
+	private String azureAccountHid;
+	private String gatewayHid;
+	private String deviceHid;
+	private String iotHubConnectionString;
+	private boolean enabled;
 
-    @Override
-    protected AzureDeviceModel self() {
-        return this;
-    }
+	@Override
+	protected AzureDeviceModel self() {
+		return this;
+	}
 
-    public AzureDeviceModel withAzureAccountHid(String azureAccountHid) {
-        setAzureAccountHid(azureAccountHid);
-        return this;
-    }
+	public AzureDeviceModel withAzureAccountHid(String azureAccountHid) {
+		setAzureAccountHid(azureAccountHid);
+		return this;
+	}
 
-    public AzureDeviceModel withGatewayHid(String gatewayHid) {
-        setGatewayHid(gatewayHid);
-        return this;
-    }
+	public AzureDeviceModel withGatewayHid(String gatewayHid) {
+		setGatewayHid(gatewayHid);
+		return this;
+	}
 
-    public AzureDeviceModel withIotHubConnectionString(String iotHubConnectionString) {
-        setIotHubConnectionString(iotHubConnectionString);
-        return this;
-    }
+	public AzureDeviceModel withIotHubConnectionString(String iotHubConnectionString) {
+		setIotHubConnectionString(iotHubConnectionString);
+		return this;
+	}
 
-    public AzureDeviceModel withEnabled(boolean enabled) {
-        setEnabled(enabled);
-        return this;
-    }
+	public AzureDeviceModel withEnabled(boolean enabled) {
+		setEnabled(enabled);
+		return this;
+	}
 
-    public String getAzureAccountHid() {
-        return azureAccountHid;
-    }
+	public String getAzureAccountHid() {
+		return azureAccountHid;
+	}
 
-    public void setAzureAccountHid(String azureAccountHid) {
-        this.azureAccountHid = azureAccountHid;
-    }
+	public void setAzureAccountHid(String azureAccountHid) {
+		this.azureAccountHid = azureAccountHid;
+	}
 
-    public String getGatewayHid() {
-        return gatewayHid;
-    }
+	public String getGatewayHid() {
+		return gatewayHid;
+	}
 
-    public void setGatewayHid(String gatewayHid) {
-        this.gatewayHid = gatewayHid;
-    }
+	public void setGatewayHid(String gatewayHid) {
+		this.gatewayHid = gatewayHid;
+	}
 
-    public String getDeviceHid() {
-        return deviceHid;
-    }
+	public String getDeviceHid() {
+		return deviceHid;
+	}
 
-    public void setDeviceHid(String deviceHid) {
-        this.deviceHid = deviceHid;
-    }
+	public void setDeviceHid(String deviceHid) {
+		this.deviceHid = deviceHid;
+	}
 
-    public String getIotHubConnectionString() {
-        return iotHubConnectionString;
-    }
+	public String getIotHubConnectionString() {
+		return iotHubConnectionString;
+	}
 
-    public void setIotHubConnectionString(String iotHubConnectionString) {
-        this.iotHubConnectionString = iotHubConnectionString;
-    }
+	public void setIotHubConnectionString(String iotHubConnectionString) {
+		this.iotHubConnectionString = iotHubConnectionString;
+	}
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 }

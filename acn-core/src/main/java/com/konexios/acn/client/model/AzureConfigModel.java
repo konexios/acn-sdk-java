@@ -18,45 +18,45 @@ package com.konexios.acn.client.model;
 import java.io.Serializable;
 
 public class AzureConfigModel implements Serializable {
-    private static final long serialVersionUID = 522892464697437578L;
+	private static final long serialVersionUID = 522892464697437578L;
 
-    private String connectionString;
+	private String connectionString;
 
-    public AzureConfigModel withConnectionString(String connectionString) {
-        setConnectionString(connectionString);
-        return this;
-    }
+	public AzureConfigModel withConnectionString(String connectionString) {
+		setConnectionString(connectionString);
+		return this;
+	}
 
-    public String getConnectionString() {
-        return connectionString;
-    }
+	public String getConnectionString() {
+		return connectionString;
+	}
 
-    public void setConnectionString(String connectionString) {
-        this.connectionString = connectionString;
-    }
+	public void setConnectionString(String connectionString) {
+		this.connectionString = connectionString;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((connectionString == null) ? 0 : connectionString.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((connectionString == null) ? 0 : connectionString.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AzureConfigModel other = (AzureConfigModel) obj;
-        if (connectionString == null) {
-            if (other.connectionString != null)
-                return false;
-        } else if (!connectionString.equals(other.connectionString))
-            return false;
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AzureConfigModel other = (AzureConfigModel) obj;
+		if (connectionString == null) {
+			if (other.connectionString != null)
+				return false;
+		} else if (!connectionString.equals(other.connectionString))
+			return false;
+		return true;
+	}
 }

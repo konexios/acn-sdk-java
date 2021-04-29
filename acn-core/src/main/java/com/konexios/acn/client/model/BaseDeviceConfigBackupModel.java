@@ -107,7 +107,7 @@ public class BaseDeviceConfigBackupModel implements Serializable {
 		setIndexTelemetry(indexTelemetry);
 		return this;
 	}
-	
+
 	public BaseDeviceConfigBackupModel withSoftwareName(String softwareName) {
 		setSoftwareName(softwareName);
 		return this;
@@ -221,7 +221,7 @@ public class BaseDeviceConfigBackupModel implements Serializable {
 	public void setIndexTelemetry(YesNoInherit indexTelemetry) {
 		this.indexTelemetry = indexTelemetry;
 	}
-	
+
 	public String getSoftwareName() {
 		return softwareName;
 	}

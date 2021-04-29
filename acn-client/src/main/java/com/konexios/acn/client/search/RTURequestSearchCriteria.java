@@ -17,10 +17,10 @@ package com.konexios.acn.client.search;
 
 import com.konexios.acs.client.search.SearchCriteria;
 
-public class RTURequestSearchCriteria extends SearchCriteria  {
+public class RTURequestSearchCriteria extends SearchCriteria {
 
 	private static final String STATUS = "status";
-	
+
 	public void setStatus(String status) {
 		simpleCriteria.put(STATUS, status);
 	}

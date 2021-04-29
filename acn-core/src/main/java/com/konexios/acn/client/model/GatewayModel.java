@@ -47,7 +47,7 @@ public class GatewayModel extends BaseDeviceModelAbstract<GatewayModel> {
 		setOsName(osName);
 		return this;
 	}
-	
+
 	public GatewayModel withSdkVersion(String sdkVersion) {
 		setSdkVersion(sdkVersion);
 		return this;

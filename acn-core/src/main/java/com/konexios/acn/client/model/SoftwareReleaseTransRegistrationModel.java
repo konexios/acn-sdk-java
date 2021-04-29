@@ -57,7 +57,7 @@ public class SoftwareReleaseTransRegistrationModel implements Serializable {
 	}
 
 	public SoftwareReleaseTransRegistrationModel withRelatedSoftwareReleaseTransHid(
-	        String relatedSoftwareReleaseTransHid) {
+			String relatedSoftwareReleaseTransHid) {
 		setRelatedSoftwareReleaseTransHid(relatedSoftwareReleaseTransHid);
 		return this;
 	}

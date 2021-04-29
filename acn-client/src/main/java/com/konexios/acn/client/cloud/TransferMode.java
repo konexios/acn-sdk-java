@@ -16,5 +16,5 @@
 package com.konexios.acn.client.cloud;
 
 public enum TransferMode {
-    SINGLE, BATCH, GZIP_BATCH
+	SINGLE, BATCH, GZIP_BATCH
 }

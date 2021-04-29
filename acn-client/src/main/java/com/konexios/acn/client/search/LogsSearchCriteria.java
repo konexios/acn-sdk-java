@@ -16,16 +16,16 @@
 package com.konexios.acn.client.search;
 
 public class LogsSearchCriteria extends SortedSearchCriteria {
-    private static final String USER_HIDS = "userHids";
-    private static final String TYPES = "types";
+	private static final String USER_HIDS = "userHids";
+	private static final String TYPES = "types";
 
-    public LogsSearchCriteria withUserHids(String[] userHids) {
-        arrayCriteria.put(USER_HIDS, userHids);
-        return this;
-    }
+	public LogsSearchCriteria withUserHids(String[] userHids) {
+		arrayCriteria.put(USER_HIDS, userHids);
+		return this;
+	}
 
-    public LogsSearchCriteria withTypes(String[] types) {
-        arrayCriteria.put(TYPES, types);
-        return this;
-    }
+	public LogsSearchCriteria withTypes(String[] types) {
+		arrayCriteria.put(TYPES, types);
+		return this;
+	}
 }

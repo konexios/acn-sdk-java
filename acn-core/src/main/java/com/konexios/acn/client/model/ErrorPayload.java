@@ -18,24 +18,24 @@ package com.konexios.acn.client.model;
 import java.io.Serializable;
 
 public class ErrorPayload implements Serializable {
-    private static final long serialVersionUID = 4550623647779649658L;
+	private static final long serialVersionUID = 4550623647779649658L;
 
-    private String error;
-    private String code;
+	private String error;
+	private String code;
 
-    public String getError() {
-        return error;
-    }
+	public String getError() {
+		return error;
+	}
 
-    public void setError(String error) {
-        this.error = error;
-    }
+	public void setError(String error) {
+		this.error = error;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 }

@@ -16,5 +16,5 @@
 package com.konexios.acn.client.model;
 
 public enum CloudPlatform {
-    IotConnect, Aws, Azure, Ibm
+	IotConnect, Aws, Azure, Ibm
 }

@@ -16,5 +16,5 @@
 package com.konexios.acn.client.cloud;
 
 public interface MessageListener {
-    void processMessage(String topic, byte[] payload);
+	void processMessage(String topic, byte[] payload);
 }

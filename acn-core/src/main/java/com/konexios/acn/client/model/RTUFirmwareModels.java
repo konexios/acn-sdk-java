@@ -20,14 +20,15 @@ import java.io.Serializable;
 import com.konexios.acs.client.model.ModelAbstract;
 
 public class RTUFirmwareModels {
-	
+
 	public static class AvailableFirmwareVersion implements Serializable {
 		private static final long serialVersionUID = -5425557624114264695L;
 
 		private String softwareReleaseHid;
 		private String softwareReleaseName;
-		
-		public AvailableFirmwareVersion() {}
+
+		public AvailableFirmwareVersion() {
+		}
 
 		public AvailableFirmwareVersion(String softwareReleaseId, String softwareReleaseName) {
 			this.softwareReleaseHid = softwareReleaseId;
@@ -50,7 +51,7 @@ public class RTUFirmwareModels {
 			this.softwareReleaseName = softwareReleaseName;
 		}
 	}
-	
+
 	public static class RTURequestedFirmwareModel extends ModelAbstract<RTURequestedFirmwareModel> {
 		private static final long serialVersionUID = 3456782850563131128L;
 
@@ -64,26 +65,26 @@ public class RTUFirmwareModels {
 		}
 
 		public void setAvailableFirmwareVersion(AvailableFirmwareVersion availableFirmwareVersion) {
-				this.availableFirmwareVersion = availableFirmwareVersion;
+			this.availableFirmwareVersion = availableFirmwareVersion;
 		}
 
 		public RTURequestedFirmwareModel withAvailableFirmwareVersion(
-		        AvailableFirmwareVersion availableFirmwareVersion) {
+				AvailableFirmwareVersion availableFirmwareVersion) {
 			setAvailableFirmwareVersion(availableFirmwareVersion);
-			
+
 			return this;
 		}
-		
+
 		public RTURequestedFirmwareModel withOwnerName(String ownerName) {
 			setOwnerName(ownerName);
 			return this;
 		}
-		
+
 		public RTURequestedFirmwareModel withOwnerEmail(String ownerEmail) {
 			setOwnerEmail(ownerEmail);
 			return this;
 		}
-		
+
 		public RTURequestedFirmwareModel withStatus(RightToUseStatus status) {
 			setStatus(status);
 			return this;
@@ -119,7 +120,7 @@ public class RTUFirmwareModels {
 		}
 	}
 
-	public static class RTUFirmwareModel implements Serializable{
+	public static class RTUFirmwareModel implements Serializable {
 		private static final long serialVersionUID = 3456782850563131128L;
 
 		private String deviceTypeHid;
@@ -150,7 +151,7 @@ public class RTUFirmwareModels {
 		}
 
 		public void setAvailableFirmwareVersion(AvailableFirmwareVersion availableFirmwareVersion) {
-				this.availableFirmwareVersion = availableFirmwareVersion;
+			this.availableFirmwareVersion = availableFirmwareVersion;
 		}
 
 		public RTUFirmwareModel withNumberOfAssets(long numberOfAssets) {
@@ -165,25 +166,23 @@ public class RTUFirmwareModels {
 			return this;
 		}
 
-		public RTUFirmwareModel withCurrentFirmwareVersion(
-				AvailableFirmwareVersion currentFirmwareVersion) {
+		public RTUFirmwareModel withCurrentFirmwareVersion(AvailableFirmwareVersion currentFirmwareVersion) {
 			setCurrentFirmwareVersion(currentFirmwareVersion);
-			
+
 			return this;
 		}
 
-		public RTUFirmwareModel withAvailableFirmwareVersion(
-		        AvailableFirmwareVersion availableFirmwareVersion) {
+		public RTUFirmwareModel withAvailableFirmwareVersion(AvailableFirmwareVersion availableFirmwareVersion) {
 			setAvailableFirmwareVersion(availableFirmwareVersion);
-			
+
 			return this;
 		}
-		
+
 		public RTUFirmwareModel withDeviceTypeName(String deviceTypeName) {
 			setDeviceTypeName(deviceTypeName);
 			return this;
 		}
-		
+
 		public RTUFirmwareModel withDeviceTypeHid(String deviceTypeHid) {
 			setDeviceTypeHid(deviceTypeHid);
 			return this;

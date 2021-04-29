@@ -105,7 +105,7 @@ public class IotParameters extends HashMap<String, String> {
 
 	public void setDoubleSquare(String name, Double x, Double y, String format) {
 		put(TelemetryItemType.IntegerSquare.buildName(name),
-		        String.format("%s|%s", String.format(format, x), String.format(format, y)));
+				String.format("%s|%s", String.format(format, x), String.format(format, y)));
 		dirty = true;
 	}
 
@@ -116,7 +116,7 @@ public class IotParameters extends HashMap<String, String> {
 
 	public void setDoubleCube(String name, Double x, Double y, Double z, String format) {
 		put(TelemetryItemType.FloatCube.buildName(name), String.format("%s|%s|%s", String.format(format, x),
-		        String.format(format, y), String.format(format, z)));
+				String.format(format, y), String.format(format, z)));
 		dirty = true;
 	}
 

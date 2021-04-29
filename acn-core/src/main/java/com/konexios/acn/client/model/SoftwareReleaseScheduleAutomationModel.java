@@ -69,11 +69,11 @@ public class SoftwareReleaseScheduleAutomationModel implements Serializable {
 	public void setTimeToExpireSeconds(Long timeToExpireSeconds) {
 		this.timeToExpireSeconds = timeToExpireSeconds;
 	}
-	
+
 	public String getJobName() {
 		return jobName;
 	}
-	
+
 	public void setJobName(String jobName) {
 		this.jobName = jobName;
 	}

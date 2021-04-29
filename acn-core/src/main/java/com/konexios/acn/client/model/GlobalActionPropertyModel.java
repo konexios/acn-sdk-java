@@ -47,17 +47,17 @@ public class GlobalActionPropertyModel implements Serializable {
 	public void setParameterValue(String parameterValue) {
 		this.parameterValue = parameterValue;
 	}
-	
+
 	public GlobalActionPropertyModel withParameterName(String parameterName) {
 		setParameterName(parameterName);
 		return this;
 	}
-	
+
 	public GlobalActionPropertyModel withParameterValue(String parameterValue) {
 		setParameterValue(parameterValue);
 		return this;
 	}
-	
+
 	public GlobalActionPropertyModel withParameterType(String parameterType) {
 		setParameterType(parameterType);
 		return this;

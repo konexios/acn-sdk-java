@@ -62,8 +62,7 @@ public class SoftwareReleaseScheduleSearchCriteria extends SearchCriteria {
 
 	public SoftwareReleaseScheduleSearchCriteria withStatuses(SoftwareReleaseScheduleStatus... statuses) {
 		if (statuses != null) {
-			arrayCriteria.put(STATUSES,
-			        Arrays.stream(statuses).map(Object::toString).toArray(String[]::new));
+			arrayCriteria.put(STATUSES, Arrays.stream(statuses).map(Object::toString).toArray(String[]::new));
 		}
 		return this;
 	}

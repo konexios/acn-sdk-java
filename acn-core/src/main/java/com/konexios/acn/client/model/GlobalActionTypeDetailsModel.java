@@ -18,7 +18,7 @@ package com.konexios.acn.client.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class GlobalActionTypeDetailsModel implements Serializable{
+public class GlobalActionTypeDetailsModel implements Serializable {
 	private static final long serialVersionUID = 7250378365123494650L;
 
 	private String systemName;
@@ -76,4 +76,3 @@ public class GlobalActionTypeDetailsModel implements Serializable{
 		this.name = name;
 	}
 }
-

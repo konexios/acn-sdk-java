@@ -24,38 +24,38 @@ import com.konexios.acn.client.IotParameters;
 import com.konexios.acn.client.api.AcnClient;
 
 public class IotConnectConnector extends MqttConnectorAbstract {
-    private String iotConnectMqttVHost;
+	private String iotConnectMqttVHost;
 
-    public IotConnectConnector(AcnClient acnClient, String gatewayHid, String url, String iotConnectMqttVHost) {
-        super(acnClient, gatewayHid, url);
-        this.iotConnectMqttVHost = iotConnectMqttVHost;
-    }
+	public IotConnectConnector(AcnClient acnClient, String gatewayHid, String url, String iotConnectMqttVHost) {
+		super(acnClient, gatewayHid, url);
+		this.iotConnectMqttVHost = iotConnectMqttVHost;
+	}
 
-    @Override
-    protected MqttConnectOptions mqttConnectOptions() {
-        MqttConnectOptions options = super.mqttConnectOptions();
-        options.setUserName(String.format("%s:%s", iotConnectMqttVHost, getGatewayHid()));
-        options.setPassword(acnClient.getApiConfig().getApiKey().toCharArray());
-        return options;
-    }
+	@Override
+	protected MqttConnectOptions mqttConnectOptions() {
+		MqttConnectOptions options = super.mqttConnectOptions();
+		options.setUserName(String.format("%s:%s", iotConnectMqttVHost, getGatewayHid()));
+		options.setPassword(acnClient.getApiConfig().getApiKey().toCharArray());
+		return options;
+	}
 
-    @Override
-    protected String publisherTopic(IotParameters payload) {
-        return MqttConstants.gatewayToServerTelemetryRouting(getGatewayHid());
-    }
+	@Override
+	protected String publisherTopic(IotParameters payload) {
+		return MqttConstants.gatewayToServerTelemetryRouting(getGatewayHid());
+	}
 
-    @Override
-    protected String publisherBatchTopic(List<IotParameters> payload) {
-        return MqttConstants.gatewayToServerTelemetryBatchRouting(getGatewayHid());
-    }
+	@Override
+	protected String publisherBatchTopic(List<IotParameters> payload) {
+		return MqttConstants.gatewayToServerTelemetryBatchRouting(getGatewayHid());
+	}
 
-    @Override
-    protected String publisherGzipBatchTopic(List<IotParameters> payload) {
-        return MqttConstants.gatewayToServerTelemetryGzipBatchRouting(getGatewayHid());
-    }
+	@Override
+	protected String publisherGzipBatchTopic(List<IotParameters> payload) {
+		return MqttConstants.gatewayToServerTelemetryGzipBatchRouting(getGatewayHid());
+	}
 
-    @Override
-    protected String subscriberTopic() {
-        return MqttConstants.serverToGatewayCommandRouting(getGatewayHid());
-    }
+	@Override
+	protected String subscriberTopic() {
+		return MqttConstants.serverToGatewayCommandRouting(getGatewayHid());
+	}
 }

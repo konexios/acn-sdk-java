@@ -25,7 +25,7 @@ public class RTUAvailableSearchCriteria extends SearchCriteria {
 		simpleCriteria.put(DEVICE_TYPE_HID, String.valueOf(deviceTypeHid));
 		return this;
 	}
-	
+
 	public void setDeviceTypeHid(final String deviceTypeHid) {
 		simpleCriteria.put(DEVICE_TYPE_HID, String.valueOf(deviceTypeHid));
 	}

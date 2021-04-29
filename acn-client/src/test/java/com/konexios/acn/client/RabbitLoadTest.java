@@ -42,17 +42,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.konexios.acn.MqttConstants;
-import com.konexios.acn.client.IotParameters;
 import com.konexios.acn.client.api.AcnClient;
 import com.konexios.acn.client.cloud.CustomMqttClient;
 import com.konexios.acn.client.cloud.MessageListener;
 import com.konexios.acn.client.model.CreateGatewayModel;
+import com.konexios.acn.client.model.CreateGatewayModel.GatewayType;
 import com.konexios.acn.client.model.DeviceCommandModel;
 import com.konexios.acn.client.model.DeviceModel;
 import com.konexios.acn.client.model.DeviceRegistrationModel;
 import com.konexios.acn.client.model.GatewayConfigModel;
 import com.konexios.acn.client.model.GatewayModel;
-import com.konexios.acn.client.model.CreateGatewayModel.GatewayType;
 import com.konexios.acn.client.search.DeviceSearchCriteria;
 import com.konexios.acn.client.search.GatewaySearchCriteria;
 import com.konexios.acn.client.utils.Utils;

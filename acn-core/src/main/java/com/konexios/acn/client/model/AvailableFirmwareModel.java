@@ -27,7 +27,7 @@ public class AvailableFirmwareModel implements Serializable {
 		setSoftwareReleaseHID(softwareReleaseHid);
 		return this;
 	}
-	
+
 	public AvailableFirmwareModel withSoftwareReleaseName(String softwareReleaseName) {
 		setSoftwareReleaseName(softwareReleaseName);
 		return this;

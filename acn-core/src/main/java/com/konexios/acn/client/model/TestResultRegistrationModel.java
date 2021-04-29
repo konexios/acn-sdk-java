@@ -19,10 +19,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestResultRegistrationModel implements Serializable  {
+public class TestResultRegistrationModel implements Serializable {
 	private static final long serialVersionUID = 5667361130792298479L;
-	
-	//private DeviceCategory category; 
+
+	// private DeviceCategory category;
 	private String objectHid;
 	private String status;
 	private String testProcedureHid;
@@ -56,18 +56,15 @@ public class TestResultRegistrationModel implements Serializable  {
 		return this;
 	}
 
-	/*public DeviceCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(DeviceCategory category) {
-        this.category = category;
-    }
-
-    public TestResultCommonModel withCategory(DeviceCategory category) {
-        this.category = category;
-        return this;
-    }*/
+	/*
+	 * public DeviceCategory getCategory() { return category; }
+	 * 
+	 * public void setCategory(DeviceCategory category) { this.category = category;
+	 * }
+	 * 
+	 * public TestResultCommonModel withCategory(DeviceCategory category) {
+	 * this.category = category; return this; }
+	 */
 
 	public String getStatus() {
 		return status;
@@ -97,7 +94,7 @@ public class TestResultRegistrationModel implements Serializable  {
 	public void setStarted(String started) {
 		this.started = started;
 	}
-	
+
 	public String getEnded() {
 		return ended;
 	}
